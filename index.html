@@ -570,6 +570,17 @@
       margin-bottom: 10px;
     }
     .record-btns { display: flex; gap: 8px; margin-top: 8px; }
+    
+    @keyframes pulseRec {
+      0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 71, 87, 0.7); }
+      70% { transform: scale(1.03); box-shadow: 0 0 0 10px rgba(255, 71, 87, 0); }
+      100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 71, 87, 0); }
+    }
+    .recording-active {
+      animation: pulseRec 1.5s infinite;
+      background: #ff4757 !important;
+      color: white !important;
+    }
   </style>
 </head>
 <body>
@@ -731,10 +742,11 @@
 
     <div class="section-title">3. Add Radio Station & Phone/URL Audio</div>
     
-    <!-- LIVE MIC RECORDING OPTION -->
+    <!-- LIVE MIC RECORDING OPTION WITH TIMER & VISUAL FEEDBACK -->
     <div class="record-box">
       <label style="font-family:'Fredoka',sans-serif; color:var(--accent); margin-bottom:4px; display:block;">🎙️ Record Audio Message from Mic</label>
-      <div id="recordStatus" style="font-size:0.8rem; color:var(--text-muted); margin-bottom:6px;">Speak normally—noise filtering active!</div>
+      <div id="recordStatus" style="font-size:0.82rem; color:var(--text-main); font-weight:700; margin-bottom:6px;">Ready to record 🎙️</div>
+      <div id="recordTimer" style="font-family:'Fredoka',sans-serif; font-size:1.1rem; color:var(--accent); margin-bottom:6px; display:none;">⏱️ 00:00</div>
       <div class="record-btns">
         <button class="btn-save" id="startRecordBtn" style="background:#00b894; padding:8px; font-size:0.85rem;">🔴 Start Record</button>
         <button class="btn-save" id="stopRecordBtn" style="background:#ff4757; padding:8px; font-size:0.85rem;" disabled>⏹ Stop & Save</button>
@@ -788,6 +800,8 @@
     let mediaRecorder = null;
     let audioChunks = [];
     let recordedAudioBlobUrl = "";
+    let recordTimerInterval = null;
+    let recordSecondsElapsed = 0;
 
     let dvdX = 100, dvdY = 100;
     let dvdSpeedX = 2.5, dvdSpeedY = 2.5;
@@ -981,136 +995,134 @@
       document.getElementById('successModal').style.display = 'none';
     }
 
-    // REAL SYNTHESIZED UNIQUE AMBIENT GENERATORS
+    // ROBUST CONTINUOUS AMBIENT GENERATOR FIX
     function toggleAmbient(type) {
       if (!ambientCtx) ambientCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (ambientCtx.state === 'suspended') ambientCtx.resume();
+
       const btn = document.getElementById(type + 'Btn');
 
       if (ambientNodes[type]) {
         // Turn off
-        if (ambientNodes[type].interval) clearInterval(ambientNodes[type].interval);
-        if (ambientNodes[type].source) ambientNodes[type].source.stop();
+        if (ambientNodes[type].source) {
+          try { ambientNodes[type].source.stop(); } catch(e){}
+        }
+        if (ambientNodes[type].timer) clearInterval(ambientNodes[type].timer);
         delete ambientNodes[type];
         btn.classList.remove('active');
       } else {
-        // Turn on unique audio node
-        const bufferSize = ambientCtx.sampleRate * 4;
-        const buffer = ambientCtx.createBuffer(1, bufferSize, ambientCtx.sampleRate);
-        const data = buffer.getChannelData(0);
+        // Turn on continuous node loop
+        let bufferSize = ambientCtx.sampleRate * 5;
+        let buffer = ambientCtx.createBuffer(1, bufferSize, ambientCtx.sampleRate);
+        let data = buffer.getChannelData(0);
 
+        let source = ambientCtx.createBufferSource();
         let filter = ambientCtx.createBiquadFilter();
         let gain = ambientCtx.createGain();
-        let source = ambientCtx.createBufferSource();
+
         source.buffer = buffer;
         source.loop = true;
 
-        let trackingObj = { source };
+        let trackObj = { source };
 
         if (type === 'rain') {
-          // Pink-ish noise filtered tightly for crisp rainfall
           for (let i = 0; i < bufferSize; i++) {
-            data[i] = (Math.random() * 2 - 1) * 0.5;
-          }
-          source.buffer = buffer;
-          filter.type = 'lowpass';
-          filter.frequency.value = 1200;
-          gain.gain.value = 0.12;
-
-          source.connect(filter);
-          filter.connect(gain);
-          gain.connect(ambientCtx.destination);
-
-          // Add random droplet ticks
-          trackingObj.interval = setInterval(() => {
-            if (!ambientNodes['rain']) return;
-            let drop = ambientCtx.createOscillator();
-            let dropGain = ambientCtx.createGain();
-            drop.type = 'sine';
-            drop.frequency.setValueAtTime(1200 + Math.random() * 800, ambientCtx.currentTime);
-            drop.frequency.exponentialRampToValueAtTime(400, ambientCtx.currentTime + 0.08);
-            dropGain.gain.setValueAtTime(0.04, ambientCtx.currentTime);
-            dropGain.gain.exponentialRampToValueAtTime(0.001, ambientCtx.currentTime + 0.08);
-            drop.connect(dropGain);
-            dropGain.connect(ambientCtx.destination);
-            drop.start();
-            drop.stop(ambientCtx.currentTime + 0.09);
-          }, 120);
-
-        } else if (type === 'fire') {
-          // Low rumble + random crackle pops
-          for (let i = 0; i < bufferSize; i++) {
-            data[i] = (Math.random() * 2 - 1) * 0.3;
+            data[i] = (Math.random() * 2 - 1);
           }
           filter.type = 'lowpass';
-          filter.frequency.value = 400;
+          filter.frequency.value = 1000;
           gain.gain.value = 0.15;
 
           source.connect(filter);
           filter.connect(gain);
           gain.connect(ambientCtx.destination);
 
-          trackingObj.interval = setInterval(() => {
-            if (!ambientNodes['fire']) return;
-            if (Math.random() > 0.4) {
-              let pop = ambientCtx.createOscillator();
-              let popGain = ambientCtx.createGain();
-              pop.type = 'triangle';
-              pop.frequency.setValueAtTime(200 + Math.random() * 600, ambientCtx.currentTime);
-              popGain.gain.setValueAtTime(0.08, ambientCtx.currentTime);
-              popGain.gain.exponentialRampToValueAtTime(0.001, ambientCtx.currentTime + 0.04);
-              pop.connect(popGain);
-              popGain.connect(ambientCtx.destination);
-              pop.start();
-              pop.stop(ambientCtx.currentTime + 0.05);
-            }
-          }, 180);
-
-        } else if (type === 'waves') {
-          // Ocean sweeping low pass filter
-          for (let i = 0; i < bufferSize; i++) {
-            data[i] = Math.random() * 2 - 1;
-          }
-          filter.type = 'bandpass';
-          filter.frequency.value = 300;
-          filter.Q.value = 1.2;
-          gain.gain.value = 0.2;
-
-          source.connect(filter);
-          filter.connect(gain);
-          gain.connect(ambientCtx.destination);
-
-          let sweep = 0;
-          trackingObj.interval = setInterval(() => {
-            if (!ambientNodes['waves']) return;
-            sweep += 0.05;
-            let freqMod = 300 + Math.sin(sweep) * 220;
-            filter.frequency.setValueAtTime(freqMod, ambientCtx.currentTime);
+          // Droplet ticks
+          trackObj.timer = setInterval(() => {
+            if (!ambientNodes['rain']) return;
+            let osc = ambientCtx.createOscillator();
+            let g = ambientCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(1200 + Math.random() * 600, ambientCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(300, ambientCtx.currentTime + 0.08);
+            g.gain.setValueAtTime(0.05, ambientCtx.currentTime);
+            g.gain.exponentialRampToValueAtTime(0.001, ambientCtx.currentTime + 0.08);
+            osc.connect(g);
+            g.connect(ambientCtx.destination);
+            osc.start();
+            osc.stop(ambientCtx.currentTime + 0.09);
           }, 100);
 
-        } else if (type === 'breeze') {
-          // Soft airy wind gusts
+        } else if (type === 'fire') {
           for (let i = 0; i < bufferSize; i++) {
             data[i] = (Math.random() * 2 - 1) * 0.4;
           }
           filter.type = 'lowpass';
-          filter.frequency.value = 280;
+          filter.frequency.value = 350;
           gain.gain.value = 0.18;
 
           source.connect(filter);
           filter.connect(gain);
           gain.connect(ambientCtx.destination);
 
-          let windTime = 0;
-          trackingObj.interval = setInterval(() => {
+          trackObj.timer = setInterval(() => {
+            if (!ambientNodes['fire']) return;
+            if (Math.random() > 0.5) {
+              let pop = ambientCtx.createOscillator();
+              let g = ambientCtx.createGain();
+              pop.type = 'triangle';
+              pop.frequency.setValueAtTime(300 + Math.random() * 400, ambientCtx.currentTime);
+              g.gain.setValueAtTime(0.07, ambientCtx.currentTime);
+              g.gain.exponentialRampToValueAtTime(0.001, ambientCtx.currentTime + 0.05);
+              pop.connect(g);
+              g.connect(ambientCtx.destination);
+              pop.start();
+              pop.stop(ambientCtx.currentTime + 0.06);
+            }
+          }, 200);
+
+        } else if (type === 'waves') {
+          for (let i = 0; i < bufferSize; i++) {
+            data[i] = Math.random() * 2 - 1;
+          }
+          filter.type = 'bandpass';
+          filter.frequency.value = 300;
+          filter.Q.value = 1.0;
+          gain.gain.value = 0.22;
+
+          source.connect(filter);
+          filter.connect(gain);
+          gain.connect(ambientCtx.destination);
+
+          let waveTime = 0;
+          trackObj.timer = setInterval(() => {
+            if (!ambientNodes['waves']) return;
+            waveTime += 0.04;
+            filter.frequency.setValueAtTime(250 + Math.sin(waveTime) * 200, ambientCtx.currentTime);
+          }, 100);
+
+        } else if (type === 'breeze') {
+          for (let i = 0; i < bufferSize; i++) {
+            data[i] = (Math.random() * 2 - 1) * 0.5;
+          }
+          filter.type = 'lowpass';
+          filter.frequency.value = 250;
+          gain.gain.value = 0.2;
+
+          source.connect(filter);
+          filter.connect(gain);
+          gain.connect(ambientCtx.destination);
+
+          let bTime = 0;
+          trackObj.timer = setInterval(() => {
             if (!ambientNodes['breeze']) return;
-            windTime += 0.03;
-            let wFreq = 200 + Math.sin(windTime) * 150;
-            filter.frequency.setValueAtTime(wFreq, ambientCtx.currentTime);
+            bTime += 0.02;
+            filter.frequency.setValueAtTime(200 + Math.sin(bTime) * 120, ambientCtx.currentTime);
           }, 150);
         }
 
         source.start();
-        ambientNodes[type] = trackingObj;
+        ambientNodes[type] = trackObj;
         btn.classList.add('active');
       }
     }
@@ -1153,11 +1165,12 @@
     document.getElementById('nextBtn').onclick = () => { currentTrackIndex = (currentTrackIndex + 1) % tracks.length; loadTrack(currentTrackIndex); playAudio(); };
     document.getElementById('prevBtn').onclick = () => { currentTrackIndex = (currentTrackIndex - 1 + tracks.length) % tracks.length; loadTrack(currentTrackIndex); playAudio(); };
 
-    // CRYSTAL CLEAR MIC RECORDER WITH BUILT-IN NOISE SUPPRESSION & GAIN CONTROL
+    // CRYSTAL CLEAR RECORDER WITH VISUAL FEEDBACK & LIVE TIMER
     function initRecorder() {
       const startBtn = document.getElementById('startRecordBtn');
       const stopBtn = document.getElementById('stopRecordBtn');
       const status = document.getElementById('recordStatus');
+      const timerDisplay = document.getElementById('recordTimer');
 
       if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
         status.textContent = "Mic recording not supported in this browser.";
@@ -1168,11 +1181,7 @@
       startBtn.onclick = async () => {
         try {
           const stream = await navigator.mediaDevices.getUserMedia({ 
-            audio: {
-              echoCancellation: true,
-              noiseSuppression: true,
-              autoGainControl: true
-            } 
+            audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true } 
           });
           mediaRecorder = new MediaRecorder(stream);
           audioChunks = [];
@@ -1186,7 +1195,8 @@
             const reader = new FileReader();
             reader.onloadend = () => {
               recordedAudioBlobUrl = reader.result;
-              status.textContent = "✅ Voice recorded clearly! Now enter a name & tap Add Station.";
+              status.textContent = "✅ Voice recorded successfully! Type name & tap Add Station.";
+              timerDisplay.style.display = 'none';
             };
             reader.readAsDataURL(audioBlob);
           };
@@ -1194,7 +1204,21 @@
           mediaRecorder.start();
           startBtn.disabled = true;
           stopBtn.disabled = false;
-          status.textContent = "🔴 Recording crystal clear audio... Speak normally!";
+          startBtn.classList.add('recording-active');
+          status.textContent = "🔴 Recording active... Speak normally!";
+          
+          recordSecondsElapsed = 0;
+          timerDisplay.style.display = 'block';
+          timerDisplay.textContent = "⏱️ 00:00";
+          
+          if (recordTimerInterval) clearInterval(recordTimerInterval);
+          recordTimerInterval = setInterval(() => {
+            recordSecondsElapsed++;
+            const mins = String(Math.floor(recordSecondsElapsed / 60)).padStart(2, '0');
+            const secs = String(recordSecondsElapsed % 60).padStart(2, '0');
+            timerDisplay.textContent = `⏱️ ${mins}:${secs}`;
+          }, 1000);
+
         } catch (err) {
           alert("Microphone permission denied or unavailable.");
         }
@@ -1207,6 +1231,8 @@
         }
         startBtn.disabled = false;
         stopBtn.disabled = true;
+        startBtn.classList.remove('recording-active');
+        if (recordTimerInterval) clearInterval(recordTimerInterval);
       };
     }
 
@@ -1377,7 +1403,7 @@
         audioUrl = recordedAudioBlobUrl;
         finalizeStation(name, freq, audioUrl);
         recordedAudioBlobUrl = "";
-        document.getElementById('recordStatus').textContent = "Speak normally—noise filtering active!";
+        document.getElementById('recordStatus').textContent = "Ready to record 🎙️";
       } else if (audioFile) {
         const reader = new FileReader();
         reader.onloadend = () => {
