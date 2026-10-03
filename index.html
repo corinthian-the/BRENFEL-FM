@@ -705,9 +705,13 @@
       <button class="theme-btn" onclick="setTheme('rose')">🌹 Warm Rose</button>
     </div>
     <div class="form-group">
-      <label>Or Set Custom Image / GIF URL Background:</label>
+      <label>Or Set Custom Image / GIF Background URL:</label>
       <input type="text" id="customBgUrl" placeholder="https://example.com/wallpaper.gif">
-      <button class="btn-save" id="saveCustomBgBtn" style="margin-top:6px; background:#6c5ce7;">Apply Custom Background</button>
+      <button class="btn-save" id="saveCustomBgBtn" style="margin-top:6px; background:#6c5ce7;">Apply Custom Background URL</button>
+    </div>
+    <div class="form-group" style="margin-top: 8px;">
+      <label>Or Upload Background Image Directly from Phone:</label>
+      <input type="file" id="customBgFile" accept="image/*">
     </div>
 
     <div class="section-title">2. Custom Dating Start Date</div>
@@ -715,10 +719,14 @@
       <input type="date" id="startDateInput" value="2024-05-06">
     </div>
 
-    <div class="section-title">3. Manage Radio Stations & Audio Links</div>
+    <div class="section-title">3. Add Radio Station & Phone/URL Audio</div>
     <div class="form-group"><input type="text" id="newStationName" placeholder="Station Name"></div>
     <div class="form-group"><input type="text" id="newStationFreq" placeholder="Frequency e.g. 104.5 FM"></div>
-    <div class="form-group"><input type="text" id="newAudioUrl" placeholder="Direct Audio URL (.mp3 / stream)"></div>
+    <div class="form-group"><input type="text" id="newAudioUrl" placeholder="Or Direct Audio URL (.mp3 / stream)"></div>
+    <div class="form-group">
+      <label>Or Upload Audio File Directly from Phone (.mp3):</label>
+      <input type="file" id="newAudioFile" accept="audio/*">
+    </div>
     <button class="btn-save" id="addStationBtn" style="background:#6c5ce7; margin-bottom:10px;">+ Add Station & Audio</button>
     <div class="list-box" id="adminStationList"></div>
 
@@ -727,9 +735,13 @@
     <div class="form-group"><textarea id="inputPureLetterBody" rows="3" placeholder="Letter contents..."></textarea></div>
     <button class="btn-save" id="savePureLetterBtn" style="margin-bottom:12px;">Save Written Letter</button>
 
-    <div class="section-title">5. Add Scrapbook Photo</div>
+    <div class="section-title">5. Add Scrapbook Photo (Phone or URL)</div>
     <div class="form-group"><input type="text" id="inputPolaroidCaption" placeholder="Memory Caption"></div>
-    <div class="form-group"><input type="file" id="inputPolaroidFile" accept="image/*"></div>
+    <div class="form-group"><input type="text" id="inputPolaroidUrl" placeholder="Or Image URL"></div>
+    <div class="form-group">
+      <label>Or Upload Image from Phone Gallery:</label>
+      <input type="file" id="inputPolaroidFile" accept="image/*">
+    </div>
     <button class="btn-save" id="savePolaroidBtn" style="background:#00b894;">Add Memory Picture</button>
   </div>
 
@@ -834,6 +846,19 @@
         alert("Custom Background Applied! 🎨");
       }
     };
+
+    document.getElementById('customBgFile').addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          localStorage.setItem('love_bg_custom', reader.result);
+          document.body.style.background = `url("${reader.result}") center/cover fixed no-repeat`;
+          alert("Phone Background Applied! 📸");
+        };
+        reader.readAsDataURL(file);
+      }
+    });
 
     function saveAll() {
       localStorage.setItem('love_stations', JSON.stringify(stations));
@@ -981,12 +1006,12 @@
 
     function playAudio() {
       if (tracks[currentTrackIndex] && tracks[currentTrackIndex].audioUrl) {
-        audio.play();
+        audio.play().catch(e => alert("Playback error or browser restriction. Tap play again!"));
         isPlaying = true;
         document.getElementById('playBtn').textContent = '⏸';
         document.getElementById('vinyl').classList.add('playing');
       } else {
-        alert("No audio URL provided for this station! You can add direct MP3 links in Admin Settings (⚙️).");
+        alert("No audio file or URL provided for this station! Add one in Admin Settings (⚙️️).");
       }
     }
 
@@ -1070,13 +1095,8 @@
         document.getElementById('speechEqualizer').classList.add('active');
       };
 
-      speechUtterance.onend = () => {
-        stopSpeech();
-      };
-
-      speechUtterance.onerror = () => {
-        stopSpeech();
-      };
+      speechUtterance.onend = () => { stopSpeech(); };
+      speechUtterance.onerror = () => { stopSpeech(); };
 
       window.speechSynthesis.speak(speechUtterance);
     };
@@ -1161,18 +1181,39 @@
     document.getElementById('addStationBtn').onclick = () => {
       const name = document.getElementById('newStationName').value.trim();
       const freq = document.getElementById('newStationFreq').value.trim() || "100.0 FM";
-      const audioUrl = document.getElementById('newAudioUrl').value.trim();
-      if (name) {
-        stations.push({ name, freq, audioUrl });
-        tracks.push({ title: name, station: name, freq, photo: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=300", audioUrl });
-        saveAll(); renderStations(); renderAdminStations();
-        document.getElementById('newStationName').value = "";
-        document.getElementById('newAudioUrl').value = "";
+      let audioUrl = document.getElementById('newAudioUrl').value.trim();
+      const audioFile = document.getElementById('newAudioFile').files[0];
+
+      if (!name) {
+        alert("Please enter a station name!");
+        return;
+      }
+
+      if (audioFile) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          audioUrl = reader.result;
+          finalizeStation(name, freq, audioUrl);
+        };
+        reader.readAsDataURL(audioFile);
+      } else {
+        finalizeStation(name, freq, audioUrl);
       }
     };
 
+    function finalizeStation(name, freq, audioUrl) {
+      stations.push({ name, freq, audioUrl });
+      tracks.push({ title: name, station: name, freq, photo: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=300", audioUrl });
+      saveAll(); renderStations(); renderAdminStations();
+      document.getElementById('newStationName').value = "";
+      document.getElementById('newAudioUrl').value = "";
+      document.getElementById('newAudioFile').value = "";
+      alert("Station Added Successfully! 📻");
+    }
+
     document.getElementById('savePolaroidBtn').onclick = () => {
       const caption = document.getElementById('inputPolaroidCaption').value.trim() || "Memory";
+      let url = document.getElementById('inputPolaroidUrl').value.trim();
       const file = document.getElementById('inputPolaroidFile').files[0];
 
       if (file) {
@@ -1180,9 +1221,15 @@
         reader.onloadend = () => {
           polaroids.push({ caption, url: reader.result });
           saveAll(); renderPolaroids();
-          alert("Memory Added! 📸");
+          alert("Memory Photo Added! 📸");
         };
         reader.readAsDataURL(file);
+      } else if (url) {
+        polaroids.push({ caption, url });
+        saveAll(); renderPolaroids();
+        alert("Memory Photo Added! 📸");
+      } else {
+        alert("Please provide an image URL or upload a file from your phone.");
       }
     };
 
@@ -1194,6 +1241,7 @@
         saveAll(); renderPureLetters();
         document.getElementById('inputPureLetterTitle').value = "";
         document.getElementById('inputPureLetterBody').value = "";
+        alert("Letter Saved! 💌");
       }
     };
 
@@ -1223,4 +1271,3 @@
   </script>
 </body>
 </html>
-
