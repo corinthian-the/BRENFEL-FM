@@ -625,7 +625,7 @@
       margin-top: 2px;
     }
 
-    /* Proposal View */
+    /* Magical Proposal View & DVD Bouncing Button */
     .proposal-box {
       text-align: center;
       width: 100%;
@@ -638,20 +638,24 @@
     }
 
     .ring-icon {
-      font-size: 4.2rem;
-      animation: pulse 2s infinite;
+      font-size: 4.5rem;
+      animation: pulseGlowRing 2s infinite;
       margin-bottom: 8px;
-      filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.8));
+      filter: drop-shadow(0 0 16px rgba(255, 215, 0, 0.9));
     }
-    @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.15); } }
+
+    @keyframes pulseGlowRing { 
+      0%, 100% { transform: scale(1) rotate(0deg); filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.8)); } 
+      50% { transform: scale(1.18) rotate(5deg); filter: drop-shadow(0 0 28px rgba(255, 105, 180, 1)); } 
+    }
 
     .proposal-title {
       font-family: 'Sacramento', cursive;
-      font-size: 3.4rem;
+      font-size: 3.6rem;
       color: var(--accent);
       line-height: 1.1;
       margin-bottom: 8px;
-      text-shadow: 0 0 12px rgba(255, 75, 114, 0.3);
+      text-shadow: 0 0 15px rgba(255, 75, 114, 0.4);
     }
 
     .proposal-desc {
@@ -662,7 +666,7 @@
       line-height: 1.4;
     }
 
-    /* Floating YES Buttons Container */
+    /* Floating Bouncing DVD Logo Container & Button */
     #floatingYesContainer {
       position: fixed;
       top: 0;
@@ -674,28 +678,28 @@
       display: none;
     }
 
-    .floating-yes-btn {
-      position: absolute;
+    .dvd-yes-btn {
+      position: fixed;
       pointer-events: auto;
       font-family: 'Fredoka', sans-serif;
-      background: linear-gradient(135deg, #ff4b72 0%, #ff2b56 100%);
-      color: white;
-      border: 2px solid #ffffff;
-      padding: 12px 24px;
-      border-radius: 35px;
-      font-size: 1.1rem;
-      font-weight: 600;
+      background: linear-gradient(135deg, #ff4b72 0%, #ff1493 100%);
+      color: #ffffff;
+      border: 3px solid #ffffff;
+      padding: 16px 32px;
+      border-radius: 50px;
+      font-size: 1.35rem;
+      font-weight: 700;
       cursor: pointer;
-      box-shadow: 0 0 20px var(--accent-glow), 0 4px 15px rgba(0,0,0,0.15);
-      transition: transform 0.1s ease;
-      animation: pulseGlow 2s infinite alternate;
+      box-shadow: 0 0 25px rgba(255, 75, 114, 0.8), 0 8px 25px rgba(0, 0, 0, 0.25);
       user-select: none;
       white-space: nowrap;
+      transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.1s ease;
+      will-change: transform;
+      z-index: 1000;
     }
 
-    @keyframes pulseGlow {
-      0% { box-shadow: 0 0 10px var(--accent-glow); }
-      100% { box-shadow: 0 0 25px var(--accent), 0 0 35px #ffffff; }
+    .dvd-yes-btn:hover {
+      transform: scale(1.1);
     }
 
     /* Modals */
@@ -762,8 +766,10 @@
   <canvas id="particleCanvas"></canvas>
   <canvas id="magicalProposalCanvas"></canvas>
 
-  <!-- Container for Floating Floating YES buttons -->
-  <div id="floatingYesContainer"></div>
+  <!-- Container for Floating DVD Bounce YES button -->
+  <div id="floatingYesContainer">
+    <button id="dvdYesButton" class="dvd-yes-btn">YES! 💖</button>
+  </div>
 
   <!-- Background Floating Hearts -->
   <div class="bg-heart" style="left: 10%; animation-delay: 0s;">💖</div>
@@ -831,7 +837,7 @@
         </div>
         <div class="ambient-grid">
           <div class="ambient-card">
-            <div class="ambient-header"><span>🌧️ Rain</span><span id="rainVolVal">0%</span></div>
+            <div class="ambient-header"><span>🌧️️ Rain</span><span id="rainVolVal">0%</span></div>
             <input type="range" id="rainVol" min="0" max="100" value="0">
           </div>
           <div class="ambient-card">
@@ -939,8 +945,8 @@
       <div class="proposal-box">
         <div class="ring-icon">💍</div>
         <div class="proposal-title">Will You Marry Me?</div>
-        <p class="proposal-desc">In every life, in every universe... I want to spend forever with you. Catch any floating YES button to say forever! ♡</p>
-        <p style="font-family:'Fredoka', sans-serif; font-size: 0.9rem; color: var(--accent); animation: pulse 1.5s infinite;">✨ Floating magical YES buttons are active! ✨</p>
+        <p class="proposal-desc">In every life, in every universe... I want to spend forever with you. Catch the bouncing DVD YES button floating around your screen! ♡</p>
+        <p style="font-family:'Fredoka', sans-serif; font-size: 0.95rem; color: var(--accent); animation: pulseGlowRing 2s infinite;">✨ The magical DVD YES button is bouncing live! ✨</p>
       </div>
     </div>
   </div>
@@ -964,8 +970,8 @@
   <!-- Grand Proposal Modal -->
   <div class="modal-overlay" id="successModal">
     <div class="modal-card">
-      <div style="font-size: 3.5rem; margin-bottom: 5px;">💍✨</div>
-      <h2 style="font-family:'Sacramento', cursive; font-size:3.5rem; color:var(--accent); line-height: 1;">YES! FOREVER! 🎉</h2>
+      <div style="font-size: 3.8rem; margin-bottom: 5px;">💍✨</div>
+      <h2 style="font-family:'Sacramento', cursive; font-size:3.5rem; color:var(--accent); line-height: 1;">FOREVER & ALWAYS! 💖</h2>
       <p style="font-size: 1.05rem; color: #4a2e35; margin: 15px 0;">You made me the happiest person in the universe! I love you endlessly, today and always! 💖✨</p>
       <button class="btn-action" onclick="closeModal('successModal')">Forever & Always Yours ♡</button>
     </div>
@@ -1040,7 +1046,6 @@
     let currentUtterance = null;
     let isSpeechReading = false;
     let isSpeechPaused = false;
-    let rawLetterWords = [];
 
     /* Default dating start date set explicitly to MAY 6, 2024 */
     let startDate = new Date('2024-05-06T00:00:00');
@@ -1048,10 +1053,22 @@
 
     let memImageBase64 = null;
 
-    /* Floating Proposal Animation State */
-    let floatingButtons = [];
-    let floatingAnimId = null;
+    /* Single DVD Bouncing YES Button Animation State */
+    let dvdAnimId = null;
+    let dvdX = 100;
+    let dvdY = 100;
+    let dvdVx = 3.5;
+    let dvdVy = 2.8;
     let proposalCanvasAnimId = null;
+
+    const dvdGradients = [
+      { bg: "linear-gradient(135deg, #ff4b72 0%, #ff1493 100%)", glow: "rgba(255, 75, 114, 0.85)", border: "#ffffff" },
+      { bg: "linear-gradient(135deg, #f7b731 0%, #ff4757 100%)", glow: "rgba(247, 183, 49, 0.85)", border: "#fff0f3" },
+      { bg: "linear-gradient(135deg, #70a1ff 0%, #1e90ff 100%)", glow: "rgba(30, 144, 255, 0.85)", border: "#ffffff" },
+      { bg: "linear-gradient(135deg, #2ed573 0%, #10ac84 100%)", glow: "rgba(46, 213, 115, 0.85)", border: "#ffffff" },
+      { bg: "linear-gradient(135deg, #a55eea 0%, #8854d0 100%)", glow: "rgba(165, 94, 234, 0.85)", border: "#ffffff" }
+    ];
+    let dvdColorIdx = 0;
 
     /* Hello Kitty Icons for Tap Effect */
     const hkIcons = [
@@ -1305,68 +1322,80 @@
       setTimeout(() => img.remove(), 1200);
     });
 
-    /* ULTRA-MAGICAL PROPOSAL ENGINE */
+    /* ULTRA-MAGICAL DVD BOUNCING PROPOSAL ENGINE */
     function startMagicalProposalScene() {
       const container = document.getElementById('floatingYesContainer');
       const canvas = document.getElementById('magicalProposalCanvas');
+      const dvdBtn = document.getElementById('dvdYesButton');
+      
       container.style.display = 'block';
       canvas.classList.add('active');
-      container.innerHTML = "";
 
-      /* Create 12 Floating YES Buttons of varying sizes & speeds */
-      floatingButtons = [];
-      const labels = ["YES! 💖", "YES! 💕", "YES! 💍", "FOREVER! ✨", "YES! 🌸", "ALWAYS YES! 💗"];
+      /* Initial Position & Velocity for DVD Bounce */
+      dvdX = Math.random() * (window.innerWidth - 180) + 20;
+      dvdY = Math.random() * (window.innerHeight - 100) + 20;
+      dvdVx = 3.5;
+      dvdVy = 2.8;
 
-      for (let i = 0; i < 12; i++) {
-        const btn = document.createElement('button');
-        btn.className = 'floating-yes-btn';
-        btn.textContent = labels[i % labels.length];
-        
-        const scale = 0.8 + Math.random() * 0.6;
-        btn.style.transform = `scale(${scale})`;
+      dvdBtn.onclick = (e) => {
+        e.stopPropagation();
+        triggerGrandProposalCelebration();
+      };
 
-        container.appendChild(btn);
+      function updateDvdBounce() {
+        const btnWidth = dvdBtn.offsetWidth || 160;
+        const btnHeight = dvdBtn.offsetHeight || 60;
+        const maxW = window.innerWidth;
+        const maxH = window.innerHeight;
 
-        const rect = btn.getBoundingClientRect();
-        const obj = {
-          el: btn,
-          x: Math.random() * (window.innerWidth - 120),
-          y: Math.random() * (window.innerHeight - 100),
-          vx: (Math.random() - 0.5) * 3,
-          vy: (Math.random() - 0.5) * 3,
-          width: rect.width || 120,
-          height: rect.height || 45
-        };
+        dvdX += dvdVx;
+        dvdY += dvdVy;
 
-        btn.onclick = (e) => {
-          e.stopPropagation();
-          triggerGrandProposalCelebration();
-        };
+        let hitEdge = false;
 
-        floatingButtons.push(obj);
+        if (dvdX <= 5) {
+          dvdX = 5;
+          dvdVx *= -1;
+          hitEdge = true;
+        } else if (dvdX + btnWidth >= maxW - 5) {
+          dvdX = maxW - btnWidth - 5;
+          dvdVx *= -1;
+          hitEdge = true;
+        }
+
+        if (dvdY <= 5) {
+          dvdY = 5;
+          dvdVy *= -1;
+          hitEdge = true;
+        } else if (dvdY + btnHeight >= maxH - 5) {
+          dvdY = maxH - btnHeight - 5;
+          dvdVy *= -1;
+          hitEdge = true;
+        }
+
+        if (hitEdge) {
+          dvdColorIdx = (dvdColorIdx + 1) % dvdGradients.length;
+          const theme = dvdGradients[dvdColorIdx];
+          dvdBtn.style.background = theme.bg;
+          dvdBtn.style.borderColor = theme.border;
+          dvdBtn.style.boxShadow = `0 0 30px ${theme.glow}, 0 8px 25px rgba(0,0,0,0.3)`;
+        }
+
+        dvdBtn.style.left = `${dvdX}px`;
+        dvdBtn.style.top = `${dvdY}px`;
+
+        dvdAnimId = requestAnimationFrame(updateDvdBounce);
       }
 
-      function animateFloatingButtons() {
-        floatingButtons.forEach(b => {
-          b.x += b.vx;
-          b.y += b.vy;
+      if (dvdAnimId) cancelAnimationFrame(dvdAnimId);
+      updateDvdBounce();
 
-          if (b.x <= 10 || b.x + b.width >= window.innerWidth - 10) b.vx *= -1;
-          if (b.y <= 10 || b.y + b.height >= window.innerHeight - 10) b.vy *= -1;
-
-          b.el.style.left = b.x + 'px';
-          b.el.style.top = b.y + 'px';
-        });
-        floatingAnimId = requestAnimationFrame(animateFloatingButtons);
-      }
-      animateFloatingButtons();
-
-      /* Canvas Stars & Heart Constellation Background */
+      /* Canvas Stars & Magical Sparkle Background */
       const ctx = canvas.getContext('2d');
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
 
-      let stars = Array.from({ length: 60 }, () => ({
+      let stars = Array.from({ length: 70 }, () => ({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
         size: Math.random() * 3 + 1,
@@ -1388,6 +1417,7 @@
 
         proposalCanvasAnimId = requestAnimationFrame(animateProposalCanvas);
       }
+      if (proposalCanvasAnimId) cancelAnimationFrame(proposalCanvasAnimId);
       animateProposalCanvas();
     }
 
@@ -1396,7 +1426,7 @@
       const canvas = document.getElementById('magicalProposalCanvas');
       container.style.display = 'none';
       canvas.classList.remove('active');
-      if (floatingAnimId) cancelAnimationFrame(floatingAnimId);
+      if (dvdAnimId) cancelAnimationFrame(dvdAnimId);
       if (proposalCanvasAnimId) cancelAnimationFrame(proposalCanvasAnimId);
     }
 
@@ -1404,8 +1434,7 @@
       openModal('successModal');
 
       if (typeof confetti === 'function') {
-        /* Full-screen Fireworks Heart Confetti Cannon */
-        const count = 200;
+        const count = 250;
         const defaults = { origin: { y: 0.7 } };
 
         function fire(particleRatio, opts) {
@@ -1525,7 +1554,6 @@
       document.getElementById('letterTitle').textContent = item.title;
       document.getElementById('letterSubtitle').textContent = "Station: " + (item.station || "Love Vault");
       
-      /* Format letter with span tags for word highlighting */
       const container = document.getElementById('letterTextContent');
       const words = item.letter.split(/(\s+)/);
       container.innerHTML = words.map((w, idx) => {
