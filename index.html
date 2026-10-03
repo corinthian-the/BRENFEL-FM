@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Our Love Frequency ♡ Radio & Memories</title>
+  <title>Our Love Frequency ♡ Masterpiece Edition</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Sacramento&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
@@ -32,10 +32,39 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 20px 15px;
+      padding: 15px;
       position: relative;
       overflow-x: hidden;
       transition: background 0.4s ease;
+    }
+
+    /* Particle Trail Canvas */
+    #particleCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* Hello Kitty Animation Effect */
+    .hk-tap-icon {
+      position: fixed;
+      pointer-events: none;
+      z-index: 9998;
+      width: 52px;
+      height: 52px;
+      transform: translate(-50%, -50%) scale(0.2);
+      animation: hkPop 1.4s ease-out forwards;
+    }
+
+    @keyframes hkPop {
+      0% { opacity: 0; transform: translate(-50%, -50%) scale(0.2) rotate(0deg); }
+      30% { opacity: 1; transform: translate(-50%, -50%) scale(1.3) rotate(20deg); }
+      70% { opacity: 1; transform: translate(-50%, -90px) scale(1) rotate(-15deg); }
+      100% { opacity: 0; transform: translate(-50%, -140px) scale(0.5) rotate(0deg); }
     }
 
     .bg-heart {
@@ -55,35 +84,102 @@
 
     header {
       text-align: center;
-      margin-bottom: 15px;
+      margin-bottom: 10px;
       width: 100%;
-      max-width: 480px;
+      max-width: 500px;
       z-index: 1;
     }
 
     header h1 {
       font-family: 'Sacramento', cursive;
-      font-size: 3.2rem;
+      font-size: 3.4rem;
       color: var(--accent);
       text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.9);
-      line-height: 1.1;
+      line-height: 1;
     }
 
-    header p {
+    /* Days Together Banner */
+    .counter-banner {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(8px);
+      padding: 8px 18px;
+      border-radius: 25px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--accent);
+      border: 2px solid #ffffff;
+      box-shadow: 0 4px 15px rgba(255, 105, 135, 0.2);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      z-index: 1;
+    }
+
+    /* Top Navigation Tabs */
+    .nav-tabs {
+      display: flex;
+      gap: 6px;
+      background: var(--card-bg);
+      padding: 6px;
+      border-radius: 25px;
+      margin-bottom: 15px;
+      border: 2px solid #ffffff;
+      box-shadow: 0 4px 15px rgba(255, 105, 135, 0.15);
+      z-index: 10;
+      max-width: 500px;
+      width: 100%;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .nav-tabs::-webkit-scrollbar { display: none; }
+
+    .nav-btn {
       font-family: 'Fredoka', sans-serif;
-      font-size: 0.95rem;
+      padding: 8px 14px;
+      border-radius: 20px;
+      border: none;
+      background: transparent;
       color: var(--text-muted);
-      margin-top: 4px;
-      letter-spacing: 0.5px;
+      font-size: 0.82rem;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.3s ease;
+      flex: 1;
+      text-align: center;
     }
 
-    .radio-container {
+    .nav-btn.active {
+      background: var(--accent);
+      color: #ffffff;
+      box-shadow: 0 3px 10px var(--accent-glow);
+    }
+
+    /* Page Views */
+    .page-section {
+      width: 100%;
+      max-width: 500px;
+      display: none;
+      opacity: 0;
+      transform: translateY(15px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+      z-index: 1;
+    }
+
+    .page-section.active {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .app-card {
       background: var(--card-bg);
       backdrop-filter: blur(12px);
       width: 100%;
-      max-width: 480px;
       border-radius: 30px;
-      padding: 24px 20px;
+      padding: 22px;
       box-shadow: 0 15px 35px rgba(255, 105, 135, 0.25), 0 5px 15px rgba(255, 255, 255, 0.8) inset;
       border: 3px solid #ffffff;
       display: flex;
@@ -91,49 +187,44 @@
       align-items: center;
       gap: 16px;
       position: relative;
-      z-index: 1;
     }
 
     .admin-toggle {
       position: absolute;
-      top: 18px;
-      right: 18px;
+      top: 16px;
+      right: 16px;
       background: #ffe3e8;
       border: 2px solid #ffb6c1;
       color: var(--accent);
-      width: 38px;
-      height: 38px;
+      width: 36px;
+      height: 36px;
       border-radius: 50%;
       cursor: pointer;
-      font-size: 1.1rem;
+      font-size: 1.0rem;
       display: flex;
       justify-content: center;
       align-items: center;
-      box-shadow: 0 3px 8px rgba(0,0,0,0.08);
-      transition: transform 0.2s ease;
     }
-    .admin-toggle:active { transform: scale(0.9); }
 
-    /* Frequency Display Badge */
     .freq-badge {
       font-family: 'Fredoka', sans-serif;
-      background: #ff4b72;
+      background: var(--accent);
       color: #ffffff;
       padding: 4px 14px;
       border-radius: 20px;
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       letter-spacing: 1px;
       box-shadow: 0 3px 10px var(--accent-glow);
     }
 
     .vinyl-wrapper {
-      width: 190px;
-      height: 190px;
+      width: 180px;
+      height: 180px;
       position: relative;
       display: flex;
       justify-content: center;
       align-items: center;
-      margin: 5px 0;
+      cursor: pointer;
     }
 
     .vinyl-record {
@@ -152,73 +243,40 @@
     .vinyl-record.playing { animation-play-state: running; }
 
     .album-art {
-      width: 85px;
-      height: 85px;
+      width: 80px;
+      height: 80px;
       border-radius: 50%;
       object-fit: cover;
-      border: 5px solid #ffffff;
+      border: 4px solid #ffffff;
       box-shadow: 0 2px 10px rgba(0,0,0,0.2);
     }
 
     @keyframes spin { 100% { transform: rotate(360deg); } }
 
-    .track-info {
-      text-align: center;
-      width: 100%;
-    }
-
-    .track-title {
-      font-family: 'Fredoka', sans-serif;
-      font-size: 1.25rem;
-      font-weight: 600;
-      color: var(--text-main);
-    }
-
-    .track-subtitle {
-      font-size: 0.88rem;
-      color: var(--text-muted);
-      margin-top: 3px;
-      font-weight: 500;
-    }
-
-    /* Letter Display Card */
-    .letter-box {
-      width: 100%;
-      background: #fff8f9;
-      border: 2px dashed #ffb6c1;
-      border-radius: 18px;
-      padding: 14px;
-      font-size: 0.92rem;
-      line-height: 1.5;
-      color: #5a3e45;
-      display: none;
-      max-height: 180px;
-      overflow-y: auto;
-      text-align: left;
-    }
+    .track-info { text-align: center; width: 100%; }
+    .track-title { font-family: 'Fredoka', sans-serif; font-size: 1.2rem; color: var(--text-main); }
+    .track-subtitle { font-size: 0.85rem; color: var(--text-muted); margin-top: 3px; }
 
     .station-selector {
       display: flex;
       gap: 10px;
       width: 100%;
       overflow-x: auto;
-      padding: 5px 2px;
+      padding: 4px 2px;
       scrollbar-width: none;
     }
     .station-selector::-webkit-scrollbar { display: none; }
 
     .station-chip {
       font-family: 'Fredoka', sans-serif;
-      padding: 8px 15px;
+      padding: 8px 14px;
       border-radius: 25px;
       background: #fff0f3;
       color: var(--text-muted);
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       cursor: pointer;
       white-space: nowrap;
       border: 2px solid #ffd1dc;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
-      transition: all 0.25s ease;
       display: flex;
       align-items: center;
       gap: 6px;
@@ -231,23 +289,11 @@
       box-shadow: 0 4px 12px var(--accent-glow);
     }
 
-    .station-chip-freq {
-      font-size: 0.75rem;
-      opacity: 0.85;
-      background: rgba(0, 0, 0, 0.1);
-      padding: 2px 6px;
-      border-radius: 10px;
-    }
-
-    .controls {
-      display: flex;
-      align-items: center;
-      gap: 18px;
-    }
+    .controls { display: flex; align-items: center; gap: 18px; }
 
     .btn-circle {
-      width: 58px;
-      height: 58px;
+      width: 56px;
+      height: 56px;
       border-radius: 50%;
       border: none;
       background: var(--accent);
@@ -258,33 +304,19 @@
       align-items: center;
       cursor: pointer;
       box-shadow: 0 6px 18px var(--accent-glow);
-      transition: all 0.2s ease;
     }
-    .btn-circle:active { transform: scale(0.92); }
 
     .btn-secondary {
-      width: 44px;
-      height: 44px;
+      width: 42px;
+      height: 42px;
       border-radius: 50%;
       border: 2px solid #ffd1dc;
       background: #ffffff;
       color: var(--accent);
-      font-size: 1rem;
       cursor: pointer;
       display: flex;
       justify-content: center;
       align-items: center;
-      box-shadow: 0 3px 8px rgba(0,0,0,0.05);
-      transition: all 0.2s ease;
-    }
-    .btn-secondary:active { transform: scale(0.9); }
-
-    .action-bar {
-      width: 100%;
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-      flex-wrap: wrap;
     }
 
     .btn-action-small {
@@ -294,135 +326,246 @@
       border: 2px solid #ffd1dc;
       padding: 8px 14px;
       border-radius: 20px;
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       cursor: pointer;
       display: flex;
       align-items: center;
       gap: 5px;
       text-decoration: none;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-      transition: all 0.2s ease;
     }
-    .btn-action-small:active { transform: scale(0.95); }
 
+    /* Ambient Audio Mixer Bar */
+    .ambient-bar {
+      width: 100%;
+      background: #fff8f9;
+      border: 2px dashed #ffb6c1;
+      border-radius: 18px;
+      padding: 12px;
+      display: flex;
+      justify-content: space-around;
+      gap: 8px;
+    }
+
+    .ambient-btn {
+      background: #ffffff;
+      border: 1px solid #ffd1dc;
+      padding: 6px 10px;
+      border-radius: 12px;
+      font-size: 0.78rem;
+      color: var(--text-main);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-family: 'Fredoka', sans-serif;
+    }
+    .ambient-btn.active {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+
+    /* PAGE 2: PURE LETTERS */
+    .envelope-card {
+      width: 100%;
+      background: #ffffff;
+      border: 2px solid #ffd1dc;
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 8px 20px rgba(255, 182, 193, 0.2);
+    }
+
+    .letter-title {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1.2rem;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+
+    .letter-body {
+      font-size: 0.92rem;
+      line-height: 1.6;
+      color: #5a3e45;
+      max-height: 220px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+    }
+
+    /* PAGE 3: SCRAPBOOK POLAROID GALLERY */
+    .polaroid-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 12px;
+      width: 100%;
+      max-height: 420px;
+      overflow-y: auto;
+      padding: 5px;
+    }
+
+    .polaroid-card {
+      background: #ffffff;
+      padding: 8px 8px 14px 8px;
+      border-radius: 12px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+      border: 1px solid #f0f0f0;
+      text-align: center;
+      transition: transform 0.3s ease;
+      cursor: pointer;
+    }
+    .polaroid-card:hover { transform: scale(1.04) rotate(1deg); }
+
+    .polaroid-img {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 6px;
+    }
+
+    .polaroid-caption {
+      font-family: 'Sacramento', cursive;
+      font-size: 1.1rem;
+      color: var(--text-main);
+      line-height: 1;
+    }
+
+    /* PAGE 4: MAGICAL FLOATING PROPOSAL */
+    .proposal-box {
+      text-align: center;
+      width: 100%;
+      position: relative;
+      min-height: 420px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border-radius: 25px;
+      background: radial-gradient(circle, rgba(255,255,255,0.95) 0%, rgba(255,240,243,0.9) 100%);
+    }
+
+    .ring-icon {
+      font-size: 4.8rem;
+      animation: pulse 2s infinite;
+      margin-bottom: 10px;
+      filter: drop-shadow(0 0 12px rgba(255,75,114,0.4));
+    }
+    @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.15); } }
+
+    .proposal-title {
+      font-family: 'Sacramento', cursive;
+      font-size: 3.2rem;
+      color: var(--accent);
+      line-height: 1.1;
+      margin-bottom: 10px;
+    }
+
+    .proposal-desc {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+      padding: 0 15px;
+      line-height: 1.5;
+    }
+
+    /* Floating Area for runaway proposal button */
+    .proposal-btn-area {
+      position: relative;
+      width: 100%;
+      height: 180px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .btn-yes-floating {
+      font-family: 'Fredoka', sans-serif;
+      background: linear-gradient(135deg, #2ed573, #26af5f);
+      color: white;
+      border: none;
+      padding: 14px 32px;
+      border-radius: 30px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(46, 213, 115, 0.5);
+      position: absolute;
+      transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      z-index: 20;
+    }
+
+    .btn-no-static {
+      font-family: 'Fredoka', sans-serif;
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 14px 32px;
+      border-radius: 30px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      box-shadow: 0 6px 20px var(--accent-glow);
+    }
+
+    .success-modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.65);
+      backdrop-filter: blur(10px);
+      z-index: 10000;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .success-content {
+      background: #ffffff;
+      padding: 35px 25px;
+      border-radius: 30px;
+      text-align: center;
+      max-width: 380px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+      border: 4px solid #ffd1dc;
+    }
+
+    .success-content h2 {
+      font-family: 'Sacramento', cursive;
+      font-size: 3.5rem;
+      color: var(--accent);
+    }
+
+    /* Admin Panel */
     .admin-panel {
       width: 100%;
-      max-width: 480px;
+      max-width: 500px;
       background: var(--card-bg);
       backdrop-filter: blur(12px);
       border-radius: 25px;
       padding: 22px;
       margin-top: 20px;
       border: 3px solid #ffffff;
-      box-shadow: 0 10px 25px rgba(255, 105, 135, 0.2);
       display: none;
       z-index: 1;
     }
-
     .admin-panel.active { display: block; }
-
-    .admin-panel h2 {
-      font-family: 'Fredoka', sans-serif;
-      font-size: 1.2rem;
-      margin-bottom: 12px;
-      color: var(--accent);
-      text-align: center;
-    }
+    .admin-panel h2 { font-family: 'Fredoka', sans-serif; font-size: 1.2rem; margin-bottom: 12px; color: var(--accent); text-align: center; }
 
     .form-group { margin-bottom: 12px; }
-
-    .form-group label {
-      display: block;
-      font-size: 0.8rem;
-      font-weight: 700;
-      color: var(--text-muted);
-      margin-bottom: 4px;
-    }
-
+    .form-group label { display: block; font-size: 0.8rem; font-weight: 700; color: var(--text-muted); margin-bottom: 4px; }
     .form-group input, .form-group select, .form-group textarea {
-      width: 100%;
-      padding: 10px;
-      background: #ffffff;
-      border: 2px solid #ffd1dc;
-      color: var(--text-main);
-      border-radius: 12px;
-      font-size: 0.88rem;
-      outline: none;
-      font-family: 'Quicksand', sans-serif;
+      width: 100%; padding: 10px; background: #ffffff; border: 2px solid #ffd1dc; color: var(--text-main); border-radius: 12px; font-size: 0.88rem; outline: none; font-family: 'Quicksand', sans-serif;
     }
 
-    .recorder-box {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      margin-bottom: 14px;
-      background: #fff0f3;
-      padding: 10px;
-      border-radius: 12px;
-      border: 2px dashed #ffb6c1;
-    }
-
-    .btn-save {
-      padding: 12px;
-      border-radius: 16px;
-      border: none;
-      background: var(--accent);
-      color: white;
-      font-family: 'Fredoka', sans-serif;
-      font-size: 0.95rem;
-      cursor: pointer;
-      width: 100%;
-      box-shadow: 0 4px 12px var(--accent-glow);
-    }
-
-    .btn-recorder {
-      padding: 8px 14px;
-      border-radius: 12px;
-      border: 2px solid var(--accent);
-      background: #ffffff;
-      color: var(--accent);
-      font-weight: 700;
-      cursor: pointer;
-      font-family: 'Fredoka', sans-serif;
-    }
-
-    .section-title {
-      font-family: 'Fredoka', sans-serif;
-      font-size: 1rem;
-      color: var(--accent);
-      margin: 14px 0 8px 0;
-      border-bottom: 1px solid #ffd1dc;
-      padding-bottom: 4px;
-    }
-
-    .list-box {
-      max-height: 150px;
-      overflow-y: auto;
-      margin-bottom: 12px;
-    }
-
-    .item-card {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 8px 12px;
-      background: #ffffff;
-      border-radius: 10px;
-      margin-bottom: 6px;
-      font-size: 0.82rem;
-      border: 1px solid #ffd1dc;
-    }
-
-    .btn-del {
-      background: none;
-      border: none;
-      color: #ff4757;
-      font-size: 0.95rem;
-      cursor: pointer;
-    }
+    .btn-save { padding: 12px; border-radius: 16px; border: none; background: var(--accent); color: white; font-family: 'Fredoka', sans-serif; font-size: 0.95rem; cursor: pointer; width: 100%; }
+    .section-title { font-family: 'Fredoka', sans-serif; font-size: 0.95rem; color: var(--accent); margin: 12px 0 6px 0; border-bottom: 1px solid #ffd1dc; padding-bottom: 4px; }
+    .list-box { max-height: 120px; overflow-y: auto; margin-bottom: 10px; }
+    .item-card { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: #ffffff; border-radius: 10px; margin-bottom: 6px; font-size: 0.82rem; border: 1px solid #ffd1dc; }
+    .btn-del { background: none; border: none; color: #ff4757; font-size: 0.95rem; cursor: pointer; }
   </style>
 </head>
 <body>
+
+  <!-- Cursor Particle Canvas -->
+  <canvas id="particleCanvas"></canvas>
 
   <div class="bg-heart" style="left: 10%; animation-delay: 0s;">💖</div>
   <div class="bg-heart" style="left: 25%; animation-delay: 2s;">💕</div>
@@ -431,207 +574,257 @@
 
   <header>
     <h1>Our Love Frequency</h1>
-    <p>♡ Private Radio Station & Audio Vault ♡</p>
   </header>
 
-  <div class="radio-container">
-    <button class="admin-toggle" id="adminBtn">⚙️</button>
+  <!-- Live Dating Counter Banner (Set to May 6, 2024) -->
+  <div class="counter-banner" id="counterBanner">
+    ⏳ Loading our love timeline...
+  </div>
 
-    <div class="freq-badge" id="freqBadge">107.9 FM</div>
+  <!-- Top Navigation Tabs -->
+  <div class="nav-tabs">
+    <button class="nav-btn active" onclick="switchPage('radioPage')">📻 Radio FM</button>
+    <button class="nav-btn" onclick="switchPage('lettersPage')">💌 Letters</button>
+    <button class="nav-btn" onclick="switchPage('scrapbookPage')">🖼️ Scrapbook</button>
+    <button class="nav-btn" onclick="switchPage('proposalPage')">💍 Proposal</button>
+  </div>
 
-    <div class="vinyl-wrapper">
-      <div class="vinyl-record" id="vinyl">
-        <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=300" alt="Album Art" class="album-art" id="albumArt">
+  <!-- PAGE 1: RADIO & AMBIENT MIXER -->
+  <div class="page-section active" id="radioPage">
+    <div class="app-card">
+      <button class="admin-toggle" id="adminBtn">⚙️</button>
+      <div class="freq-badge" id="freqBadge">107.9 FM</div>
+
+      <div class="vinyl-wrapper" id="vinylWrapper">
+        <div class="vinyl-record" id="vinyl">
+          <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=300" alt="Album Art" class="album-art" id="albumArt">
+        </div>
       </div>
+
+      <div class="track-info">
+        <div class="track-title" id="trackTitle">Select a Station</div>
+        <div class="track-subtitle" id="trackSubtitle">Tap play to listen ♡</div>
+      </div>
+
+      <!-- Ambient Soundscape Generator -->
+      <div class="ambient-bar">
+        <button class="ambient-btn" id="rainBtn" onclick="toggleAmbient('rain')">🌧️ Rain</button>
+        <button class="ambient-btn" id="fireBtn" onclick="toggleAmbient('fire')">🔥 Fireplace</button>
+        <button class="ambient-btn" id="wavesBtn" onclick="toggleAmbient('waves')">🌊 Waves</button>
+      </div>
+
+      <div class="station-selector" id="stationList"></div>
+
+      <div class="controls">
+        <button class="btn-secondary" id="prevBtn">⏮</button>
+        <button class="btn-circle" id="playBtn">▶</button>
+        <button class="btn-secondary" id="nextBtn">⏭</button>
+      </div>
+
+      <a href="#" id="downloadBtn" class="btn-action-small" download="voice_note.mp3" style="display: none;">
+        📥 Download Track
+      </a>
     </div>
+  </div>
 
-    <div class="track-info">
-      <div class="track-title" id="trackTitle">Select a Station</div>
-      <div class="track-subtitle" id="trackSubtitle">Tap play to listen ♡</div>
-    </div>
+  <!-- PAGE 2: PURE LETTERS & VOICE READER -->
+  <div class="page-section" id="lettersPage">
+    <div class="app-card">
+      <div class="envelope-card">
+        <div class="letter-title" id="pureLetterTitle">No Letter Selected</div>
+        <div class="letter-body" id="pureLetterBody">Select a letter below to read...</div>
+      </div>
 
-    <!-- Letter Text Box -->
-    <div class="letter-box" id="letterBox"></div>
+      <div class="station-selector" id="pureLetterList"></div>
 
-    <div class="station-selector" id="stationList"></div>
-
-    <div class="controls">
-      <button class="btn-secondary" id="prevBtn">⏮</button>
-      <button class="btn-circle" id="playBtn">▶</button>
-      <button class="btn-secondary" id="nextBtn">⏭</button>
-    </div>
-
-    <div class="action-bar">
-      <button id="readLetterBtn" class="btn-action-small" style="display: none;">
+      <button id="readPureLetterBtn" class="btn-action-small" style="width: 100%; justify-content: center;">
         🗣️ Listen to Letter
       </button>
-      <a href="#" id="downloadBtn" class="btn-action-small" download="voice_note.mp3" style="display: none;">
-        📥 Download Voice
-      </a>
+    </div>
+  </div>
+
+  <!-- PAGE 3: UNLIMITED SCRAPBOOK GALLERY -->
+  <div class="page-section" id="scrapbookPage">
+    <div class="app-card">
+      <div style="font-family:'Fredoka',sans-serif; color:var(--accent); font-size:1.1rem;">Our Polaroid Memories ♡</div>
+      <div class="polaroid-grid" id="polaroidGrid"></div>
+    </div>
+  </div>
+
+  <!-- PAGE 4: MAGICAL FLOATING PROPOSAL -->
+  <div class="page-section" id="proposalPage">
+    <div class="app-card">
+      <div class="proposal-box" id="proposalBox">
+        <div class="ring-icon">💍</div>
+        <div class="proposal-title">Will You Marry Me?</div>
+        <p class="proposal-desc">You are my universe, my frequency, and my home. I want to love you today, tomorrow, and for all eternity. Will you make me the happiest person and be my wife? ♡</p>
+
+        <div class="proposal-btn-area" id="proposalBtnArea">
+          <button class="btn-yes-floating" id="runawayYesBtn">YES! 💖</button>
+          <button class="btn-no-static" id="normalNoBtn">YES! 💕</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Success Modal -->
+  <div class="success-modal" id="successModal">
+    <div class="success-content">
+      <h2>FOREVER & ALWAYS! 🎉</h2>
+      <p style="font-size: 1.15rem; color: #4a2e35; margin: 15px 0;">You said YES! I love you endlessly! 💖💍✨</p>
+      <button class="btn-save" onclick="closeModal()">I Love You Too ♡</button>
     </div>
   </div>
 
   <!-- Admin Panel -->
   <div class="admin-panel" id="adminPanel">
-    <h2>Admin Management ♡</h2>
+    <h2>Admin Settings ♡</h2>
 
     <div class="form-group">
-      <label>Choose Theme or Custom Background</label>
+      <label>Choose Theme / Custom Background</label>
       <select id="bgThemeSelect">
-        <option value="sunset">Sunset Romantic (Gradient)</option>
-        <option value="cosmic">Night Cosmic (Dark Purple)</option>
-        <option value="lavender">Lavender Dream (Soft Violet)</option>
-        <option value="custom">Upload Custom Wallpaper Image 🖼️</option>
+        <option value="sunset">Sunset Romantic</option>
+        <option value="cosmic">Night Cosmic</option>
+        <option value="lavender">Lavender Dream</option>
+        <option value="custom">Upload Custom Wallpaper 🖼️</option>
       </select>
     </div>
-
     <div class="form-group" id="customBgBox" style="display: none;">
-      <label>Upload Custom Wallpaper</label>
       <input type="file" id="bgFileInput" accept="image/*">
     </div>
 
-    <!-- Station Creation Section -->
-    <div class="section-title">1. Manage Custom Stations & Frequencies</div>
+    <div class="section-title">1. Custom Dating Start Date</div>
     <div class="form-group">
-      <label>Station Name</label>
-      <input type="text" id="newStationName" placeholder="e.g. Late Night Chats 🌙">
+      <input type="date" id="startDateInput" value="2024-05-06">
     </div>
-    <div class="form-group">
-      <label>Custom Frequency (e.g. 104.5 FM)</label>
-      <input type="text" id="newStationFreq" placeholder="e.g. 98.5 FM">
-    </div>
-    <button class="btn-save" id="addStationBtn" style="margin-bottom: 10px; background: #6c5ce7;">+ Add Station</button>
 
+    <div class="section-title">2. Manage Custom Stations</div>
+    <div class="form-group"><input type="text" id="newStationName" placeholder="Station Name"></div>
+    <div class="form-group"><input type="text" id="newStationFreq" placeholder="Frequency e.g. 104.5 FM"></div>
+    <button class="btn-save" id="addStationBtn" style="background:#6c5ce7; margin-bottom:10px;">+ Add Station</button>
     <div class="list-box" id="adminStationList"></div>
 
-    <!-- Content / Track Creation Section -->
-    <div class="section-title">2. Add Track, Voice Note or Written Letter</div>
+    <div class="section-title">3. Add Audio Memory</div>
+    <div class="form-group"><select id="selectTrackStation"></select></div>
+    <div class="form-group"><input type="text" id="inputTitle" placeholder="Track Title"></div>
     <div class="form-group">
-      <label>Select Station Channel</label>
-      <select id="selectTrackStation"></select>
+      <label>Audio File or URL</label>
+      <input type="file" id="inputAudioFile" accept="audio/*" style="margin-bottom: 5px;">
+      <input type="text" id="inputAudioUrl" placeholder="https://example.com/song.mp3">
     </div>
+    <div class="form-group"><label>Cover Photo</label><input type="file" id="inputFile" accept="image/*"></div>
+    <button class="btn-save" id="saveTrackBtn" style="margin-bottom:12px;">Save Audio Track</button>
 
-    <div class="form-group">
-      <label>Track / Letter Title</label>
-      <input type="text" id="inputTitle" placeholder="e.g. For when you miss me">
-    </div>
+    <div class="section-title">4. Add Scrapbook Polaroid</div>
+    <div class="form-group"><input type="text" id="inputPolaroidCaption" placeholder="Memory Caption"></div>
+    <div class="form-group"><input type="file" id="inputPolaroidFile" accept="image/*"></div>
+    <button class="btn-save" id="savePolaroidBtn" style="margin-bottom:12px; background:#00b894;">Add Polaroid Picture</button>
 
-    <div class="form-group">
-      <label>Written Love Letter (Optional - She can read or listen to it)</label>
-      <textarea id="inputLetter" rows="3" placeholder="Write your letter here..."></textarea>
-    </div>
-
-    <div class="form-group">
-      <label>Pick Cover Photo from Phone</label>
-      <input type="file" id="inputFile" accept="image/*">
-    </div>
-
-    <div class="recorder-box">
-      <button class="btn-recorder" id="recordBtn">🎙️ Record Voice</button>
-      <span id="recordStatus" style="font-size:0.8rem; color:var(--text-muted); font-weight: 600;">Ready</span>
-    </div>
-
-    <button class="btn-save" id="saveTrackBtn">Save Memory ♡</button>
-
-    <div class="section-title">Existing Memories</div>
-    <div class="list-box" id="adminTrackList"></div>
+    <div class="section-title">5. Add Written Love Letter</div>
+    <div class="form-group"><input type="text" id="inputPureLetterTitle" placeholder="Letter Title"></div>
+    <div class="form-group"><textarea id="inputPureLetterBody" rows="3" placeholder="Letter contents..."></textarea></div>
+    <button class="btn-save" id="savePureLetterBtn">Save Written Letter</button>
   </div>
 
   <script>
     let stations = [];
     let tracks = [];
+    let pureLetters = [];
+    let polaroids = [];
+    let datingStartDate = new Date("2024-05-06T00:00:00");
+
     let currentTrackIndex = 0;
+    let currentLetterIndex = 0;
     let isPlaying = false;
     let audio = new Audio();
-    let mediaRecorder;
-    let audioChunks = [];
-    let recordedAudioUrl = null;
-    let selectedImageBase64 = null;
-    let isReadingLetter = false;
+    let vinylClicks = 0;
 
-    // Default Stations if empty
-    const defaultStations = [
-      { name: "Our Memories 📸", freq: "107.9 FM" },
-      { name: "Late Night 🌙", freq: "98.5 FM" },
-      { name: "Pick-Me-Up 💕", freq: "101.3 FM" }
+    let ambientCtx = null;
+    let ambientNodes = {};
+
+    const hkIcons = [
+      `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="%23ffffff" stroke="%23ff4b72" stroke-width="4"/><ellipse cx="35" cy="48" rx="5" ry="7" fill="%23000"/><ellipse cx="65" cy="48" rx="5" ry="7" fill="%23000"/><ellipse cx="50" cy="58" rx="6" ry="4" fill="%23ffb6c1"/><path d="M 65 25 Q 75 15 85 25 Q 75 35 65 25 Z" fill="%23ff4b72"/><circle cx="72" cy="27" r="4" fill="%23ffffff"/></svg>`,
+      `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="%23fff0f3" stroke="%23ff2b56" stroke-width="4"/><ellipse cx="35" cy="48" rx="5" ry="7" fill="%23000"/><ellipse cx="65" cy="48" rx="5" ry="7" fill="%23000"/><ellipse cx="50" cy="58" rx="6" ry="4" fill="%23ff4b72"/><path d="M 20 25 Q 10 15 20 5 Q 30 15 20 25 Z" fill="%23ff4b72"/></svg>`
     ];
 
-    const playBtn = document.getElementById('playBtn');
-    const prevBtn = document.getElementById('prevBtn');
-    const nextBtn = document.getElementById('nextBtn');
-    const vinyl = document.getElementById('vinyl');
-    const albumArt = document.getElementById('albumArt');
-    const trackTitle = document.getElementById('trackTitle');
-    const trackSubtitle = document.getElementById('trackSubtitle');
-    const freqBadge = document.getElementById('freqBadge');
-    const stationList = document.getElementById('stationList');
-    const letterBox = document.getElementById('letterBox');
-    const readLetterBtn = document.getElementById('readLetterBtn');
-    const downloadBtn = document.getElementById('downloadBtn');
-    const adminBtn = document.getElementById('adminBtn');
-    const adminPanel = document.getElementById('adminPanel');
-
-    const bgThemeSelect = document.getElementById('bgThemeSelect');
-    const customBgBox = document.getElementById('customBgBox');
-    const bgFileInput = document.getElementById('bgFileInput');
-
-    // Admin Inputs
-    const newStationName = document.getElementById('newStationName');
-    const newStationFreq = document.getElementById('newStationFreq');
-    const addStationBtn = document.getElementById('addStationBtn');
-    const adminStationList = document.getElementById('adminStationList');
-
-    const selectTrackStation = document.getElementById('selectTrackStation');
-    const inputTitle = document.getElementById('inputTitle');
-    const inputLetter = document.getElementById('inputLetter');
-    const inputFile = document.getElementById('inputFile');
-    const recordBtn = document.getElementById('recordBtn');
-    const recordStatus = document.getElementById('recordStatus');
-    const saveTrackBtn = document.getElementById('saveTrackBtn');
-    const adminTrackList = document.getElementById('adminTrackList');
-
     function init() {
-      // Load Stations
+      const savedDate = localStorage.getItem('love_start_date');
+      if (savedDate) {
+        datingStartDate = new Date(savedDate);
+      } else {
+        localStorage.setItem('love_start_date', datingStartDate.toISOString());
+      }
+
       const savedStations = localStorage.getItem('love_stations');
-      if (savedStations) {
-        stations = JSON.parse(savedStations);
-      } else {
-        stations = defaultStations;
-        saveStations();
-      }
+      stations = savedStations ? JSON.parse(savedStations) : [
+        { name: "Our Memories 📸", freq: "107.9 FM" },
+        { name: "Late Night 🌙", freq: "98.5 FM" },
+        { name: "Pick-Me-Up 💕", freq: "101.3 FM" }
+      ];
 
-      // Load Tracks
       const savedTracks = localStorage.getItem('love_radio_tracks');
-      if (savedTracks) {
-        tracks = JSON.parse(savedTracks);
-      } else {
-        tracks = [
-          {
-            title: "Welcome Note ♡",
-            station: stations[0].name,
-            freq: stations[0].freq,
-            letter: "Welcome to our private radio station! Switch between stations to hear voice notes or read letters.",
-            photo: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=300",
-            audioUrl: ""
-          }
-        ];
-        saveTracks();
-      }
+      tracks = savedTracks ? JSON.parse(savedTracks) : [{
+        title: "Welcome Note ♡", station: stations[0].name, freq: stations[0].freq,
+        photo: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=300", audioUrl: ""
+      }];
 
-      // Load Background
+      const savedLetters = localStorage.getItem('love_pure_letters');
+      pureLetters = savedLetters ? JSON.parse(savedLetters) : [{
+        title: "My Heart For You ♡", body: "Every moment with you since May 6, 2024 feels like a dream I never want to wake up from..."
+      }];
+
+      const savedPolaroids = localStorage.getItem('love_polaroids');
+      polaroids = savedPolaroids ? JSON.parse(savedPolaroids) : [
+        { caption: "First Date 💕", url: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400" },
+        { caption: "Sunset Walk 🌅", url: "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=400" }
+      ];
+
       const savedBg = localStorage.getItem('love_radio_bg');
       if (savedBg) applyBackground(savedBg);
 
       renderStations();
       renderAdminStations();
-      renderAdminTracks();
+      renderPureLetters();
+      renderPolaroids();
       populateStationDropdown();
+      startCounter();
+      initParticles();
 
       if (tracks.length > 0) loadTrack(0);
+      if (pureLetters.length > 0) loadPureLetter(0);
     }
 
-    function saveStations() { localStorage.setItem('love_stations', JSON.stringify(stations)); }
-    function saveTracks() { localStorage.setItem('love_radio_tracks', JSON.stringify(tracks)); }
+    function saveAll() {
+      localStorage.setItem('love_stations', JSON.stringify(stations));
+      localStorage.setItem('love_radio_tracks', JSON.stringify(tracks));
+      localStorage.setItem('love_pure_letters', JSON.stringify(pureLetters));
+      localStorage.setItem('love_polaroids', JSON.stringify(polaroids));
+      localStorage.setItem('love_start_date', datingStartDate.toISOString());
+    }
+
+    /* Days Together Counter starting May 6, 2024 */
+    function startCounter() {
+      setInterval(() => {
+        const now = new Date();
+        const diff = now - datingStartDate;
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+        const mins = Math.floor((diff / 1000 / 60) % 60);
+        const secs = Math.floor((diff / 1000) % 60);
+
+        document.getElementById('counterBanner').innerHTML = 
+          `💖 Together Since May 6, 2024: <strong>${days}</strong> Days, <strong>${hours}</strong>h <strong>${mins}</strong>m <strong>${secs}</strong>s ♡`;
+      }, 1000);
+    }
+
+    function switchPage(pageId) {
+      document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById(pageId).classList.add('active');
+      event.target.classList.add('active');
+
+      if (pageId !== 'radioPage') pauseAudio();
+    }
 
     function applyBackground(bg) {
       if (bg.startsWith('data:image')) {
@@ -645,311 +838,289 @@
       }
     }
 
-    bgThemeSelect.onchange = (e) => {
-      const val = e.target.value;
-      if (val === 'custom') {
-        customBgBox.style.display = 'block';
-      } else {
-        customBgBox.style.display = 'none';
-        applyBackground(val);
-        localStorage.setItem('love_radio_bg', val);
+    /* Proposal Section Runaway Yes Button Game & Hello Kitty Followers */
+    const runawayBtn = document.getElementById('runawayYesBtn');
+    const normalNoBtn = document.getElementById('normalNoBtn');
+
+    function floatRunawayBtn(e) {
+      const area = document.getElementById('proposalBtnArea');
+      const maxX = area.clientWidth - runawayBtn.clientWidth;
+      const maxY = area.clientHeight - runawayBtn.clientHeight;
+
+      const randomX = Math.max(10, Math.floor(Math.random() * maxX));
+      const randomY = Math.max(10, Math.floor(Math.random() * maxY));
+
+      runawayBtn.style.left = randomX + 'px';
+      runawayBtn.style.top = randomY + 'px';
+
+      // Spawn Hello Kitty animation trailing right after the runaway button moves
+      spawnHKIcon(
+        runawayBtn.getBoundingClientRect().left + 30,
+        runawayBtn.getBoundingClientRect().top + 20
+      );
+    }
+
+    function spawnHKIcon(x, y) {
+      const img = document.createElement('img');
+      img.src = hkIcons[Math.floor(Math.random() * hkIcons.length)];
+      img.className = 'hk-tap-icon';
+      img.style.left = x + 'px';
+      img.style.top = y + 'px';
+      document.body.appendChild(img);
+      setTimeout(() => img.remove(), 1400);
+    }
+
+    runawayBtn.addEventListener('mouseover', floatRunawayBtn);
+    runawayBtn.addEventListener('touchstart', floatRunawayBtn);
+    runawayBtn.addEventListener('click', triggerSuccess);
+    normalNoBtn.addEventListener('click', triggerSuccess);
+
+    document.getElementById('proposalBox').addEventListener('click', (e) => {
+      if (e.target.tagName !== 'BUTTON') {
+        spawnHKIcon(e.clientX, e.clientY);
       }
-    };
+    });
 
-    bgFileInput.onchange = (e) => {
-      const file = e.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          applyBackground(reader.result);
-          localStorage.setItem('love_radio_bg', reader.result);
-        };
-        reader.readAsDataURL(file);
-      }
-    };
+    function triggerSuccess() {
+      document.getElementById('successModal').style.display = 'flex';
+    }
+    function closeModal() {
+      document.getElementById('successModal').style.display = 'none';
+    }
 
-    function loadTrack(index) {
-      if (tracks.length === 0) return;
-      currentTrackIndex = index;
-      const track = tracks[index];
+    /* Audio Ambient Soundscape Generator */
+    function toggleAmbient(type) {
+      if (!ambientCtx) ambientCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const btn = document.getElementById(type + 'Btn');
 
-      trackTitle.textContent = track.title;
-      trackSubtitle.textContent = "Station: " + track.station;
-      freqBadge.textContent = track.freq || "107.9 FM";
-      albumArt.src = track.photo || "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=300";
-
-      // Stop speech if running
-      window.speechSynthesis.cancel();
-      isReadingLetter = false;
-
-      // Letter Display
-      if (track.letter && track.letter.trim() !== "") {
-        letterBox.textContent = track.letter;
-        letterBox.style.display = "block";
-        readLetterBtn.style.display = "inline-flex";
+      if (ambientNodes[type]) {
+        ambientNodes[type].stop();
+        delete ambientNodes[type];
+        btn.classList.remove('active');
       } else {
-        letterBox.style.display = "none";
-        readLetterBtn.style.display = "none";
-      }
+        const bufferSize = ambientCtx.sampleRate * 2;
+        const buffer = ambientCtx.createBuffer(1, bufferSize, ambientCtx.sampleRate);
+        const data = buffer.getChannelData(0);
 
-      // Audio Display
-      if (track.audioUrl) {
-        audio.src = track.audioUrl;
-        downloadBtn.href = track.audioUrl;
-        downloadBtn.style.display = 'inline-flex';
-        downloadBtn.download = `${track.title.replace(/\s+/g, '_')}_VoiceNote.mp3`;
-      } else {
-        audio.src = "";
-        downloadBtn.style.display = 'none';
+        for (let i = 0; i < bufferSize; i++) {
+          data[i] = Math.random() * 2 - 1;
+        }
+
+        const noise = ambientCtx.createBufferSource();
+        noise.buffer = buffer;
+        noise.loop = true;
+
+        const gain = ambientCtx.createGain();
+        gain.gain.value = type === 'rain' ? 0.08 : type === 'fire' ? 0.12 : 0.05;
+
+        noise.connect(gain);
+        gain.connect(ambientCtx.destination);
+        noise.start();
+
+        ambientNodes[type] = noise;
+        btn.classList.add('active');
       }
     }
 
-    function renderStations() {
-      stationList.innerHTML = "";
-      stations.forEach(st => {
-        const chip = document.createElement('div');
-        chip.className = 'station-chip';
-        chip.innerHTML = `<span>${st.name}</span><span class="station-chip-freq">${st.freq}</span>`;
-        chip.onclick = () => {
-          document.querySelectorAll('.station-chip').forEach(c => c.classList.remove('active'));
-          chip.classList.add('active');
-          const firstInStation = tracks.findIndex(t => t.station === st.name);
-          if (firstInStation !== -1) {
-            loadTrack(firstInStation);
-            playAudio();
-          } else {
-            trackTitle.textContent = st.name;
-            trackSubtitle.textContent = "No tracks in this station yet";
-            freqBadge.textContent = st.freq;
-            letterBox.style.display = "none";
-            readLetterBtn.style.display = "none";
-            downloadBtn.style.display = "none";
-            pauseAudio();
-          }
-        };
-        stationList.appendChild(chip);
-      });
+    /* Radio Functions */
+    function loadTrack(index) {
+      if (tracks.length === 0) return;
+      currentTrackIndex = index;
+      const t = tracks[index];
+      document.getElementById('trackTitle').textContent = t.title;
+      document.getElementById('trackSubtitle').textContent = "Station: " + t.station;
+      document.getElementById('freqBadge').textContent = t.freq || "107.9 FM";
+      document.getElementById('albumArt').src = t.photo || "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=300";
+
+      const dl = document.getElementById('downloadBtn');
+      if (t.audioUrl) {
+        audio.src = t.audioUrl;
+        dl.href = t.audioUrl;
+        dl.style.display = 'inline-flex';
+      } else {
+        audio.src = "";
+        dl.style.display = 'none';
+      }
     }
 
     function playAudio() {
       if (tracks[currentTrackIndex] && tracks[currentTrackIndex].audioUrl) {
         audio.play();
         isPlaying = true;
-        playBtn.textContent = '⏸';
-        vinyl.classList.add('playing');
+        document.getElementById('playBtn').textContent = '⏸';
+        document.getElementById('vinyl').classList.add('playing');
       }
     }
 
     function pauseAudio() {
       audio.pause();
       isPlaying = false;
-      playBtn.textContent = '▶';
-      vinyl.classList.remove('playing');
+      document.getElementById('playBtn').textContent = '▶';
+      document.getElementById('vinyl').classList.remove('playing');
       window.speechSynthesis.cancel();
     }
 
-    playBtn.onclick = () => {
-      if (isPlaying) pauseAudio();
-      else playAudio();
-    };
+    document.getElementById('playBtn').onclick = () => isPlaying ? pauseAudio() : playAudio();
+    document.getElementById('nextBtn').onclick = () => { currentTrackIndex = (currentTrackIndex + 1) % tracks.length; loadTrack(currentTrackIndex); playAudio(); };
+    document.getElementById('prevBtn').onclick = () => { currentTrackIndex = (currentTrackIndex - 1 + tracks.length) % tracks.length; loadTrack(currentTrackIndex); playAudio(); };
 
-    nextBtn.onclick = () => {
-      currentTrackIndex = (currentTrackIndex + 1) % tracks.length;
-      loadTrack(currentTrackIndex);
-      playAudio();
-    };
+    /* Pure Letters & Voice */
+    function loadPureLetter(i) {
+      currentLetterIndex = i;
+      const l = pureLetters[i];
+      document.getElementById('pureLetterTitle').textContent = l.title;
+      document.getElementById('pureLetterBody').textContent = l.body;
+    }
 
-    prevBtn.onclick = () => {
-      currentTrackIndex = (currentTrackIndex - 1 + tracks.length) % tracks.length;
-      loadTrack(currentTrackIndex);
-      playAudio();
-    };
-
-    audio.onended = () => pauseAudio();
-
-    // Read Aloud Text-to-Speech
-    readLetterBtn.onclick = () => {
-      const track = tracks[currentTrackIndex];
-      if (!track || !track.letter) return;
-
-      if (isReadingLetter) {
-        window.speechSynthesis.cancel();
-        isReadingLetter = false;
-        readLetterBtn.textContent = "🗣️ Listen to Letter";
-        vinyl.classList.remove('playing');
-      } else {
-        pauseAudio();
-        const utterance = new SpeechSynthesisUtterance(track.letter);
-        utterance.rate = 0.9;
-        utterance.pitch = 1.0;
-
-        utterance.onend = () => {
-          isReadingLetter = false;
-          readLetterBtn.textContent = "🗣️ Listen to Letter";
-          vinyl.classList.remove('playing');
+    function renderPureLetters() {
+      const list = document.getElementById('pureLetterList');
+      list.innerHTML = "";
+      pureLetters.forEach((l, i) => {
+        const chip = document.createElement('div');
+        chip.className = 'station-chip' + (i === currentLetterIndex ? ' active' : '');
+        chip.textContent = l.title;
+        chip.onclick = () => {
+          document.querySelectorAll('#pureLetterList .station-chip').forEach(c => c.classList.remove('active'));
+          chip.classList.add('active');
+          loadPureLetter(i);
         };
-
-        window.speechSynthesis.speak(utterance);
-        isReadingLetter = true;
-        readLetterBtn.textContent = "⏹️ Stop Reading";
-        vinyl.classList.add('playing');
-      }
-    };
-
-    // Admin Passcode Toggle
-    adminBtn.onclick = () => {
-      const pass = prompt("Enter Admin Passcode ♡:", "");
-      if (pass === "1234") {
-        adminPanel.classList.toggle('active');
-      } else {
-        alert("Incorrect passcode!");
-      }
-    };
-
-    // Add New Custom Station
-    addStationBtn.onclick = () => {
-      const name = newStationName.value.trim();
-      const freq = newStationFreq.value.trim() || "100.0 FM";
-
-      if (!name) {
-        alert("Please enter a station name");
-        return;
-      }
-
-      stations.push({ name: name, freq: freq });
-      saveStations();
-      renderStations();
-      renderAdminStations();
-      populateStationDropdown();
-
-      newStationName.value = "";
-      newStationFreq.value = "";
-      alert("New station added!");
-    };
-
-    function renderAdminStations() {
-      adminStationList.innerHTML = "";
-      stations.forEach((s, index) => {
-        const item = document.createElement('div');
-        item.className = 'item-card';
-        item.innerHTML = `
-          <span><strong>${s.name}</strong> (${s.freq})</span>
-          <button class="btn-del" onclick="deleteStation(${index})">🗑️</button>
-        `;
-        adminStationList.appendChild(item);
+        list.appendChild(chip);
       });
     }
 
-    window.deleteStation = function(index) {
-      stations.splice(index, 1);
-      saveStations();
-      renderStations();
-      renderAdminStations();
-      populateStationDropdown();
+    document.getElementById('readPureLetterBtn').onclick = () => {
+      const l = pureLetters[currentLetterIndex];
+      if (!l) return;
+      pauseAudio();
+      const utterance = new SpeechSynthesisUtterance(l.body);
+      utterance.rate = 0.9;
+      window.speechSynthesis.speak(utterance);
     };
 
-    function populateStationDropdown() {
-      selectTrackStation.innerHTML = stations.map(s => `<option value="${s.name}">${s.name} (${s.freq})</option>`).join('');
+    /* Unlimited Scrapbook Polaroid Gallery */
+    function renderPolaroids() {
+      const grid = document.getElementById('polaroidGrid');
+      grid.innerHTML = "";
+      polaroids.forEach((p, i) => {
+        const card = document.createElement('div');
+        card.className = 'polaroid-card';
+        card.innerHTML = `
+          <img src="${p.url}" class="polaroid-img" alt="${p.caption}">
+          <div class="polaroid-caption">${p.caption}</div>
+        `;
+        grid.appendChild(card);
+      });
     }
 
-    // File Input Base64
-    inputFile.onchange = (e) => {
-      const file = e.target.files[0];
+    /* Particles Trail */
+    function initParticles() {
+      const canvas = document.getElementById('particleCanvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      let particles = [];
+      window.addEventListener('mousemove', (e) => {
+        for (let i = 0; i < 2; i++) {
+          particles.push({
+            x: e.clientX, y: e.clientY,
+            size: Math.random() * 8 + 3,
+            color: `hsl(${Math.random() * 40 + 340}, 100%, 70%)`,
+            speedX: Math.random() * 2 - 1,
+            speedY: Math.random() * 2 - 1,
+            life: 1
+          });
+        }
+      });
+
+      function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach((p, index) => {
+          p.x += p.speedX; p.y += p.speedY; p.life -= 0.02;
+          ctx.fillStyle = p.color;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+          ctx.fill();
+          if (p.life <= 0) particles.splice(index, 1);
+        });
+        requestAnimationFrame(animate);
+      }
+      animate();
+    }
+
+    /* Admin Settings */
+    document.getElementById('adminBtn').onclick = () => {
+      if (prompt("Enter Passcode ♡:") === "1234") {
+        document.getElementById('adminPanel').classList.toggle('active');
+      }
+    };
+
+    document.getElementById('startDateInput').addEventListener('change', (e) => {
+      if (e.target.value) {
+        datingStartDate = new Date(e.target.value + "T00:00:00");
+        saveAll();
+      }
+    });
+
+    document.getElementById('addStationBtn').onclick = () => {
+      const name = document.getElementById('newStationName').value.trim();
+      const freq = document.getElementById('newStationFreq').value.trim() || "100.0 FM";
+      if (name) {
+        stations.push({ name, freq });
+        saveAll(); renderStations(); renderAdminStations(); populateStationDropdown();
+      }
+    };
+
+    document.getElementById('savePolaroidBtn').onclick = () => {
+      const caption = document.getElementById('inputPolaroidCaption').value.trim() || "Memory";
+      const file = document.getElementById('inputPolaroidFile').files[0];
+
       if (file) {
         const reader = new FileReader();
-        reader.onloadend = () => { selectedImageBase64 = reader.result; };
+        reader.onloadend = () => {
+          polaroids.push({ caption, url: reader.result });
+          saveAll(); renderPolaroids();
+          alert("New Polaroid Added to Scrapbook! 📸");
+        };
         reader.readAsDataURL(file);
       }
     };
 
-    // Recorder Logic
-    recordBtn.onclick = async () => {
-      if (!mediaRecorder || mediaRecorder.state === "inactive") {
-        try {
-          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-          mediaRecorder = new MediaRecorder(stream);
-          audioChunks = [];
-
-          mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
-          mediaRecorder.onstop = () => {
-            const blob = new Blob(audioChunks, { type: 'audio/mp3' });
-            const reader = new FileReader();
-            reader.readAsDataURL(blob);
-            reader.onloadend = () => {
-              recordedAudioUrl = reader.result;
-              recordStatus.textContent = "Voice Saved! ✨";
-            };
-          };
-
-          mediaRecorder.start();
-          recordStatus.textContent = "Recording... 🎙️";
-          recordBtn.textContent = "⏹ Stop";
-        } catch (err) {
-          alert("Microphone permission denied.");
-        }
-      } else {
-        mediaRecorder.stop();
-        recordBtn.textContent = "🎙️ Record Voice";
+    document.getElementById('savePureLetterBtn').onclick = () => {
+      const title = document.getElementById('inputPureLetterTitle').value.trim();
+      const body = document.getElementById('inputPureLetterBody').value.trim();
+      if (title && body) {
+        pureLetters.push({ title, body });
+        saveAll(); renderPureLetters();
       }
     };
 
-    // Save Memory Track
-    saveTrackBtn.onclick = () => {
-      const title = inputTitle.value.trim();
-      const stationName = selectTrackStation.value;
-      const letter = inputLetter.value.trim();
-
-      if (!title) {
-        alert("Please write a title for this memory!");
-        return;
-      }
-
-      const selectedStationObj = stations.find(s => s.name === stationName) || stations[0];
-
-      tracks.push({
-        title: title,
-        station: selectedStationObj.name,
-        freq: selectedStationObj.freq,
-        letter: letter,
-        photo: selectedImageBase64 || "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=300",
-        audioUrl: recordedAudioUrl || ""
-      });
-
-      saveTracks();
-      renderStations();
-      renderAdminTracks();
-
-      inputTitle.value = "";
-      inputLetter.value = "";
-      inputFile.value = "";
-      selectedImageBase64 = null;
-      recordedAudioUrl = null;
-      recordStatus.textContent = "Ready";
-      alert("Memory saved to " + selectedStationObj.name + "!");
-    };
-
-    function renderAdminTracks() {
-      adminTrackList.innerHTML = "";
-      tracks.forEach((t, i) => {
-        const item = document.createElement('div');
-        item.className = 'item-card';
-        item.innerHTML = `
-          <span>${t.title} (${t.station})</span>
-          <button class="btn-del" onclick="deleteTrack(${i})">🗑️</button>
-        `;
-        adminTrackList.appendChild(item);
+    function renderStations() {
+      const list = document.getElementById('stationList');
+      list.innerHTML = "";
+      stations.forEach(s => {
+        const chip = document.createElement('div');
+        chip.className = 'station-chip';
+        chip.innerHTML = `<span>${s.name}</span><span style="font-size:0.75rem; opacity:0.8;">${s.freq}</span>`;
+        chip.onclick = () => {
+          const idx = tracks.findIndex(t => t.station === s.name);
+          if (idx !== -1) { loadTrack(idx); playAudio(); }
+        };
+        list.appendChild(chip);
       });
     }
 
-    window.deleteTrack = function(index) {
-      tracks.splice(index, 1);
-      saveTracks();
-      renderStations();
-      renderAdminTracks();
-      if (tracks.length > 0) loadTrack(0);
-    };
+    function renderAdminStations() {
+      document.getElementById('adminStationList').innerHTML = stations.map((s, i) => `
+        <div class="item-card"><span>${s.name} (${s.freq})</span><button class="btn-del" onclick="stations.splice(${i},1);saveAll();renderStations();renderAdminStations();">🗑️</button></div>
+      `).join('');
+    }
+
+    function populateStationDropdown() {
+      document.getElementById('selectTrackStation').innerHTML = stations.map(s => `<option value="${s.name}">${s.name}</option>`).join('');
+    }
 
     init();
   </script>
 </body>
-      </html>
+</html>
