@@ -7,6 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Sacramento&family=Quicksand:wght@500;600;700&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   
   <style>
     :root {
@@ -40,8 +41,8 @@
       transition: background 0.5s ease;
     }
 
-    /* Particle Canvas Overlay */
-    #particleCanvas {
+    /* Canvas Overlays */
+    #particleCanvas, #magicalProposalCanvas {
       position: fixed;
       top: 0;
       left: 0;
@@ -50,6 +51,13 @@
       pointer-events: none;
       z-index: 2;
     }
+
+    #magicalProposalCanvas {
+      z-index: 4;
+      opacity: 0;
+      transition: opacity 1s ease;
+    }
+    #magicalProposalCanvas.active { opacity: 1; }
 
     /* Hello Kitty Tap Spawn Animation */
     .hk-tap-icon {
@@ -109,7 +117,7 @@
       letter-spacing: 0.5px;
     }
 
-    /* Days Together Live Clock Banner & Anniversary Countdown */
+    /* Days Together Live Clock Banner */
     .timer-container {
       width: 100%;
       max-width: 500px;
@@ -150,24 +158,9 @@
       gap: 6px;
     }
 
-    .timer-unit {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .timer-num {
-      font-family: 'Fredoka', sans-serif;
-      font-size: 1.35rem;
-      font-weight: 700;
-      color: var(--accent);
-    }
-
-    .timer-label {
-      font-size: 0.65rem;
-      text-transform: uppercase;
-      font-weight: 700;
-      color: var(--text-muted);
-    }
+    .timer-unit { display: flex; flex-direction: column; }
+    .timer-num { font-family: 'Fredoka', sans-serif; font-size: 1.35rem; font-weight: 700; color: var(--accent); }
+    .timer-label { font-size: 0.65rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted); }
 
     /* Bottom Navigation Bar */
     .bottom-nav {
@@ -203,9 +196,7 @@
       border-radius: 20px;
       transition: all 0.3s ease;
     }
-
     .nav-item span.icon { font-size: 1.2rem; }
-
     .nav-item.active {
       background: var(--accent);
       color: #ffffff;
@@ -268,7 +259,6 @@
     }
     .admin-toggle:active { transform: scale(0.9); }
 
-    /* Frequency Badge Display */
     .freq-badge {
       font-family: 'Fredoka', sans-serif;
       background: var(--accent);
@@ -304,7 +294,6 @@
       animation: spin 5s linear infinite;
       animation-play-state: paused;
     }
-
     .vinyl-record.playing { animation-play-state: running; }
 
     .album-art {
@@ -322,7 +311,7 @@
     .track-title { font-family: 'Fredoka', sans-serif; font-size: 1.25rem; font-weight: 600; color: var(--text-main); }
     .track-subtitle { font-size: 0.85rem; color: var(--text-muted); margin-top: 3px; font-weight: 500; }
 
-    /* Station Selector Horizontal Chips */
+    /* Station Selector Chips */
     .station-selector {
       display: flex;
       gap: 8px;
@@ -349,7 +338,6 @@
       gap: 6px;
       transition: all 0.25s ease;
     }
-
     .station-chip.active {
       background: var(--accent);
       color: #ffffff;
@@ -357,7 +345,7 @@
       box-shadow: 0 4px 12px var(--accent-glow);
     }
 
-    /* Ambient Soundscape Mixer Box */
+    /* Ambient Soundscape Mixer */
     .soundscape-box {
       width: 100%;
       background: #fff8f9;
@@ -378,12 +366,7 @@
       gap: 6px;
     }
 
-    .ambient-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-    }
-
+    .ambient-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
     .ambient-card {
       background: #ffffff;
       border: 1px solid #ffd1dc;
@@ -393,24 +376,11 @@
       flex-direction: column;
       gap: 4px;
     }
-
-    .ambient-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.75rem;
-      font-weight: 700;
-      color: var(--text-muted);
-    }
-
-    .ambient-card input[type="range"] {
-      width: 100%;
-      accent-color: var(--accent);
-    }
+    .ambient-header { display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); }
+    .ambient-card input[type="range"] { width: 100%; accent-color: var(--accent); }
 
     /* Player Controls */
     .controls { display: flex; align-items: center; gap: 18px; }
-
     .btn-circle {
       width: 58px;
       height: 58px;
@@ -483,6 +453,14 @@
       white-space: pre-wrap;
     }
 
+    .highlighted-word {
+      background-color: #ffeaa7;
+      color: #d63031;
+      border-radius: 4px;
+      padding: 0 2px;
+      transition: background-color 0.2s ease;
+    }
+
     /* Dedicated Read Aloud Deck Box */
     .read-aloud-deck {
       width: 100%;
@@ -537,13 +515,15 @@
 
     @keyframes eqPulse {
       0% { height: 6px; }
-      100% { height: 26px; }
+      100% { height: 28px; }
     }
 
     .tts-controls-row {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
     }
 
     .btn-read-primary {
@@ -551,13 +531,13 @@
       background: var(--accent);
       color: white;
       border: none;
-      padding: 10px 22px;
+      padding: 10px 18px;
       border-radius: 25px;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       box-shadow: 0 4px 12px var(--accent-glow);
     }
 
@@ -566,9 +546,9 @@
       background: #ffffff;
       color: var(--accent);
       border: 2px solid #ffb6c1;
-      padding: 8px 16px;
+      padding: 8px 14px;
       border-radius: 20px;
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       cursor: pointer;
     }
 
@@ -650,7 +630,7 @@
       text-align: center;
       width: 100%;
       position: relative;
-      min-height: 360px;
+      min-height: 380px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -661,58 +641,61 @@
       font-size: 4.2rem;
       animation: pulse 2s infinite;
       margin-bottom: 8px;
+      filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.8));
     }
-    @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+    @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.15); } }
 
     .proposal-title {
       font-family: 'Sacramento', cursive;
-      font-size: 3.2rem;
+      font-size: 3.4rem;
       color: var(--accent);
       line-height: 1.1;
       margin-bottom: 8px;
+      text-shadow: 0 0 12px rgba(255, 75, 114, 0.3);
     }
 
     .proposal-desc {
-      font-size: 0.92rem;
+      font-size: 0.95rem;
       color: var(--text-muted);
       margin-bottom: 25px;
       padding: 0 10px;
+      line-height: 1.4;
     }
 
-    .proposal-btn-area {
-      position: relative;
-      width: 100%;
-      height: 110px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+    /* Floating YES Buttons Container */
+    #floatingYesContainer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 999;
+      display: none;
     }
 
-    .btn-yes {
-      font-family: 'Fredoka', sans-serif;
-      background: #2ed573;
-      color: white;
-      border: none;
-      padding: 12px 28px;
-      border-radius: 30px;
-      font-size: 1.1rem;
-      cursor: pointer;
-      box-shadow: 0 4px 15px rgba(46, 213, 115, 0.4);
+    .floating-yes-btn {
       position: absolute;
-      transition: all 0.15s ease-out;
-      z-index: 10;
+      pointer-events: auto;
+      font-family: 'Fredoka', sans-serif;
+      background: linear-gradient(135deg, #ff4b72 0%, #ff2b56 100%);
+      color: white;
+      border: 2px solid #ffffff;
+      padding: 12px 24px;
+      border-radius: 35px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 0 20px var(--accent-glow), 0 4px 15px rgba(0,0,0,0.15);
+      transition: transform 0.1s ease;
+      animation: pulseGlow 2s infinite alternate;
+      user-select: none;
+      white-space: nowrap;
     }
 
-    .btn-no {
-      font-family: 'Fredoka', sans-serif;
-      background: var(--accent);
-      color: white;
-      border: none;
-      padding: 12px 28px;
-      border-radius: 30px;
-      font-size: 1.1rem;
-      cursor: pointer;
-      box-shadow: 0 4px 15px var(--accent-glow);
+    @keyframes pulseGlow {
+      0% { box-shadow: 0 0 10px var(--accent-glow); }
+      100% { box-shadow: 0 0 25px var(--accent), 0 0 35px #ffffff; }
     }
 
     /* Modals */
@@ -720,7 +703,7 @@
       display: none;
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.6);
+      background: rgba(0,0,0,0.65);
       backdrop-filter: blur(8px);
       z-index: 10000;
       justify-content: center;
@@ -730,12 +713,18 @@
 
     .modal-card {
       background: #ffffff;
-      padding: 25px 20px;
+      padding: 30px 22px;
       border-radius: 30px;
       text-align: center;
-      max-width: 380px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      max-width: 400px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.3);
       border: 4px solid #ffd1dc;
+      animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    @keyframes popIn {
+      0% { transform: scale(0.6); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
     }
 
     /* Admin Panel */
@@ -771,8 +760,12 @@
 
   <!-- Particle Effect Canvas Overlay -->
   <canvas id="particleCanvas"></canvas>
+  <canvas id="magicalProposalCanvas"></canvas>
 
-  <!-- Background Hearts -->
+  <!-- Container for Floating Floating YES buttons -->
+  <div id="floatingYesContainer"></div>
+
+  <!-- Background Floating Hearts -->
   <div class="bg-heart" style="left: 10%; animation-delay: 0s;">💖</div>
   <div class="bg-heart" style="left: 30%; animation-delay: 2.5s;">💕</div>
   <div class="bg-heart" style="left: 65%; animation-delay: 4.5s;">🌸</div>
@@ -784,7 +777,7 @@
     <p>♡ FM Radio, Read Aloud Letters & Vault ♡</p>
   </header>
 
-  <!-- Days Together Live Counter (Since May 6, 2024) -->
+  <!-- Live Clock Banner (Since May 6, 2024) -->
   <div class="timer-container">
     <div class="timer-banner">
       <div class="timer-unit">
@@ -882,10 +875,10 @@
 
       <div class="station-selector" id="letterList"></div>
 
-      <!-- PROMINENT READ ALOUD CONTROL DECK -->
+      <!-- READ ALOUD CONTROL DECK -->
       <div class="read-aloud-deck">
         <div class="tts-header">
-          <span>🔊 Dedicated Letter Read Aloud Voice</span>
+          <span>🔊 Read Aloud Voice Engine</span>
         </div>
 
         <!-- Equalizer Animation Wave -->
@@ -899,7 +892,7 @@
 
         <div class="tts-controls-row">
           <button class="btn-read-primary" id="startReadAloudBtn">
-            <span id="readIcon">🔊</span> <span id="readText">Read Letter Aloud</span>
+            <span id="readIcon">▶</span> <span id="readText">Read Aloud</span>
           </button>
           <button class="btn-read-secondary" id="pauseReadAloudBtn">Pause ⏸</button>
           <button class="btn-read-secondary" id="stopReadAloudBtn">Stop ⏹</button>
@@ -940,18 +933,14 @@
     </div>
   </div>
 
-  <!-- PAGE 4: PROPOSAL PAGE WITH RUNAWAY YES BUTTON -->
+  <!-- PAGE 4: MAGICAL PROPOSAL PAGE -->
   <div class="page-view" id="proposalPage">
-    <div class="app-card">
-      <div class="proposal-box" id="proposalTapZone">
+    <div class="app-card" style="background: rgba(255, 255, 255, 0.95);">
+      <div class="proposal-box">
         <div class="ring-icon">💍</div>
         <div class="proposal-title">Will You Marry Me?</div>
-        <p class="proposal-desc">In every life, in every universe... I want to spend forever with you. Will you make me the happiest person and be my wife? ♡</p>
-
-        <div class="proposal-btn-area" id="proposalBtnArea">
-          <button class="btn-yes" id="runawayYesBtn">YES! 💖</button>
-          <button class="btn-no" id="normalNoBtn">YES! 💕</button>
-        </div>
+        <p class="proposal-desc">In every life, in every universe... I want to spend forever with you. Catch any floating YES button to say forever! ♡</p>
+        <p style="font-family:'Fredoka', sans-serif; font-size: 0.9rem; color: var(--accent); animation: pulse 1.5s infinite;">✨ Floating magical YES buttons are active! ✨</p>
       </div>
     </div>
   </div>
@@ -972,12 +961,13 @@
     </button>
   </div>
 
-  <!-- Success Proposal Modal -->
+  <!-- Grand Proposal Modal -->
   <div class="modal-overlay" id="successModal">
     <div class="modal-card">
-      <h2 style="font-family:'Sacramento', cursive; font-size:3.5rem; color:var(--accent);">I KNEW IT! 🎉</h2>
-      <p style="font-size: 1.1rem; color: #4a2e35; margin: 15px 0;">You said YES! I love you forever and always! 💖💍✨</p>
-      <button class="btn-action" onclick="closeModal('successModal')">Forever Yours ♡</button>
+      <div style="font-size: 3.5rem; margin-bottom: 5px;">💍✨</div>
+      <h2 style="font-family:'Sacramento', cursive; font-size:3.5rem; color:var(--accent); line-height: 1;">YES! FOREVER! 🎉</h2>
+      <p style="font-size: 1.05rem; color: #4a2e35; margin: 15px 0;">You made me the happiest person in the universe! I love you endlessly, today and always! 💖✨</p>
+      <button class="btn-action" onclick="closeModal('successModal')">Forever & Always Yours ♡</button>
     </div>
   </div>
 
@@ -1033,7 +1023,6 @@
     <div class="list-box" id="adminLetterList"></div>
   </div>
 
-  <!-- JavaScript Application Logic -->
   <script>
     /* Global Application State */
     let stations = [];
@@ -1051,14 +1040,18 @@
     let currentUtterance = null;
     let isSpeechReading = false;
     let isSpeechPaused = false;
+    let rawLetterWords = [];
 
     /* Default dating start date set explicitly to MAY 6, 2024 */
     let startDate = new Date('2024-05-06T00:00:00');
     let vinylClickCount = 0;
 
-    let uploadedAudioBase64 = null;
-    let selectedImageBase64 = null;
     let memImageBase64 = null;
+
+    /* Floating Proposal Animation State */
+    let floatingButtons = [];
+    let floatingAnimId = null;
+    let proposalCanvasAnimId = null;
 
     /* Hello Kitty Icons for Tap Effect */
     const hkIcons = [
@@ -1139,9 +1132,15 @@
 
       if (pageId !== 'radioPage') stopRadioAudio();
       if (pageId !== 'lettersPage') stopReadAloud();
+
+      if (pageId === 'proposalPage') {
+        startMagicalProposalScene();
+      } else {
+        stopMagicalProposalScene();
+      }
     }
 
-    /* Live Time Together Clock (Since May 6, 2024) & Anniversary Countdown */
+    /* Live Time Together Clock (Since May 6, 2024) */
     function updateLiveTimer() {
       const now = new Date();
       const diff = Math.max(0, now - startDate);
@@ -1281,7 +1280,6 @@
       return gainNode;
     }
 
-    /* Soundscape Sliders Listener */
     ['rain', 'fire', 'ocean', 'chime'].forEach(type => {
       const slider = document.getElementById(type + 'Vol');
       const label = document.getElementById(type + 'VolVal');
@@ -1295,9 +1293,9 @@
       };
     });
 
-    /* Hello Kitty Tap Listener in Proposal View */
-    document.getElementById('proposalPage').addEventListener('click', (e) => {
-      if (e.target.tagName === 'BUTTON') return;
+    /* Hello Kitty Tap Listener */
+    document.addEventListener('click', (e) => {
+      if (e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT' || e.target.tagName === 'A') return;
       const img = document.createElement('img');
       img.src = hkIcons[Math.floor(Math.random() * hkIcons.length)];
       img.className = 'hk-tap-icon';
@@ -1307,25 +1305,122 @@
       setTimeout(() => img.remove(), 1200);
     });
 
-    /* Runaway Yes Button Game */
-    const runawayBtn = document.getElementById('runawayYesBtn');
-    const normalNoBtn = document.getElementById('normalNoBtn');
+    /* ULTRA-MAGICAL PROPOSAL ENGINE */
+    function startMagicalProposalScene() {
+      const container = document.getElementById('floatingYesContainer');
+      const canvas = document.getElementById('magicalProposalCanvas');
+      container.style.display = 'block';
+      canvas.classList.add('active');
+      container.innerHTML = "";
 
-    function moveYesButton() {
-      const area = document.getElementById('proposalBtnArea');
-      const maxX = area.clientWidth - runawayBtn.clientWidth;
-      const maxY = area.clientHeight - runawayBtn.clientHeight;
-      const randomX = Math.max(0, Math.floor(Math.random() * maxX));
-      const randomY = Math.max(0, Math.floor(Math.random() * maxY));
+      /* Create 12 Floating YES Buttons of varying sizes & speeds */
+      floatingButtons = [];
+      const labels = ["YES! 💖", "YES! 💕", "YES! 💍", "FOREVER! ✨", "YES! 🌸", "ALWAYS YES! 💗"];
 
-      runawayBtn.style.left = randomX + 'px';
-      runawayBtn.style.top = randomY + 'px';
+      for (let i = 0; i < 12; i++) {
+        const btn = document.createElement('button');
+        btn.className = 'floating-yes-btn';
+        btn.textContent = labels[i % labels.length];
+        
+        const scale = 0.8 + Math.random() * 0.6;
+        btn.style.transform = `scale(${scale})`;
+
+        container.appendChild(btn);
+
+        const rect = btn.getBoundingClientRect();
+        const obj = {
+          el: btn,
+          x: Math.random() * (window.innerWidth - 120),
+          y: Math.random() * (window.innerHeight - 100),
+          vx: (Math.random() - 0.5) * 3,
+          vy: (Math.random() - 0.5) * 3,
+          width: rect.width || 120,
+          height: rect.height || 45
+        };
+
+        btn.onclick = (e) => {
+          e.stopPropagation();
+          triggerGrandProposalCelebration();
+        };
+
+        floatingButtons.push(obj);
+      }
+
+      function animateFloatingButtons() {
+        floatingButtons.forEach(b => {
+          b.x += b.vx;
+          b.y += b.vy;
+
+          if (b.x <= 10 || b.x + b.width >= window.innerWidth - 10) b.vx *= -1;
+          if (b.y <= 10 || b.y + b.height >= window.innerHeight - 10) b.vy *= -1;
+
+          b.el.style.left = b.x + 'px';
+          b.el.style.top = b.y + 'px';
+        });
+        floatingAnimId = requestAnimationFrame(animateFloatingButtons);
+      }
+      animateFloatingButtons();
+
+      /* Canvas Stars & Heart Constellation Background */
+      const ctx = canvas.getContext('2d');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      let stars = Array.from({ length: 60 }, () => ({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        size: Math.random() * 3 + 1,
+        alpha: Math.random(),
+        speed: Math.random() * 0.02 + 0.005
+      }));
+
+      function animateProposalCanvas() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        stars.forEach(s => {
+          s.alpha += s.speed;
+          if (s.alpha > 1 || s.alpha < 0) s.speed *= -1;
+          ctx.fillStyle = `rgba(255, 255, 255, ${Math.abs(s.alpha)})`;
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+          ctx.fill();
+        });
+
+        proposalCanvasAnimId = requestAnimationFrame(animateProposalCanvas);
+      }
+      animateProposalCanvas();
     }
 
-    runawayBtn.addEventListener('mouseover', moveYesButton);
-    runawayBtn.addEventListener('touchstart', moveYesButton);
-    runawayBtn.addEventListener('click', () => openModal('successModal'));
-    normalNoBtn.addEventListener('click', () => openModal('successModal'));
+    function stopMagicalProposalScene() {
+      const container = document.getElementById('floatingYesContainer');
+      const canvas = document.getElementById('magicalProposalCanvas');
+      container.style.display = 'none';
+      canvas.classList.remove('active');
+      if (floatingAnimId) cancelAnimationFrame(floatingAnimId);
+      if (proposalCanvasAnimId) cancelAnimationFrame(proposalCanvasAnimId);
+    }
+
+    function triggerGrandProposalCelebration() {
+      openModal('successModal');
+
+      if (typeof confetti === 'function') {
+        /* Full-screen Fireworks Heart Confetti Cannon */
+        const count = 200;
+        const defaults = { origin: { y: 0.7 } };
+
+        function fire(particleRatio, opts) {
+          confetti(Object.assign({}, defaults, opts, {
+            particleCount: Math.floor(count * particleRatio)
+          }));
+        }
+
+        fire(0.25, { spread: 26, startVelocity: 55, colors: ['#ff4b72', '#ffffff'] });
+        fire(0.2, { spread: 60, colors: ['#ff2b56', '#ffd1dc'] });
+        fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
+        fire(0.1, { spread: 120, startVelocity: 25, decay: 0.92, colors: ['#f7b731', '#ffffff'] });
+        fire(0.1, { spread: 120, startVelocity: 45 });
+      }
+    }
 
     /* Vinyl 5-Taps Easter Egg */
     document.getElementById('vinylClickTarget').onclick = () => {
@@ -1401,7 +1496,7 @@
       });
     }
 
-    /* PROMINENT READ ALOUD / TEXT TO SPEECH ENGINE */
+    /* READ ALOUD & HIGHLIGHTING ENGINE */
     function initVoices() {
       if (!('speechSynthesis' in window)) return;
       const vs = document.getElementById('voiceSelect');
@@ -1429,7 +1524,14 @@
 
       document.getElementById('letterTitle').textContent = item.title;
       document.getElementById('letterSubtitle').textContent = "Station: " + (item.station || "Love Vault");
-      document.getElementById('letterTextContent').textContent = item.letter;
+      
+      /* Format letter with span tags for word highlighting */
+      const container = document.getElementById('letterTextContent');
+      const words = item.letter.split(/(\s+)/);
+      container.innerHTML = words.map((w, idx) => {
+        if (w.trim().length === 0) return w;
+        return `<span id="word-${idx}">${w}</span>`;
+      }).join('');
     }
 
     function renderLetters() {
@@ -1471,8 +1573,8 @@
         speechSynth.cancel();
       }
 
-      const text = pureLetters[currentLetterIndex].letter;
-      currentUtterance = new SpeechSynthesisUtterance(text);
+      const rawText = pureLetters[currentLetterIndex].letter;
+      currentUtterance = new SpeechSynthesisUtterance(rawText);
 
       const vs = document.getElementById('voiceSelect');
       const voices = speechSynth.getVoices();
@@ -1483,6 +1585,13 @@
       currentUtterance.rate = parseFloat(document.getElementById('speechRate').value);
       currentUtterance.pitch = parseFloat(document.getElementById('speechPitch').value);
 
+      currentUtterance.onboundary = (e) => {
+        if (e.name === 'word') {
+          const charIndex = e.charIndex;
+          highlightWordAtCharIndex(rawText, charIndex);
+        }
+      };
+
       currentUtterance.onstart = () => {
         isSpeechReading = true;
         isSpeechPaused = false;
@@ -1492,16 +1601,40 @@
       currentUtterance.onend = () => {
         isSpeechReading = false;
         isSpeechPaused = false;
+        clearHighlights();
         updateTTSUI(false);
       };
 
       currentUtterance.onerror = () => {
         isSpeechReading = false;
         isSpeechPaused = false;
+        clearHighlights();
         updateTTSUI(false);
       };
 
       speechSynth.speak(currentUtterance);
+    }
+
+    function highlightWordAtCharIndex(fullText, charIndex) {
+      clearHighlights();
+      const container = document.getElementById('letterTextContent');
+      const spans = container.querySelectorAll('span');
+      
+      let count = 0;
+      for (let span of spans) {
+        const len = span.textContent.length;
+        if (charIndex >= count && charIndex < count + len + 2) {
+          span.classList.add('highlighted-word');
+          span.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          break;
+        }
+        count += len + 1;
+      }
+    }
+
+    function clearHighlights() {
+      const container = document.getElementById('letterTextContent');
+      container.querySelectorAll('.highlighted-word').forEach(s => s.classList.remove('highlighted-word'));
     }
 
     function pauseReadAloud() {
@@ -1519,22 +1652,20 @@
       }
       isSpeechReading = false;
       isSpeechPaused = false;
+      clearHighlights();
       updateTTSUI(false);
     }
 
     function updateTTSUI(speaking) {
       const eq = document.getElementById('equalizerWave');
       const btnText = document.getElementById('readText');
-      const btnIcon = document.getElementById('readIcon');
 
       if (speaking) {
         eq.classList.add('speaking');
-        btnText.textContent = "Reading Letter...";
-        btnIcon.textContent = "🔊";
+        btnText.textContent = "Reading...";
       } else {
         eq.classList.remove('speaking');
-        btnText.textContent = "Read Letter Aloud";
-        btnIcon.textContent = "🔊";
+        btnText.textContent = "Read Aloud";
       }
     }
 
@@ -1651,7 +1782,7 @@
 
     function renderAdminLetters() {
       document.getElementById('adminLetterList').innerHTML = pureLetters.map((l, i) => `
-        <div class="item-card"><span>${l.title}</span><button class="btn-del" onclick="pureLetters.splice(${i},1);saveAll();renderLetters();renderAdminLetters();">🗑️️</button></div>
+        <div class="item-card"><span>${l.title}</span><button class="btn-del" onclick="pureLetters.splice(${i},1);saveAll();renderLetters();renderAdminLetters();">🗑</button></div>
       `).join('');
     }
 
