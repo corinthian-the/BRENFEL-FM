@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Our Love Frequency ♡ Masterpiece Edition</title>
+  <title>Our Love Frequency ♡ Ultimate Edition</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Sacramento&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-theme: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #feada6 100%);
+      --bg-gradient: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #feada6 100%);
       --card-bg: rgba(255, 255, 255, 0.90);
       --accent: #ff4b72;
       --accent-hover: #ff2b56;
@@ -22,7 +22,7 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
     
     body {
-      background: var(--bg-theme);
+      background: var(--bg-gradient);
       background-size: cover;
       background-position: center;
       background-attachment: fixed;
@@ -35,7 +35,7 @@
       padding: 15px;
       position: relative;
       overflow-x: hidden;
-      transition: background 0.4s ease;
+      transition: background 0.5s ease;
     }
 
     #particleCanvas {
@@ -46,26 +46,10 @@
       z-index: 9999;
     }
 
-    .hk-tap-icon {
-      position: fixed;
-      pointer-events: none;
-      z-index: 9998;
-      width: 52px; height: 52px;
-      transform: translate(-50%, -50%) scale(0.2);
-      animation: hkPop 1.4s ease-out forwards;
-    }
-
-    @keyframes hkPop {
-      0% { opacity: 0; transform: translate(-50%, -50%) scale(0.2) rotate(0deg); }
-      30% { opacity: 1; transform: translate(-50%, -50%) scale(1.3) rotate(20deg); }
-      70% { opacity: 1; transform: translate(-50%, -90px) scale(1) rotate(-15deg); }
-      100% { opacity: 0; transform: translate(-50%, -140px) scale(0.5) rotate(0deg); }
-    }
-
     .bg-heart {
       position: absolute;
-      color: rgba(255, 255, 255, 0.5);
-      font-size: 22px;
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 24px;
       user-select: none;
       animation: floatUp 8s linear infinite;
       z-index: 0;
@@ -82,29 +66,29 @@
       text-align: center;
       margin-bottom: 10px;
       width: 100%;
-      max-width: 500px;
+      max-width: 520px;
       z-index: 1;
     }
 
     header h1 {
       font-family: 'Sacramento', cursive;
-      font-size: 3.4rem;
+      font-size: 3.6rem;
       color: var(--accent);
-      text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.9);
+      text-shadow: 2px 2px 6px rgba(255, 255, 255, 0.9);
       line-height: 1;
     }
 
     .counter-banner {
-      background: rgba(255, 255, 255, 0.88);
-      backdrop-filter: blur(8px);
-      padding: 8px 18px;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(10px);
+      padding: 10px 20px;
       border-radius: 25px;
-      font-size: 0.82rem;
+      font-size: 0.85rem;
       font-weight: 700;
       color: var(--accent);
       border: 2px solid #ffffff;
       box-shadow: 0 4px 15px rgba(255, 105, 135, 0.2);
-      margin-bottom: 12px;
+      margin-bottom: 14px;
       display: flex;
       align-items: center;
       gap: 6px;
@@ -122,7 +106,7 @@
       border: 2px solid #ffffff;
       box-shadow: 0 4px 15px rgba(255, 105, 135, 0.15);
       z-index: 10;
-      max-width: 500px;
+      max-width: 520px;
       width: 100%;
       overflow-x: auto;
       scrollbar-width: none;
@@ -152,7 +136,7 @@
 
     .page-section {
       width: 100%;
-      max-width: 500px;
+      max-width: 520px;
       display: none;
       opacity: 0;
       transform: translateY(15px);
@@ -185,60 +169,50 @@
 
     .admin-toggle {
       position: absolute;
-      top: 16px;
-      right: 16px;
+      top: 16px; right: 16px;
       background: #ffe3e8;
       border: 2px solid #ffb6c1;
       color: var(--accent);
-      width: 36px;
-      height: 36px;
+      width: 38px; height: 38px;
       border-radius: 50%;
       cursor: pointer;
-      font-size: 1.0rem;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      font-size: 1.1rem;
+      display: flex; justify-content: center; align-items: center;
+      transition: transform 0.2s ease;
     }
+    .admin-toggle:hover { transform: rotate(45deg); }
 
     .freq-badge {
       font-family: 'Fredoka', sans-serif;
       background: var(--accent);
       color: #ffffff;
-      padding: 4px 14px;
+      padding: 4px 16px;
       border-radius: 20px;
-      font-size: 0.82rem;
+      font-size: 0.85rem;
       letter-spacing: 1px;
       box-shadow: 0 3px 10px var(--accent-glow);
     }
 
     .vinyl-wrapper {
-      width: 170px;
-      height: 170px;
+      width: 170px; height: 170px;
       position: relative;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      display: flex; justify-content: center; align-items: center;
       cursor: pointer;
     }
 
     .vinyl-record {
-      width: 100%;
-      height: 100%;
+      width: 100%; height: 100%;
       background: radial-gradient(circle, #1a1013 25%, #2b1e22 26%, #3d2b31 40%, #1a1013 41%, #2b1e22 60%, #1a1013 61%);
       border-radius: 50%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      display: flex; justify-content: center; align-items: center;
       box-shadow: 0 8px 25px rgba(74, 46, 53, 0.3), 0 0 0 8px rgba(255, 255, 255, 0.5);
       animation: spin 5s linear infinite;
       animation-play-state: paused;
     }
-
     .vinyl-record.playing { animation-play-state: running; }
 
     .album-art {
-      width: 75px;
-      height: 75px;
+      width: 75px; height: 75px;
       border-radius: 50%;
       object-fit: cover;
       border: 4px solid #ffffff;
@@ -248,7 +222,7 @@
     @keyframes spin { 100% { transform: rotate(360deg); } }
 
     .track-info { text-align: center; width: 100%; }
-    .track-title { font-family: 'Fredoka', sans-serif; font-size: 1.2rem; color: var(--text-main); }
+    .track-title { font-family: 'Fredoka', sans-serif; font-size: 1.25rem; color: var(--text-main); }
     .track-subtitle { font-size: 0.85rem; color: var(--text-muted); margin-top: 3px; }
 
     .station-selector {
@@ -271,9 +245,8 @@
       cursor: pointer;
       white-space: nowrap;
       border: 2px solid #ffd1dc;
-      display: flex;
-      align-items: center;
-      gap: 6px;
+      display: flex; align-items: center; gap: 6px;
+      transition: all 0.2s ease;
     }
 
     .station-chip.active {
@@ -286,17 +259,17 @@
     .controls { display: flex; align-items: center; gap: 18px; }
 
     .btn-circle {
-      width: 54px; height: 54px;
+      width: 56px; height: 56px;
       border-radius: 50%; border: none;
       background: var(--accent); color: white;
-      font-size: 1.3rem;
+      font-size: 1.4rem;
       display: flex; justify-content: center; align-items: center;
       cursor: pointer;
       box-shadow: 0 6px 18px var(--accent-glow);
     }
 
     .btn-secondary {
-      width: 40px; height: 40px;
+      width: 42px; height: 42px;
       border-radius: 50%;
       border: 2px solid #ffd1dc;
       background: #ffffff;
@@ -311,9 +284,7 @@
       border: 2px dashed #ffb6c1;
       border-radius: 18px;
       padding: 10px;
-      display: flex;
-      justify-content: space-around;
-      gap: 6px;
+      display: flex; justify-content: space-around; gap: 6px;
     }
 
     .ambient-btn {
@@ -343,7 +314,7 @@
 
     .letter-title {
       font-family: 'Fredoka', sans-serif;
-      font-size: 1.2rem;
+      font-size: 1.25rem;
       color: var(--accent);
       margin-bottom: 8px;
     }
@@ -362,10 +333,22 @@
       background: #fff8f9;
       border: 2px solid #ffd1dc;
       border-radius: 20px;
-      padding: 12px;
+      padding: 14px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 12px;
+    }
+
+    .voice-select-box {
+      width: 100%;
+      padding: 8px 12px;
+      border-radius: 12px;
+      border: 2px solid #ffd1dc;
+      font-family: 'Quicksand', sans-serif;
+      font-size: 0.82rem;
+      color: var(--text-main);
+      outline: none;
+      background: #ffffff;
     }
 
     .speech-btn-row {
@@ -383,9 +366,7 @@
       border-radius: 18px;
       font-size: 0.85rem;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 6px;
+      display: flex; align-items: center; gap: 6px;
     }
 
     .btn-speech.primary {
@@ -404,8 +385,7 @@
     }
 
     .eq-col {
-      width: 5px;
-      height: 4px;
+      width: 5px; height: 4px;
       background: #ffb6c1;
       border-radius: 4px;
       transition: height 0.15s ease;
@@ -425,22 +405,20 @@
       100% { height: 22px; background: var(--accent); }
     }
 
-    .sliders-row {
-      display: flex;
-      gap: 12px;
-      width: 100%;
-    }
+    .sliders-row { display: flex; gap: 12px; width: 100%; }
 
     .slider-group {
       flex: 1;
       display: flex;
       flex-direction: column;
-      gap: 2px;
+      gap: 4px;
     }
     .slider-group label {
       font-size: 0.75rem;
       font-weight: 700;
       color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
     }
 
     .slider-group input[type=range] {
@@ -468,8 +446,7 @@
     }
 
     .polaroid-img {
-      width: 100%;
-      height: 110px;
+      width: 100%; height: 110px;
       object-fit: cover;
       border-radius: 8px;
       margin-bottom: 6px;
@@ -477,11 +454,10 @@
 
     .polaroid-caption {
       font-family: 'Sacramento', cursive;
-      font-size: 1.1rem;
+      font-size: 1.15rem;
       color: var(--text-main);
     }
 
-    /* PROPOSAL TAB - CLEAN LAYOUT */
     .proposal-box {
       text-align: center;
       width: 100%;
@@ -494,7 +470,7 @@
     }
 
     .ring-icon {
-      font-size: 4.8rem;
+      font-size: 5rem;
       animation: pulse 2s infinite;
       margin-bottom: 12px;
       filter: drop-shadow(0 0 16px rgba(255,75,114,0.5));
@@ -503,7 +479,7 @@
 
     .proposal-title {
       font-family: 'Sacramento', cursive;
-      font-size: 3.4rem;
+      font-size: 3.5rem;
       color: var(--accent);
       line-height: 1.1;
     }
@@ -554,7 +530,7 @@
 
     .admin-panel {
       width: 100%;
-      max-width: 500px;
+      max-width: 520px;
       background: var(--card-bg);
       backdrop-filter: blur(12px);
       border-radius: 25px;
@@ -565,7 +541,7 @@
       z-index: 1;
     }
     .admin-panel.active { display: block; }
-    .admin-panel h2 { font-family: 'Fredoka', sans-serif; font-size: 1.2rem; margin-bottom: 12px; color: var(--accent); text-align: center; }
+    .admin-panel h2 { font-family: 'Fredoka', sans-serif; font-size: 1.25rem; margin-bottom: 12px; color: var(--accent); text-align: center; }
 
     .form-group { margin-bottom: 12px; }
     .form-group label { display: block; font-size: 0.8rem; font-weight: 700; color: var(--text-muted); margin-bottom: 4px; }
@@ -573,8 +549,14 @@
       width: 100%; padding: 10px; background: #ffffff; border: 2px solid #ffd1dc; color: var(--text-main); border-radius: 12px; font-size: 0.88rem; outline: none; font-family: 'Quicksand', sans-serif;
     }
 
+    .theme-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 10px; }
+    .theme-btn {
+      padding: 8px; border-radius: 12px; border: 2px solid #ffd1dc; background: #ffffff; font-family: 'Fredoka', sans-serif; font-size: 0.78rem; cursor: pointer; text-align: center; color: var(--text-main);
+    }
+    .theme-btn.active { border-color: var(--accent); background: #ffe3e8; color: var(--accent); }
+
     .btn-save { padding: 12px; border-radius: 16px; border: none; background: var(--accent); color: white; font-family: 'Fredoka', sans-serif; font-size: 0.95rem; cursor: pointer; width: 100%; }
-    .section-title { font-family: 'Fredoka', sans-serif; font-size: 0.95rem; color: var(--accent); margin: 12px 0 6px 0; border-bottom: 1px solid #ffd1dc; padding-bottom: 4px; }
+    .section-title { font-family: 'Fredoka', sans-serif; font-size: 0.95rem; color: var(--accent); margin: 14px 0 6px 0; border-bottom: 1px solid #ffd1dc; padding-bottom: 4px; }
     .list-box { max-height: 120px; overflow-y: auto; margin-bottom: 10px; }
     .item-card { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: #ffffff; border-radius: 10px; margin-bottom: 6px; font-size: 0.82rem; border: 1px solid #ffd1dc; }
     .btn-del { background: none; border: none; color: #ff4757; font-size: 0.95rem; cursor: pointer; }
@@ -625,6 +607,7 @@
         <button class="ambient-btn" id="rainBtn" onclick="toggleAmbient('rain')">🌧️ Rain</button>
         <button class="ambient-btn" id="fireBtn" onclick="toggleAmbient('fire')">🔥 Fireplace</button>
         <button class="ambient-btn" id="wavesBtn" onclick="toggleAmbient('waves')">🌊 Ocean</button>
+        <button class="ambient-btn" id="breezeBtn" onclick="toggleAmbient('breeze')">🍃 Breeze</button>
       </div>
 
       <div class="station-selector" id="stationList"></div>
@@ -648,6 +631,10 @@
       <div class="station-selector" id="pureLetterList"></div>
 
       <div class="speech-controls">
+        <select class="voice-select-box" id="voiceSelect">
+          <option value="">Loading system voices...</option>
+        </select>
+
         <div class="speech-btn-row">
           <button class="btn-speech primary" id="btnSpeechPlay">▶ Listen</button>
           <button class="btn-speech" id="btnSpeechPause">⏸ Pause</button>
@@ -664,12 +651,12 @@
 
         <div class="sliders-row">
           <div class="slider-group">
-            <label>Speed (Rate)</label>
-            <input type="range" id="speechRate" min="0.5" max="1.5" step="0.1" value="0.9">
+            <label>Speed <span id="rateVal">0.9x</span></label>
+            <input type="range" id="speechRate" min="0.5" max="1.5" step="0.1" value="0.9" oninput="document.getElementById('rateVal').innerText = this.value + 'x'">
           </div>
           <div class="slider-group">
-            <label>Pitch</label>
-            <input type="range" id="speechPitch" min="0.5" max="1.5" step="0.1" value="1.0">
+            <label>Pitch <span id="pitchVal">1.0</span></label>
+            <input type="range" id="speechPitch" min="0.5" max="1.5" step="0.1" value="1.0" oninput="document.getElementById('pitchVal').innerText = this.value">
           </div>
         </div>
       </div>
@@ -679,7 +666,7 @@
   <!-- PAGE 3: SCRAPBOOK GALLERY -->
   <div class="page-section" id="scrapbookPage">
     <div class="app-card">
-      <div style="font-family:'Fredoka',sans-serif; color:var(--accent); font-size:1.1rem;">Our Memories ♡</div>
+      <div style="font-family:'Fredoka',sans-serif; color:var(--accent); font-size:1.15rem;">Our Memories ♡</div>
       <div class="polaroid-grid" id="polaroidGrid"></div>
     </div>
   </div>
@@ -710,23 +697,37 @@
   <div class="admin-panel" id="adminPanel">
     <h2>Admin Settings ♡</h2>
 
-    <div class="section-title">1. Custom Dating Start Date</div>
+    <div class="section-title">1. Customize Background Theme</div>
+    <div class="theme-grid">
+      <button class="theme-btn active" onclick="setTheme('romantic')">🌸 Romantic Sunset</button>
+      <button class="theme-btn" onclick="setTheme('pastel')">🎨 Pastel Dream</button>
+      <button class="theme-btn" onclick="setTheme('midnight')">🌌 Midnight Star</button>
+      <button class="theme-btn" onclick="setTheme('rose')">🌹 Warm Rose</button>
+    </div>
+    <div class="form-group">
+      <label>Or Set Custom Image / GIF URL Background:</label>
+      <input type="text" id="customBgUrl" placeholder="https://example.com/wallpaper.gif">
+      <button class="btn-save" id="saveCustomBgBtn" style="margin-top:6px; background:#6c5ce7;">Apply Custom Background</button>
+    </div>
+
+    <div class="section-title">2. Custom Dating Start Date</div>
     <div class="form-group">
       <input type="date" id="startDateInput" value="2024-05-06">
     </div>
 
-    <div class="section-title">2. Manage Stations</div>
+    <div class="section-title">3. Manage Radio Stations & Audio Links</div>
     <div class="form-group"><input type="text" id="newStationName" placeholder="Station Name"></div>
     <div class="form-group"><input type="text" id="newStationFreq" placeholder="Frequency e.g. 104.5 FM"></div>
-    <button class="btn-save" id="addStationBtn" style="background:#6c5ce7; margin-bottom:10px;">+ Add Station</button>
+    <div class="form-group"><input type="text" id="newAudioUrl" placeholder="Direct Audio URL (.mp3 / stream)"></div>
+    <button class="btn-save" id="addStationBtn" style="background:#6c5ce7; margin-bottom:10px;">+ Add Station & Audio</button>
     <div class="list-box" id="adminStationList"></div>
 
-    <div class="section-title">3. Add Written Love Letter</div>
+    <div class="section-title">4. Add Written Love Letter</div>
     <div class="form-group"><input type="text" id="inputPureLetterTitle" placeholder="Letter Title"></div>
     <div class="form-group"><textarea id="inputPureLetterBody" rows="3" placeholder="Letter contents..."></textarea></div>
     <button class="btn-save" id="savePureLetterBtn" style="margin-bottom:12px;">Save Written Letter</button>
 
-    <div class="section-title">4. Add Scrapbook Photo</div>
+    <div class="section-title">5. Add Scrapbook Photo</div>
     <div class="form-group"><input type="text" id="inputPolaroidCaption" placeholder="Memory Caption"></div>
     <div class="form-group"><input type="file" id="inputPolaroidFile" accept="image/*"></div>
     <button class="btn-save" id="savePolaroidBtn" style="background:#00b894;">Add Memory Picture</button>
@@ -749,8 +750,8 @@
 
     let speechUtterance = null;
     let isSpeaking = false;
+    let voicesList = [];
 
-    // DVD Bouncing Button state
     let dvdX = 100, dvdY = 100;
     let dvdSpeedX = 2.5, dvdSpeedY = 2.5;
     let dvdAnimId = null;
@@ -762,6 +763,13 @@
       'linear-gradient(135deg, #fd79a8, #e84393)'
     ];
 
+    const themes = {
+      romantic: 'linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #feada6 100%)',
+      pastel: 'linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%)',
+      midnight: 'linear-gradient(135deg, #2b5876 0%, #4e4376 100%)',
+      rose: 'linear-gradient(135deg, #ff0844 0%, #ffb199 100%)'
+    };
+
     function init() {
       const savedDate = localStorage.getItem('love_start_date');
       if (savedDate) {
@@ -770,11 +778,16 @@
         localStorage.setItem('love_start_date', datingStartDate.toISOString());
       }
 
+      const savedBg = localStorage.getItem('love_bg_custom');
+      if (savedBg) {
+        document.body.style.background = `url("${savedBg}") center/cover fixed no-repeat`;
+      }
+
       const savedStations = localStorage.getItem('love_stations');
       stations = savedStations ? JSON.parse(savedStations) : [
-        { name: "Our Memories 📸", freq: "107.9 FM" },
-        { name: "Late Night 🌙", freq: "98.5 FM" },
-        { name: "Pick-Me-Up 💕", freq: "101.3 FM" }
+        { name: "Our Memories 📸", freq: "107.9 FM", audioUrl: "" },
+        { name: "Late Night 🌙", freq: "98.5 FM", audioUrl: "" },
+        { name: "Pick-Me-Up 💕", freq: "101.3 FM", audioUrl: "" }
       ];
 
       const savedTracks = localStorage.getItem('love_radio_tracks');
@@ -800,10 +813,27 @@
       renderPolaroids();
       startCounter();
       initParticles();
+      populateVoices();
 
       if (tracks.length > 0) loadTrack(0);
       if (pureLetters.length > 0) loadPureLetter(0);
     }
+
+    function setTheme(themeName) {
+      localStorage.removeItem('love_bg_custom');
+      document.body.style.background = themes[themeName];
+      document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
+      event.target.classList.add('active');
+    }
+
+    document.getElementById('saveCustomBgBtn').onclick = () => {
+      const url = document.getElementById('customBgUrl').value.trim();
+      if (url) {
+        localStorage.setItem('love_bg_custom', url);
+        document.body.style.background = `url("${url}") center/cover fixed no-repeat`;
+        alert("Custom Background Applied! 🎨");
+      }
+    };
 
     function saveAll() {
       localStorage.setItem('love_stations', JSON.stringify(stations));
@@ -829,7 +859,7 @@
 
     function switchPage(pageId) {
       document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
-      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.nav-tabs .nav-btn').forEach(b => b.classList.remove('active'));
       document.getElementById(pageId).classList.add('active');
       event.target.classList.add('active');
 
@@ -846,7 +876,6 @@
       }
     }
 
-    // DVD Bouncing YES Button Engine
     function startDvdBouncing() {
       const btn = document.getElementById('dvdYesBtn');
       if (!dvdAnimId) {
@@ -901,7 +930,6 @@
       document.getElementById('successModal').style.display = 'none';
     }
 
-    // Ambient Audio Synthesizer
     function toggleAmbient(type) {
       if (!ambientCtx) ambientCtx = new (window.AudioContext || window.webkitAudioContext)();
       const btn = document.getElementById(type + 'Btn');
@@ -924,7 +952,7 @@
         noise.loop = true;
 
         const gain = ambientCtx.createGain();
-        gain.gain.value = type === 'rain' ? 0.08 : type === 'fire' ? 0.12 : 0.05;
+        gain.gain.value = type === 'rain' ? 0.08 : type === 'fire' ? 0.12 : type === 'waves' ? 0.05 : 0.04;
 
         noise.connect(gain);
         gain.connect(ambientCtx.destination);
@@ -935,7 +963,6 @@
       }
     }
 
-    // Radio Engine
     function loadTrack(index) {
       if (tracks.length === 0) return;
       currentTrackIndex = index;
@@ -958,6 +985,8 @@
         isPlaying = true;
         document.getElementById('playBtn').textContent = '⏸';
         document.getElementById('vinyl').classList.add('playing');
+      } else {
+        alert("No audio URL provided for this station! You can add direct MP3 links in Admin Settings (⚙️).");
       }
     }
 
@@ -972,7 +1001,24 @@
     document.getElementById('nextBtn').onclick = () => { currentTrackIndex = (currentTrackIndex + 1) % tracks.length; loadTrack(currentTrackIndex); playAudio(); };
     document.getElementById('prevBtn').onclick = () => { currentTrackIndex = (currentTrackIndex - 1 + tracks.length) % tracks.length; loadTrack(currentTrackIndex); playAudio(); };
 
-    // Read Aloud Speech Engine
+    function populateVoices() {
+      if ('speechSynthesis' in window) {
+        const updateVoices = () => {
+          voicesList = window.speechSynthesis.getVoices();
+          const select = document.getElementById('voiceSelect');
+          select.innerHTML = "";
+          voicesList.forEach((v, i) => {
+            const opt = document.createElement('option');
+            opt.value = i;
+            opt.textContent = `${v.name} (${v.lang})`;
+            select.appendChild(opt);
+          });
+        };
+        updateVoices();
+        window.speechSynthesis.onvoiceschanged = updateVoices;
+      }
+    }
+
     function loadPureLetter(i) {
       currentLetterIndex = i;
       const l = pureLetters[i];
@@ -1014,6 +1060,11 @@
       speechUtterance.rate = parseFloat(document.getElementById('speechRate').value);
       speechUtterance.pitch = parseFloat(document.getElementById('speechPitch').value);
 
+      const voiceIndex = document.getElementById('voiceSelect').value;
+      if (voiceIndex && voicesList[voiceIndex]) {
+        speechUtterance.voice = voicesList[voiceIndex];
+      }
+
       speechUtterance.onstart = () => {
         isSpeaking = true;
         document.getElementById('speechEqualizer').classList.add('active');
@@ -1045,7 +1096,6 @@
       document.getElementById('speechEqualizer').classList.remove('active');
     }
 
-    // Memories Gallery
     function renderPolaroids() {
       const grid = document.getElementById('polaroidGrid');
       grid.innerHTML = "";
@@ -1060,7 +1110,6 @@
       });
     }
 
-    // Particle Trail
     function initParticles() {
       const canvas = document.getElementById('particleCanvas');
       const ctx = canvas.getContext('2d');
@@ -1096,7 +1145,6 @@
       animate();
     }
 
-    // Admin Panel
     document.getElementById('adminBtn').onclick = () => {
       if (prompt("Enter Passcode ♡:") === "1234") {
         document.getElementById('adminPanel').classList.toggle('active');
@@ -1113,9 +1161,13 @@
     document.getElementById('addStationBtn').onclick = () => {
       const name = document.getElementById('newStationName').value.trim();
       const freq = document.getElementById('newStationFreq').value.trim() || "100.0 FM";
+      const audioUrl = document.getElementById('newAudioUrl').value.trim();
       if (name) {
-        stations.push({ name, freq });
+        stations.push({ name, freq, audioUrl });
+        tracks.push({ title: name, station: name, freq, photo: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=300", audioUrl });
         saveAll(); renderStations(); renderAdminStations();
+        document.getElementById('newStationName').value = "";
+        document.getElementById('newAudioUrl').value = "";
       }
     };
 
@@ -1140,19 +1192,22 @@
       if (title && body) {
         pureLetters.push({ title, body });
         saveAll(); renderPureLetters();
+        document.getElementById('inputPureLetterTitle').value = "";
+        document.getElementById('inputPureLetterBody').value = "";
       }
     };
 
     function renderStations() {
       const list = document.getElementById('stationList');
       list.innerHTML = "";
-      stations.forEach(s => {
+      stations.forEach((s, idx) => {
         const chip = document.createElement('div');
-        chip.className = 'station-chip';
+        chip.className = 'station-chip' + (idx === currentTrackIndex ? ' active' : '');
         chip.innerHTML = `<span>${s.name}</span><span style="font-size:0.75rem; opacity:0.8;">${s.freq}</span>`;
         chip.onclick = () => {
-          const idx = tracks.findIndex(t => t.station === s.name);
-          if (idx !== -1) { loadTrack(idx); playAudio(); }
+          document.querySelectorAll('#stationList .station-chip').forEach(c => c.classList.remove('active'));
+          chip.classList.add('active');
+          loadTrack(idx); playAudio();
         };
         list.appendChild(chip);
       });
@@ -1160,7 +1215,7 @@
 
     function renderAdminStations() {
       document.getElementById('adminStationList').innerHTML = stations.map((s, i) => `
-        <div class="item-card"><span>${s.name} (${s.freq})</span><button class="btn-del" onclick="stations.splice(${i},1);saveAll();renderStations();renderAdminStations();">🗑️</button></div>
+        <div class="item-card"><span>${s.name} (${s.freq})</span><button class="btn-del" onclick="stations.splice(${i},1);tracks.splice(${i},1);saveAll();renderStations();renderAdminStations();">🗑️</button></div>
       `).join('');
     }
 
@@ -1168,3 +1223,4 @@
   </script>
 </body>
 </html>
+
