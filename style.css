@@ -6,7 +6,7 @@
 }
 
 body {
-    /* Background Image setup - links straight to your images folder */
+    /* Loads your background picture from the images folder */
     background-image: url('images/background.jpg');
     background-size: cover;
     background-position: center;
@@ -20,7 +20,6 @@ body {
     padding: 15px;
 }
 
-/* Semi-transparent container for readability over the background */
 .app-container {
     width: 100%;
     max-width: 420px;
@@ -185,7 +184,7 @@ body {
     padding: 10px;
     border-radius: 12px;
     text-align: left;
-    font-size: 0.85srem;
+    font-size: 0.85rem;
     font-weight: 600;
     cursor: pointer;
     transition: 0.2s;
@@ -223,8 +222,4 @@ body {
     border-radius: 8px;
     font-size: 0.7rem;
     cursor: pointer;
-}
-
-.ambient-btn.active-ambient {
-    background: #d81b60;
 }
