@@ -560,6 +560,16 @@
     .list-box { max-height: 120px; overflow-y: auto; margin-bottom: 10px; }
     .item-card { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: #ffffff; border-radius: 10px; margin-bottom: 6px; font-size: 0.82rem; border: 1px solid #ffd1dc; }
     .btn-del { background: none; border: none; color: #ff4757; font-size: 0.95rem; cursor: pointer; }
+    
+    .record-box {
+      background: #fff0f3;
+      border: 2px dashed #ffb6c1;
+      padding: 12px;
+      border-radius: 16px;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    .record-btns { display: flex; gap: 8px; margin-top: 8px; }
   </style>
 </head>
 <body>
@@ -720,11 +730,22 @@
     </div>
 
     <div class="section-title">3. Add Radio Station & Phone/URL Audio</div>
-    <div class="form-group"><input type="text" id="newStationName" placeholder="Station Name"></div>
+    
+    <!-- LIVE MIC RECORDING OPTION -->
+    <div class="record-box">
+      <label style="font-family:'Fredoka',sans-serif; color:var(--accent); margin-bottom:4px; display:block;">🎙️ Record Audio Message from Mic</label>
+      <div id="recordStatus" style="font-size:0.8rem; color:var(--text-muted); margin-bottom:6px;">Tap record to speak into your phone</div>
+      <div class="record-btns">
+        <button class="btn-save" id="startRecordBtn" style="background:#00b894; padding:8px; font-size:0.85rem;">🔴 Start Record</button>
+        <button class="btn-save" id="stopRecordBtn" style="background:#ff4757; padding:8px; font-size:0.85rem;" disabled>⏹ Stop & Save</button>
+      </div>
+    </div>
+
+    <div class="form-group"><input type="text" id="newStationName" placeholder="Station / Voice Note Name"></div>
     <div class="form-group"><input type="text" id="newStationFreq" placeholder="Frequency e.g. 104.5 FM"></div>
     <div class="form-group"><input type="text" id="newAudioUrl" placeholder="Or Direct Audio URL (.mp3 / stream)"></div>
     <div class="form-group">
-      <label>Or Upload Audio File Directly from Phone (.mp3):</label>
+      <label>Or Upload Audio File from Phone (.mp3):</label>
       <input type="file" id="newAudioFile" accept="audio/*">
     </div>
     <button class="btn-save" id="addStationBtn" style="background:#6c5ce7; margin-bottom:10px;">+ Add Station & Audio</button>
@@ -763,6 +784,10 @@
     let speechUtterance = null;
     let isSpeaking = false;
     let voicesList = [];
+
+    let mediaRecorder = null;
+    let audioChunks = [];
+    let recordedAudioBlobUrl = "";
 
     let dvdX = 100, dvdY = 100;
     let dvdSpeedX = 2.5, dvdSpeedY = 2.5;
@@ -826,6 +851,7 @@
       startCounter();
       initParticles();
       populateVoices();
+      initRecorder();
 
       if (tracks.length > 0) loadTrack(0);
       if (pureLetters.length > 0) loadPureLetter(0);
@@ -1011,7 +1037,7 @@
         document.getElementById('playBtn').textContent = '⏸';
         document.getElementById('vinyl').classList.add('playing');
       } else {
-        alert("No audio file or URL provided for this station! Add one in Admin Settings (⚙️️).");
+        alert("No audio file or URL provided for this station! Add one in Admin Settings (⚙).");
       }
     }
 
@@ -1025,6 +1051,56 @@
     document.getElementById('playBtn').onclick = () => isPlaying ? pauseAudio() : playAudio();
     document.getElementById('nextBtn').onclick = () => { currentTrackIndex = (currentTrackIndex + 1) % tracks.length; loadTrack(currentTrackIndex); playAudio(); };
     document.getElementById('prevBtn').onclick = () => { currentTrackIndex = (currentTrackIndex - 1 + tracks.length) % tracks.length; loadTrack(currentTrackIndex); playAudio(); };
+
+    function initRecorder() {
+      const startBtn = document.getElementById('startRecordBtn');
+      const stopBtn = document.getElementById('stopRecordBtn');
+      const status = document.getElementById('recordStatus');
+
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        status.textContent = "Mic recording not supported in this browser.";
+        startBtn.disabled = true;
+        return;
+      }
+
+      startBtn.onclick = async () => {
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          mediaRecorder = new MediaRecorder(stream);
+          audioChunks = [];
+
+          mediaRecorder.ondataavailable = e => {
+            if (e.data.size > 0) audioChunks.push(e.data);
+          };
+
+          mediaRecorder.onstop = () => {
+            const audioBlob = new Blob(audioChunks, { type: 'audio/mp3' });
+            const reader = new FileReader();
+            reader.onloadend = () => {
+              recordedAudioBlobUrl = reader.result;
+              status.textContent = "✅ Voice recorded successfully! Now enter a name & tap Add Station.";
+            };
+            reader.readAsDataURL(audioBlob);
+          };
+
+          mediaRecorder.start();
+          startBtn.disabled = true;
+          stopBtn.disabled = false;
+          status.textContent = "🔴 Recording in progress... Speak your heart out!";
+        } catch (err) {
+          alert("Microphone permission denied or unavailable.");
+        }
+      };
+
+      stopBtn.onclick = () => {
+        if (mediaRecorder && mediaRecorder.state !== "inactive") {
+          mediaRecorder.stop();
+          mediaRecorder.stream.getTracks().forEach(track => track.stop());
+        }
+        startBtn.disabled = false;
+        stopBtn.disabled = true;
+      };
+    }
 
     function populateVoices() {
       if ('speechSynthesis' in window) {
@@ -1180,7 +1256,7 @@
 
     document.getElementById('addStationBtn').onclick = () => {
       const name = document.getElementById('newStationName').value.trim();
-      const freq = document.getElementById('newStationFreq').value.trim() || "100.0 FM";
+      const freq = document.getElementById('newStationFreq').value.trim() || "104.5 FM";
       let audioUrl = document.getElementById('newAudioUrl').value.trim();
       const audioFile = document.getElementById('newAudioFile').files[0];
 
@@ -1189,7 +1265,12 @@
         return;
       }
 
-      if (audioFile) {
+      if (recordedAudioBlobUrl) {
+        audioUrl = recordedAudioBlobUrl;
+        finalizeStation(name, freq, audioUrl);
+        recordedAudioBlobUrl = "";
+        document.getElementById('recordStatus').textContent = "Tap record to speak into your phone";
+      } else if (audioFile) {
         const reader = new FileReader();
         reader.onloadend = () => {
           audioUrl = reader.result;
