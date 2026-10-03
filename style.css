@@ -1,0 +1,230 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    /* Background Image setup - links straight to your images folder */
+    background-image: url('images/background.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    padding: 15px;
+}
+
+/* Semi-transparent container for readability over the background */
+.app-container {
+    width: 100%;
+    max-width: 420px;
+    background: rgba(255, 182, 193, 0.25);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 24px;
+    padding: 20px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+}
+
+.app-header {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.app-header h1 {
+    font-size: 1.8rem;
+    color: #fff;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    font-family: cursive;
+}
+
+.counter-badge {
+    background: rgba(255, 255, 255, 0.4);
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    display: inline-block;
+    margin-top: 8px;
+    color: #4a1525;
+    font-weight: 600;
+}
+
+.nav-tabs {
+    display: flex;
+    justify-content: space-between;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 14px;
+    padding: 4px;
+    margin-bottom: 20px;
+}
+
+.tab-btn {
+    background: transparent;
+    border: none;
+    color: #fff;
+    padding: 8px 12px;
+    font-size: 0.8rem;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.tab-btn.active {
+    background: #fff;
+    color: #d81b60;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.player-card {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 20px;
+    padding: 20px;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.frequency-display {
+    background: #d81b60;
+    color: white;
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.vinyl-container {
+    width: 130px;
+    height: 130px;
+    margin: 0 auto 15px auto;
+    background: #111;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    border: 4px solid rgba(255,255,255,0.2);
+}
+
+.vinyl-record.spinning {
+    animation: spin 4s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.vinyl-center {
+    width: 45px;
+    height: 45px;
+    background: #d81b60;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+}
+
+.station-title {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #fff;
+}
+
+.controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.control-icon {
+    background: none;
+    border: none;
+    font-size: 1.3rem;
+    cursor: pointer;
+    color: white;
+}
+
+.play-main-btn {
+    width: 55px;
+    height: 55px;
+    background: #d81b60;
+    border: none;
+    border-radius: 50%;
+    color: white;
+    font-size: 1.4rem;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(216, 27, 96, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.station-selector {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.station-select-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    padding: 10px;
+    border-radius: 12px;
+    text-align: left;
+    font-size: 0.85srem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.station-select-btn.active-station {
+    background: #d81b60;
+}
+
+.ambient-section {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 16px;
+    padding: 12px;
+    text-align: center;
+}
+
+.ambient-title {
+    font-size: 0.8rem;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.ambient-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+}
+
+.ambient-btn {
+    background: rgba(255, 255, 255, 0.25);
+    border: none;
+    color: white;
+    padding: 6px 4px;
+    border-radius: 8px;
+    font-size: 0.7rem;
+    cursor: pointer;
+}
+
+.ambient-btn.active-ambient {
+    background: #d81b60;
+}
