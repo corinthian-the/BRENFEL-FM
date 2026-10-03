@@ -734,7 +734,7 @@
     <!-- LIVE MIC RECORDING OPTION -->
     <div class="record-box">
       <label style="font-family:'Fredoka',sans-serif; color:var(--accent); margin-bottom:4px; display:block;">🎙️ Record Audio Message from Mic</label>
-      <div id="recordStatus" style="font-size:0.8rem; color:var(--text-muted); margin-bottom:6px;">Tap record to speak into your phone</div>
+      <div id="recordStatus" style="font-size:0.8rem; color:var(--text-muted); margin-bottom:6px;">Speak normally—noise filtering active!</div>
       <div class="record-btns">
         <button class="btn-save" id="startRecordBtn" style="background:#00b894; padding:8px; font-size:0.85rem;">🔴 Start Record</button>
         <button class="btn-save" id="stopRecordBtn" style="background:#ff4757; padding:8px; font-size:0.85rem;" disabled>⏹ Stop & Save</button>
@@ -981,35 +981,136 @@
       document.getElementById('successModal').style.display = 'none';
     }
 
+    // REAL SYNTHESIZED UNIQUE AMBIENT GENERATORS
     function toggleAmbient(type) {
       if (!ambientCtx) ambientCtx = new (window.AudioContext || window.webkitAudioContext)();
       const btn = document.getElementById(type + 'Btn');
 
       if (ambientNodes[type]) {
-        ambientNodes[type].stop();
+        // Turn off
+        if (ambientNodes[type].interval) clearInterval(ambientNodes[type].interval);
+        if (ambientNodes[type].source) ambientNodes[type].source.stop();
         delete ambientNodes[type];
         btn.classList.remove('active');
       } else {
-        const bufferSize = ambientCtx.sampleRate * 2;
+        // Turn on unique audio node
+        const bufferSize = ambientCtx.sampleRate * 4;
         const buffer = ambientCtx.createBuffer(1, bufferSize, ambientCtx.sampleRate);
         const data = buffer.getChannelData(0);
 
-        for (let i = 0; i < bufferSize; i++) {
-          data[i] = Math.random() * 2 - 1;
+        let filter = ambientCtx.createBiquadFilter();
+        let gain = ambientCtx.createGain();
+        let source = ambientCtx.createBufferSource();
+        source.buffer = buffer;
+        source.loop = true;
+
+        let trackingObj = { source };
+
+        if (type === 'rain') {
+          // Pink-ish noise filtered tightly for crisp rainfall
+          for (let i = 0; i < bufferSize; i++) {
+            data[i] = (Math.random() * 2 - 1) * 0.5;
+          }
+          source.buffer = buffer;
+          filter.type = 'lowpass';
+          filter.frequency.value = 1200;
+          gain.gain.value = 0.12;
+
+          source.connect(filter);
+          filter.connect(gain);
+          gain.connect(ambientCtx.destination);
+
+          // Add random droplet ticks
+          trackingObj.interval = setInterval(() => {
+            if (!ambientNodes['rain']) return;
+            let drop = ambientCtx.createOscillator();
+            let dropGain = ambientCtx.createGain();
+            drop.type = 'sine';
+            drop.frequency.setValueAtTime(1200 + Math.random() * 800, ambientCtx.currentTime);
+            drop.frequency.exponentialRampToValueAtTime(400, ambientCtx.currentTime + 0.08);
+            dropGain.gain.setValueAtTime(0.04, ambientCtx.currentTime);
+            dropGain.gain.exponentialRampToValueAtTime(0.001, ambientCtx.currentTime + 0.08);
+            drop.connect(dropGain);
+            dropGain.connect(ambientCtx.destination);
+            drop.start();
+            drop.stop(ambientCtx.currentTime + 0.09);
+          }, 120);
+
+        } else if (type === 'fire') {
+          // Low rumble + random crackle pops
+          for (let i = 0; i < bufferSize; i++) {
+            data[i] = (Math.random() * 2 - 1) * 0.3;
+          }
+          filter.type = 'lowpass';
+          filter.frequency.value = 400;
+          gain.gain.value = 0.15;
+
+          source.connect(filter);
+          filter.connect(gain);
+          gain.connect(ambientCtx.destination);
+
+          trackingObj.interval = setInterval(() => {
+            if (!ambientNodes['fire']) return;
+            if (Math.random() > 0.4) {
+              let pop = ambientCtx.createOscillator();
+              let popGain = ambientCtx.createGain();
+              pop.type = 'triangle';
+              pop.frequency.setValueAtTime(200 + Math.random() * 600, ambientCtx.currentTime);
+              popGain.gain.setValueAtTime(0.08, ambientCtx.currentTime);
+              popGain.gain.exponentialRampToValueAtTime(0.001, ambientCtx.currentTime + 0.04);
+              pop.connect(popGain);
+              popGain.connect(ambientCtx.destination);
+              pop.start();
+              pop.stop(ambientCtx.currentTime + 0.05);
+            }
+          }, 180);
+
+        } else if (type === 'waves') {
+          // Ocean sweeping low pass filter
+          for (let i = 0; i < bufferSize; i++) {
+            data[i] = Math.random() * 2 - 1;
+          }
+          filter.type = 'bandpass';
+          filter.frequency.value = 300;
+          filter.Q.value = 1.2;
+          gain.gain.value = 0.2;
+
+          source.connect(filter);
+          filter.connect(gain);
+          gain.connect(ambientCtx.destination);
+
+          let sweep = 0;
+          trackingObj.interval = setInterval(() => {
+            if (!ambientNodes['waves']) return;
+            sweep += 0.05;
+            let freqMod = 300 + Math.sin(sweep) * 220;
+            filter.frequency.setValueAtTime(freqMod, ambientCtx.currentTime);
+          }, 100);
+
+        } else if (type === 'breeze') {
+          // Soft airy wind gusts
+          for (let i = 0; i < bufferSize; i++) {
+            data[i] = (Math.random() * 2 - 1) * 0.4;
+          }
+          filter.type = 'lowpass';
+          filter.frequency.value = 280;
+          gain.gain.value = 0.18;
+
+          source.connect(filter);
+          filter.connect(gain);
+          gain.connect(ambientCtx.destination);
+
+          let windTime = 0;
+          trackingObj.interval = setInterval(() => {
+            if (!ambientNodes['breeze']) return;
+            windTime += 0.03;
+            let wFreq = 200 + Math.sin(windTime) * 150;
+            filter.frequency.setValueAtTime(wFreq, ambientCtx.currentTime);
+          }, 150);
         }
 
-        const noise = ambientCtx.createBufferSource();
-        noise.buffer = buffer;
-        noise.loop = true;
-
-        const gain = ambientCtx.createGain();
-        gain.gain.value = type === 'rain' ? 0.08 : type === 'fire' ? 0.12 : type === 'waves' ? 0.05 : 0.04;
-
-        noise.connect(gain);
-        gain.connect(ambientCtx.destination);
-        noise.start();
-
-        ambientNodes[type] = noise;
+        source.start();
+        ambientNodes[type] = trackingObj;
         btn.classList.add('active');
       }
     }
@@ -1052,6 +1153,7 @@
     document.getElementById('nextBtn').onclick = () => { currentTrackIndex = (currentTrackIndex + 1) % tracks.length; loadTrack(currentTrackIndex); playAudio(); };
     document.getElementById('prevBtn').onclick = () => { currentTrackIndex = (currentTrackIndex - 1 + tracks.length) % tracks.length; loadTrack(currentTrackIndex); playAudio(); };
 
+    // CRYSTAL CLEAR MIC RECORDER WITH BUILT-IN NOISE SUPPRESSION & GAIN CONTROL
     function initRecorder() {
       const startBtn = document.getElementById('startRecordBtn');
       const stopBtn = document.getElementById('stopRecordBtn');
@@ -1065,7 +1167,13 @@
 
       startBtn.onclick = async () => {
         try {
-          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          const stream = await navigator.mediaDevices.getUserMedia({ 
+            audio: {
+              echoCancellation: true,
+              noiseSuppression: true,
+              autoGainControl: true
+            } 
+          });
           mediaRecorder = new MediaRecorder(stream);
           audioChunks = [];
 
@@ -1078,7 +1186,7 @@
             const reader = new FileReader();
             reader.onloadend = () => {
               recordedAudioBlobUrl = reader.result;
-              status.textContent = "✅ Voice recorded successfully! Now enter a name & tap Add Station.";
+              status.textContent = "✅ Voice recorded clearly! Now enter a name & tap Add Station.";
             };
             reader.readAsDataURL(audioBlob);
           };
@@ -1086,7 +1194,7 @@
           mediaRecorder.start();
           startBtn.disabled = true;
           stopBtn.disabled = false;
-          status.textContent = "🔴 Recording in progress... Speak your heart out!";
+          status.textContent = "🔴 Recording crystal clear audio... Speak normally!";
         } catch (err) {
           alert("Microphone permission denied or unavailable.");
         }
@@ -1269,7 +1377,7 @@
         audioUrl = recordedAudioBlobUrl;
         finalizeStation(name, freq, audioUrl);
         recordedAudioBlobUrl = "";
-        document.getElementById('recordStatus').textContent = "Tap record to speak into your phone";
+        document.getElementById('recordStatus').textContent = "Speak normally—noise filtering active!";
       } else if (audioFile) {
         const reader = new FileReader();
         reader.onloadend = () => {
