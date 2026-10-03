@@ -1,14 +1,14 @@
-// Hardcoded stations pointing straight to your audio folder files
+// Stations linked directly to your audio files in the repository
 const stations = [
     {
         name: "Our Memories",
         frequency: "107.9 FM",
-        src: "audio/memory-vn.mp3"
+        src: "audio/vn1.mp3"
     },
     {
         name: "Late Night Thoughts",
         frequency: "98.5 FM",
-        src: "audio/latenight.mp3"
+        src: "audio/vn2.mp3"
     }
 ];
 
@@ -45,7 +45,7 @@ playBtn.addEventListener("click", () => {
             playBtn.textContent = "⏸";
             vinyl.classList.add("spinning");
         }).catch(error => {
-            alert("Could not play audio. Check if the audio file exists in your 'audio/' folder!");
+            alert("Audio file not found! Make sure your .mp3 file is uploaded to the 'audio/' folder.");
         });
     } else {
         audioPlayer.pause();
@@ -54,29 +54,30 @@ playBtn.addEventListener("click", () => {
     }
 });
 
-// Next / Previous Station Controls
+// Next Station
 document.getElementById("next-btn").addEventListener("click", () => {
     currentStationIndex = (currentStationIndex + 1) % stations.length;
     loadStation(currentStationIndex);
-    audioPlayer.play();
+    audioPlayer.play().catch(() => {});
     playBtn.textContent = "⏸";
     vinyl.classList.add("spinning");
 });
 
+// Previous Station
 document.getElementById("prev-btn").addEventListener("click", () => {
     currentStationIndex = (currentStationIndex - 1 + stations.length) % stations.length;
     loadStation(currentStationIndex);
-    audioPlayer.play();
+    audioPlayer.play().catch(() => {});
     playBtn.textContent = "⏸";
     vinyl.classList.add("spinning");
 });
 
-// Station Select Buttons clicking functionality
+// Click station selector buttons
 stationButtons.forEach((btn) => {
     btn.addEventListener("click", (e) => {
         const index = parseInt(e.currentTarget.getAttribute("data-index"));
         loadStation(index);
-        audioPlayer.play();
+        audioPlayer.play().catch(() => {});
         playBtn.textContent = "⏸";
         vinyl.classList.add("spinning");
     });
