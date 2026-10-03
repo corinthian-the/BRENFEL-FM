@@ -1,1488 +1,813 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Our Love Frequency ♡ Ultimate Edition</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Sacramento&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --bg-gradient: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #feada6 100%);
-      --card-bg: rgba(255, 255, 255, 0.90);
-      --accent: #ff4b72;
-      --accent-hover: #ff2b56;
-      --accent-glow: rgba(255, 75, 114, 0.35);
-      --text-main: #4a2e35;
-      --text-muted: #8c6b73;
-      --border-color: #ffd1dc;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Love Frequency</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Sacramento&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-pink: #ff758c;
+            --secondary-pink: #ff7eb3;
+            --bg-gradient: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+            --card-bg: rgba(255, 255, 255, 0.88);
+            --text-color: #5d4037;
+        }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    
-    body {
-      background: var(--bg-gradient);
-      background-size: cover;
-      background-position: center;
-      background-attachment: fixed;
-      color: var(--text-main);
-      font-family: 'Quicksand', sans-serif;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 15px;
-      position: relative;
-      overflow-x: hidden;
-      transition: background 0.5s ease;
-    }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-    #particleCanvas {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw; height: 100vh;
-      pointer-events: none;
-      z-index: 9999;
-    }
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: var(--bg-gradient);
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
 
-    .bg-heart {
-      position: absolute;
-      color: rgba(255, 255, 255, 0.6);
-      font-size: 24px;
-      user-select: none;
-      animation: floatUp 8s linear infinite;
-      z-index: 0;
-      pointer-events: none;
-    }
+        .container {
+            width: 100%;
+            max-width: 420px;
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border-radius: 25px;
+            box-shadow: 0 10px 30px rgba(255, 117, 140, 0.3);
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.7);
+            position: relative;
+        }
 
-    @keyframes floatUp {
-      0% { transform: translateY(100vh) scale(0.8) rotate(0deg); opacity: 0; }
-      20% { opacity: 0.8; }
-      100% { transform: translateY(-10vh) scale(1.2) rotate(360deg); opacity: 0; }
-    }
+        header {
+            text-align: center;
+            margin-bottom: 12px;
+        }
 
-    header {
-      text-align: center;
-      margin-bottom: 10px;
-      width: 100%;
-      max-width: 520px;
-      z-index: 1;
-    }
+        h1 {
+            font-family: 'Sacramento', cursive;
+            font-size: 2.8rem;
+            color: #d81b60;
+            margin-bottom: 2px;
+        }
 
-    header h1 {
-      font-family: 'Sacramento', cursive;
-      font-size: 3.6rem;
-      color: var(--accent);
-      text-shadow: 2px 2px 6px rgba(255, 255, 255, 0.9);
-      line-height: 1;
-    }
+        .counter-badge {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #c2185b;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            display: inline-block;
+            margin-bottom: 8px;
+        }
 
-    .counter-banner {
-      background: rgba(255, 255, 255, 0.92);
-      backdrop-filter: blur(10px);
-      padding: 10px 20px;
-      border-radius: 25px;
-      font-size: 0.85rem;
-      font-weight: 700;
-      color: var(--accent);
-      border: 2px solid #ffffff;
-      box-shadow: 0 4px 15px rgba(255, 105, 135, 0.2);
-      margin-bottom: 14px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      z-index: 1;
-      text-align: center;
-    }
+        /* Navigation Tabs */
+        .nav-tabs {
+            display: flex;
+            justify-content: space-around;
+            background: rgba(255, 255, 255, 0.6);
+            padding: 5px;
+            border-radius: 15px;
+            margin-bottom: 12px;
+        }
 
-    .nav-tabs {
-      display: flex;
-      gap: 6px;
-      background: var(--card-bg);
-      padding: 6px;
-      border-radius: 25px;
-      margin-bottom: 15px;
-      border: 2px solid #ffffff;
-      box-shadow: 0 4px 15px rgba(255, 105, 135, 0.15);
-      z-index: 10;
-      max-width: 520px;
-      width: 100%;
-      overflow-x: auto;
-      scrollbar-width: none;
-    }
-    .nav-tabs::-webkit-scrollbar { display: none; }
+        .tab-btn {
+            background: none;
+            border: none;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 600;
+            font-size: 0.78rem;
+            color: #7b5e57;
+            padding: 6px 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
 
-    .nav-btn {
-      font-family: 'Fredoka', sans-serif;
-      padding: 8px 14px;
-      border-radius: 20px;
-      border: none;
-      background: transparent;
-      color: var(--text-muted);
-      font-size: 0.82rem;
-      cursor: pointer;
-      white-space: nowrap;
-      transition: all 0.3s ease;
-      flex: 1;
-      text-align: center;
-    }
+        .tab-btn.active {
+            background: var(--primary-pink);
+            color: white;
+            box-shadow: 0 4px 10px rgba(255, 117, 140, 0.4);
+        }
 
-    .nav-btn.active {
-      background: var(--accent);
-      color: #ffffff;
-      box-shadow: 0 3px 10px var(--accent-glow);
-    }
+        .section-content {
+            display: none;
+        }
 
-    .page-section {
-      width: 100%;
-      max-width: 520px;
-      display: none;
-      opacity: 0;
-      transform: translateY(15px);
-      transition: opacity 0.4s ease, transform 0.4s ease;
-      z-index: 1;
-    }
+        .section-content.active {
+            display: block;
+        }
 
-    .page-section.active {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      opacity: 1;
-      transform: translateY(0);
-    }
+        /* Radio Player Section */
+        .radio-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 18px;
+            text-align: center;
+            position: relative;
+            box-shadow: inset 0 2px 5px rgba(255,255,255,0.8);
+        }
 
-    .app-card {
-      background: var(--card-bg);
-      backdrop-filter: blur(12px);
-      width: 100%;
-      border-radius: 30px;
-      padding: 22px;
-      box-shadow: 0 15px 35px rgba(255, 105, 135, 0.25), 0 5px 15px rgba(255, 255, 255, 0.8) inset;
-      border: 3px solid #ffffff;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 16px;
-      position: relative;
-    }
+        .admin-trigger {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: none;
+            border: none;
+            font-size: 1.1rem;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
 
-    .admin-toggle {
-      position: absolute;
-      top: 16px; right: 16px;
-      background: #ffe3e8;
-      border: 2px solid #ffb6c1;
-      color: var(--accent);
-      width: 38px; height: 38px;
-      border-radius: 50%;
-      cursor: pointer;
-      font-size: 1.1rem;
-      display: flex; justify-content: center; align-items: center;
-      transition: transform 0.2s ease;
-    }
-    .admin-toggle:hover { transform: rotate(45deg); }
+        .admin-trigger:hover {
+            opacity: 1;
+        }
 
-    .freq-badge {
-      font-family: 'Fredoka', sans-serif;
-      background: var(--accent);
-      color: #ffffff;
-      padding: 4px 16px;
-      border-radius: 20px;
-      font-size: 0.85rem;
-      letter-spacing: 1px;
-      box-shadow: 0 3px 10px var(--accent-glow);
-    }
+        .frequency-display {
+            background: #d81b60;
+            color: white;
+            font-weight: 700;
+            font-size: 0.85rem;
+            padding: 4px 12px;
+            border-radius: 12px;
+            display: inline-block;
+            margin-bottom: 12px;
+        }
 
-    .vinyl-wrapper {
-      width: 170px; height: 170px;
-      position: relative;
-      display: flex; justify-content: center; align-items: center;
-      cursor: pointer;
-    }
+        .vinyl-container {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 12px auto;
+            background: #222;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            position: relative;
+            border: 4px solid #444;
+        }
 
-    .vinyl-record {
-      width: 100%; height: 100%;
-      background: radial-gradient(circle, #1a1013 25%, #2b1e22 26%, #3d2b31 40%, #1a1013 41%, #2b1e22 60%, #1a1013 61%);
-      border-radius: 50%;
-      display: flex; justify-content: center; align-items: center;
-      box-shadow: 0 8px 25px rgba(74, 46, 53, 0.3), 0 0 0 8px rgba(255, 255, 255, 0.5);
-      animation: spin 5s linear infinite;
-      animation-play-state: paused;
-    }
-    .vinyl-record.playing { animation-play-state: running; }
+        .vinyl-container.spinning {
+            animation: spin 4s linear infinite;
+        }
 
-    .album-art {
-      width: 75px; height: 75px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 4px solid #ffffff;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-    }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
 
-    @keyframes spin { 100% { transform: rotate(360deg); } }
+        .vinyl-center {
+            width: 42px;
+            height: 42px;
+            background: var(--primary-pink);
+            border-radius: 50%;
+            border: 3px solid white;
+            background-size: cover;
+            background-position: center;
+        }
 
-    .track-info { text-align: center; width: 100%; }
-    .track-title { font-family: 'Fredoka', sans-serif; font-size: 1.25rem; color: var(--text-main); }
-    .track-subtitle { font-size: 0.85rem; color: var(--text-muted); margin-top: 3px; }
+        .station-info h3 {
+            font-size: 1.05rem;
+            color: #333;
+            margin-bottom: 2px;
+        }
 
-    .station-selector {
-      display: flex;
-      gap: 10px;
-      width: 100%;
-      overflow-x: auto;
-      padding: 4px 2px;
-      scrollbar-width: none;
-    }
-    .station-selector::-webkit-scrollbar { display: none; }
+        .station-info p {
+            font-size: 0.78rem;
+            color: #777;
+            margin-bottom: 12px;
+        }
 
-    .station-chip {
-      font-family: 'Fredoka', sans-serif;
-      padding: 8px 14px;
-      border-radius: 25px;
-      background: #fff0f3;
-      color: var(--text-muted);
-      font-size: 0.82rem;
-      cursor: pointer;
-      white-space: nowrap;
-      border: 2px solid #ffd1dc;
-      display: flex; align-items: center; gap: 6px;
-      transition: all 0.2s ease;
-    }
+        .controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
 
-    .station-chip.active {
-      background: var(--accent);
-      color: #ffffff;
-      border-color: var(--accent);
-      box-shadow: 0 4px 12px var(--accent-glow);
-    }
+        .control-btn {
+            background: white;
+            border: 2px solid var(--primary-pink);
+            color: var(--primary-pink);
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+        }
 
-    .controls { display: flex; align-items: center; gap: 18px; }
+        .control-btn.main-play {
+            width: 50px;
+            height: 50px;
+            background: var(--primary-pink);
+            color: white;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 15px rgba(255, 117, 140, 0.4);
+        }
 
-    .btn-circle {
-      width: 56px; height: 56px;
-      border-radius: 50%; border: none;
-      background: var(--accent); color: white;
-      font-size: 1.4rem;
-      display: flex; justify-content: center; align-items: center;
-      cursor: pointer;
-      box-shadow: 0 6px 18px var(--accent-glow);
-    }
+        .control-btn:active {
+            transform: scale(0.95);
+        }
 
-    .btn-secondary {
-      width: 42px; height: 42px;
-      border-radius: 50%;
-      border: 2px solid #ffd1dc;
-      background: #ffffff;
-      color: var(--accent);
-      cursor: pointer;
-      display: flex; justify-content: center; align-items: center;
-    }
+        .playlist {
+            display: flex;
+            gap: 6px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+            justify-content: center;
+        }
 
-    .ambient-bar {
-      width: 100%;
-      background: #fff8f9;
-      border: 2px dashed #ffb6c1;
-      border-radius: 18px;
-      padding: 10px;
-      display: flex; justify-content: space-around; gap: 6px;
-    }
+        .station-chip {
+            background: #fce4ec;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 12px;
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: #c2185b;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
 
-    .ambient-btn {
-      background: #ffffff;
-      border: 1px solid #ffd1dc;
-      padding: 6px 10px;
-      border-radius: 12px;
-      font-size: 0.78rem;
-      color: var(--text-main);
-      cursor: pointer;
-      font-family: 'Fredoka', sans-serif;
-    }
-    .ambient-btn.active {
-      background: var(--accent);
-      color: white;
-      border-color: var(--accent);
-    }
+        .station-chip.active {
+            background: var(--primary-pink);
+            color: white;
+        }
 
-    .envelope-card {
-      width: 100%;
-      background: #ffffff;
-      border: 2px solid #ffd1dc;
-      border-radius: 20px;
-      padding: 18px;
-      box-shadow: 0 8px 20px rgba(255, 182, 193, 0.2);
-    }
+        /* Memories Section */
+        .memories-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            max-height: 280px;
+            overflow-y: auto;
+            padding: 4px;
+        }
 
-    .letter-title {
-      font-family: 'Fredoka', sans-serif;
-      font-size: 1.25rem;
-      color: var(--accent);
-      margin-bottom: 8px;
-    }
+        .memory-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            text-align: center;
+            padding-bottom: 6px;
+        }
 
-    .letter-body {
-      font-size: 0.92rem;
-      line-height: 1.6;
-      color: #5a3e45;
-      max-height: 200px;
-      overflow-y: auto;
-      white-space: pre-wrap;
-    }
+        .memory-card img {
+            width: 100%;
+            height: 105px;
+            object-fit: cover;
+        }
 
-    .speech-controls {
-      width: 100%;
-      background: #fff8f9;
-      border: 2px solid #ffd1dc;
-      border-radius: 20px;
-      padding: 14px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
+        .memory-card span {
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: #555;
+            display: block;
+            margin-top: 4px;
+            padding: 0 4px;
+        }
 
-    .voice-select-box {
-      width: 100%;
-      padding: 8px 12px;
-      border-radius: 12px;
-      border: 2px solid #ffd1dc;
-      font-family: 'Quicksand', sans-serif;
-      font-size: 0.82rem;
-      color: var(--text-main);
-      outline: none;
-      background: #ffffff;
-    }
+        /* Admin Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
 
-    .speech-btn-row {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-    }
+        .modal-content {
+            background: white;
+            padding: 22px;
+            border-radius: 20px;
+            width: 92%;
+            max-width: 380px;
+            max-height: 88vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
 
-    .btn-speech {
-      font-family: 'Fredoka', sans-serif;
-      background: #ffffff;
-      color: var(--accent);
-      border: 2px solid #ffb6c1;
-      padding: 8px 16px;
-      border-radius: 18px;
-      font-size: 0.85rem;
-      cursor: pointer;
-      display: flex; align-items: center; gap: 6px;
-    }
+        .modal-content h2 {
+            font-size: 1.2rem;
+            color: #d81b60;
+            margin-bottom: 12px;
+            text-align: center;
+        }
 
-    .btn-speech.primary {
-      background: var(--accent);
-      color: #ffffff;
-      border-color: var(--accent);
-      box-shadow: 0 4px 12px var(--accent-glow);
-    }
+        .form-group {
+            margin-bottom: 10px;
+        }
 
-    .equalizer-bar {
-      display: flex;
-      justify-content: center;
-      align-items: flex-end;
-      gap: 4px;
-      height: 24px;
-    }
+        .form-group label {
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: #555;
+            display: block;
+            margin-bottom: 3px;
+        }
 
-    .eq-col {
-      width: 5px; height: 4px;
-      background: #ffb6c1;
-      border-radius: 4px;
-      transition: height 0.15s ease;
-    }
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 7px 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-family: 'Quicksand', sans-serif;
+            font-size: 0.82rem;
+        }
 
-    .equalizer-bar.active .eq-col {
-      animation: eqBounce 0.5s ease-in-out infinite alternate;
-    }
-    .equalizer-bar.active .eq-col:nth-child(1) { animation-delay: 0.1s; }
-    .equalizer-bar.active .eq-col:nth-child(2) { animation-delay: 0.3s; }
-    .equalizer-bar.active .eq-col:nth-child(3) { animation-delay: 0.2s; }
-    .equalizer-bar.active .eq-col:nth-child(4) { animation-delay: 0.4s; }
-    .equalizer-bar.active .eq-col:nth-child(5) { animation-delay: 0.15s; }
+        .file-upload-row {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
 
-    @keyframes eqBounce {
-      0% { height: 4px; background: #ffb6c1; }
-      100% { height: 22px; background: var(--accent); }
-    }
+        .file-upload-row input[type="file"] {
+            font-size: 0.72rem;
+            padding: 4px;
+        }
 
-    .sliders-row { display: flex; gap: 12px; width: 100%; }
+        .btn-primary {
+            background: var(--primary-pink);
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 9px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 8px;
+            font-size: 0.85rem;
+        }
 
-    .slider-group {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-    .slider-group label {
-      font-size: 0.75rem;
-      font-weight: 700;
-      color: var(--text-muted);
-      display: flex;
-      justify-content: space-between;
-    }
+        .btn-secondary {
+            background: #eee;
+            color: #555;
+            border: none;
+            width: 100%;
+            padding: 7px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 5px;
+            font-size: 0.8rem;
+        }
 
-    .slider-group input[type=range] {
-      width: 100%;
-      accent-color: var(--accent);
-    }
+        .record-box {
+            background: #fdf2f4;
+            border: 2px dashed var(--primary-pink);
+            padding: 8px;
+            border-radius: 8px;
+            text-align: center;
+            margin-top: 8px;
+        }
 
-    .polaroid-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-      gap: 12px;
-      width: 100%;
-      max-height: 400px;
-      overflow-y: auto;
-      padding: 4px;
-    }
+        .record-btn {
+            background: #e91e63;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 12px;
+            font-size: 0.72rem;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 4px;
+        }
 
-    .polaroid-card {
-      background: #ffffff;
-      padding: 8px 8px 12px 8px;
-      border-radius: 12px;
-      box-shadow: 0 6px 15px rgba(0,0,0,0.1);
-      border: 1px solid #f0f0f0;
-      text-align: center;
-    }
+        .record-btn.recording {
+            background: #d32f2f;
+            animation: pulse 1.2s infinite;
+        }
 
-    .polaroid-img {
-      width: 100%; height: 110px;
-      object-fit: cover;
-      border-radius: 8px;
-      margin-bottom: 6px;
-    }
-
-    .polaroid-caption {
-      font-family: 'Sacramento', cursive;
-      font-size: 1.15rem;
-      color: var(--text-main);
-    }
-
-    .proposal-box {
-      text-align: center;
-      width: 100%;
-      min-height: 380px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-    }
-
-    .ring-icon {
-      font-size: 5rem;
-      animation: pulse 2s infinite;
-      margin-bottom: 12px;
-      filter: drop-shadow(0 0 16px rgba(255,75,114,0.5));
-    }
-    @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.15); } }
-
-    .proposal-title {
-      font-family: 'Sacramento', cursive;
-      font-size: 3.5rem;
-      color: var(--accent);
-      line-height: 1.1;
-    }
-
-    .dvd-yes-btn {
-      position: fixed;
-      font-family: 'Fredoka', sans-serif;
-      background: linear-gradient(135deg, #ff2b56, #ff758c);
-      color: white;
-      border: 3px solid #ffffff;
-      padding: 16px 36px;
-      border-radius: 40px;
-      font-size: 1.35rem;
-      cursor: pointer;
-      box-shadow: 0 0 25px rgba(255, 43, 86, 0.8), 0 6px 20px rgba(0,0,0,0.2);
-      z-index: 10000;
-      transition: background 0.2s ease, box-shadow 0.2s ease;
-      user-select: none;
-    }
-
-    .success-modal {
-      display: none;
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.65);
-      backdrop-filter: blur(10px);
-      z-index: 20000;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-    }
-
-    .success-content {
-      background: #ffffff;
-      padding: 35px 25px;
-      border-radius: 30px;
-      text-align: center;
-      max-width: 380px;
-      box-shadow: 0 15px 40px rgba(0,0,0,0.3);
-      border: 4px solid #ffd1dc;
-    }
-
-    .success-content h2 {
-      font-family: 'Sacramento', cursive;
-      font-size: 3.5rem;
-      color: var(--accent);
-    }
-
-    .admin-panel {
-      width: 100%;
-      max-width: 520px;
-      background: var(--card-bg);
-      backdrop-filter: blur(12px);
-      border-radius: 25px;
-      padding: 22px;
-      margin-top: 20px;
-      border: 3px solid #ffffff;
-      display: none;
-      z-index: 1;
-    }
-    .admin-panel.active { display: block; }
-    .admin-panel h2 { font-family: 'Fredoka', sans-serif; font-size: 1.25rem; margin-bottom: 12px; color: var(--accent); text-align: center; }
-
-    .form-group { margin-bottom: 12px; }
-    .form-group label { display: block; font-size: 0.8rem; font-weight: 700; color: var(--text-muted); margin-bottom: 4px; }
-    .form-group input, .form-group select, .form-group textarea {
-      width: 100%; padding: 10px; background: #ffffff; border: 2px solid #ffd1dc; color: var(--text-main); border-radius: 12px; font-size: 0.88rem; outline: none; font-family: 'Quicksand', sans-serif;
-    }
-
-    .theme-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 10px; }
-    .theme-btn {
-      padding: 8px; border-radius: 12px; border: 2px solid #ffd1dc; background: #ffffff; font-family: 'Fredoka', sans-serif; font-size: 0.78rem; cursor: pointer; text-align: center; color: var(--text-main);
-    }
-    .theme-btn.active { border-color: var(--accent); background: #ffe3e8; color: var(--accent); }
-
-    .btn-save { padding: 12px; border-radius: 16px; border: none; background: var(--accent); color: white; font-family: 'Fredoka', sans-serif; font-size: 0.95rem; cursor: pointer; width: 100%; }
-    .section-title { font-family: 'Fredoka', sans-serif; font-size: 0.95rem; color: var(--accent); margin: 14px 0 6px 0; border-bottom: 1px solid #ffd1dc; padding-bottom: 4px; }
-    .list-box { max-height: 120px; overflow-y: auto; margin-bottom: 10px; }
-    .item-card { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: #ffffff; border-radius: 10px; margin-bottom: 6px; font-size: 0.82rem; border: 1px solid #ffd1dc; }
-    .btn-del { background: none; border: none; color: #ff4757; font-size: 0.95rem; cursor: pointer; }
-    
-    .record-box {
-      background: #fff0f3;
-      border: 2px dashed #ffb6c1;
-      padding: 12px;
-      border-radius: 16px;
-      text-align: center;
-      margin-bottom: 10px;
-    }
-    .record-btns { display: flex; gap: 8px; margin-top: 8px; }
-    
-    @keyframes pulseRec {
-      0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 71, 87, 0.7); }
-      70% { transform: scale(1.03); box-shadow: 0 0 0 10px rgba(255, 71, 87, 0); }
-      100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 71, 87, 0); }
-    }
-    .recording-active {
-      animation: pulseRec 1.5s infinite;
-      background: #ff4757 !important;
-      color: white !important;
-    }
-  </style>
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.04); }
+            100% { transform: scale(1); }
+        }
+    </style>
 </head>
 <body>
 
-  <canvas id="particleCanvas"></canvas>
+    <div class="container">
+        <header>
+            <h1>Our Love Frequency</h1>
+            <div class="counter-badge" id="counter">Together Since May 6, 2024</div>
+        </header>
 
-  <div class="bg-heart" style="left: 10%; animation-delay: 0s;">💖</div>
-  <div class="bg-heart" style="left: 25%; animation-delay: 2s;">💕</div>
-  <div class="bg-heart" style="left: 60%; animation-delay: 4s;">🌸</div>
-  <div class="bg-heart" style="left: 80%; animation-delay: 1s;">✨</div>
-
-  <header>
-    <h1>Our Love Frequency</h1>
-  </header>
-
-  <div class="counter-banner" id="counterBanner">
-    ⏳ Loading timeline...
-  </div>
-
-  <div class="nav-tabs">
-    <button class="nav-btn active" onclick="switchPage('radioPage')">📻 Radio FM</button>
-    <button class="nav-btn" onclick="switchPage('lettersPage')">💌 Read Aloud</button>
-    <button class="nav-btn" onclick="switchPage('scrapbookPage')">🖼️ Memories</button>
-    <button class="nav-btn" onclick="switchPage('proposalPage')">💍 Proposal</button>
-  </div>
-
-  <!-- PAGE 1: RADIO & AMBIENT MIXER -->
-  <div class="page-section active" id="radioPage">
-    <div class="app-card">
-      <button class="admin-toggle" id="adminBtn">⚙️</button>
-      <div class="freq-badge" id="freqBadge">107.9 FM</div>
-
-      <div class="vinyl-wrapper" id="vinylWrapper">
-        <div class="vinyl-record" id="vinyl">
-          <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=300" alt="Album Art" class="album-art" id="albumArt">
-        </div>
-      </div>
-
-      <div class="track-info">
-        <div class="track-title" id="trackTitle">Select a Station</div>
-        <div class="track-subtitle" id="trackSubtitle">Tap play to listen ♡</div>
-      </div>
-
-      <div class="ambient-bar">
-        <button class="ambient-btn" id="rainBtn" onclick="toggleAmbient('rain')">🌧️ Rain</button>
-        <button class="ambient-btn" id="fireBtn" onclick="toggleAmbient('fire')">🔥 Fireplace</button>
-        <button class="ambient-btn" id="wavesBtn" onclick="toggleAmbient('waves')">🌊 Ocean</button>
-        <button class="ambient-btn" id="breezeBtn" onclick="toggleAmbient('breeze')">🍃 Breeze</button>
-      </div>
-
-      <div class="station-selector" id="stationList"></div>
-
-      <div class="controls">
-        <button class="btn-secondary" id="prevBtn">⏮</button>
-        <button class="btn-circle" id="playBtn">▶</button>
-        <button class="btn-secondary" id="nextBtn">⏭</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- PAGE 2: LETTERS & VOICE ENGINE -->
-  <div class="page-section" id="lettersPage">
-    <div class="app-card">
-      <div class="envelope-card">
-        <div class="letter-title" id="pureLetterTitle">No Letter Selected</div>
-        <div class="letter-body" id="pureLetterBody">Select a letter below to read...</div>
-      </div>
-
-      <div class="station-selector" id="pureLetterList"></div>
-
-      <div class="speech-controls">
-        <select class="voice-select-box" id="voiceSelect">
-          <option value="">Loading system voices...</option>
-        </select>
-
-        <div class="speech-btn-row">
-          <button class="btn-speech primary" id="btnSpeechPlay">▶ Listen</button>
-          <button class="btn-speech" id="btnSpeechPause">⏸ Pause</button>
-          <button class="btn-speech" id="btnSpeechStop">⏹ Stop</button>
+        <div class="nav-tabs">
+            <button class="tab-btn active" onclick="switchTab('radio')">📻 Radio FM</button>
+            <button class="tab-btn" onclick="switchTab('memories')">🖼️ Memories</button>
         </div>
 
-        <div class="equalizer-bar" id="speechEqualizer">
-          <div class="eq-col"></div>
-          <div class="eq-col"></div>
-          <div class="eq-col"></div>
-          <div class="eq-col"></div>
-          <div class="eq-col"></div>
+        <!-- RADIO SECTION -->
+        <div id="radio-section" class="section-content active">
+            <div class="radio-card">
+                <button class="admin-trigger" onclick="openAdmin()">⚙️</button>
+                <div class="frequency-display" id="freq-display">107.9 FM</div>
+
+                <div class="vinyl-container" id="vinyl">
+                    <div class="vinyl-center" id="vinyl-img"></div>
+                </div>
+
+                <div class="station-info">
+                    <h3 id="station-title">Welcome to Brenfel Fm</h3>
+                    <p id="station-desc">Tap play to listen to our love audio</p>
+                </div>
+
+                <div class="controls">
+                    <button class="control-btn" onclick="prevStation()">⏮</button>
+                    <button class="control-btn main-play" id="play-btn" onclick="togglePlay()">▶</button>
+                    <button class="control-btn" onclick="nextStation()">⏭</button>
+                </div>
+
+                <div class="playlist" id="playlist-chips">
+                    <!-- Dynamic chips generated via JS -->
+                </div>
+            </div>
         </div>
 
-        <div class="sliders-row">
-          <div class="slider-group">
-            <label>Speed <span id="rateVal">0.9x</span></label>
-            <input type="range" id="speechRate" min="0.5" max="1.5" step="0.1" value="0.9" oninput="document.getElementById('rateVal').innerText = this.value + 'x'">
-          </div>
-          <div class="slider-group">
-            <label>Pitch <span id="pitchVal">1.0</span></label>
-            <input type="range" id="speechPitch" min="0.5" max="1.5" step="0.1" value="1.0" oninput="document.getElementById('pitchVal').innerText = this.value">
-          </div>
+        <!-- MEMORIES SECTION -->
+        <div id="memories-section" class="section-content">
+            <div class="memories-grid" id="memories-container">
+                <!-- Dynamic memory cards generated via JS -->
+            </div>
         </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- PAGE 3: SCRAPBOOK GALLERY -->
-  <div class="page-section" id="scrapbookPage">
-    <div class="app-card">
-      <div style="font-family:'Fredoka',sans-serif; color:var(--accent); font-size:1.15rem;">Our Memories ♡</div>
-      <div class="polaroid-grid" id="polaroidGrid"></div>
-    </div>
-  </div>
-
-  <!-- PAGE 4: CLEAN PROPOSAL VIEW -->
-  <div class="page-section" id="proposalPage">
-    <div class="app-card">
-      <div class="proposal-box">
-        <div class="ring-icon">💍</div>
-        <div class="proposal-title">Will You Marry Me?</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- DVD Bouncing YES Button -->
-  <button class="dvd-yes-btn" id="dvdYesBtn" style="display: none;">YES! 💖</button>
-
-  <!-- Success Modal -->
-  <div class="success-modal" id="successModal">
-    <div class="success-content">
-      <h2>FOREVER & ALWAYS! 🎉</h2>
-      <p style="font-size: 1.15rem; color: #4a2e35; margin: 15px 0;">You said YES! I love you endlessly! 💖💍✨</p>
-      <button class="btn-save" onclick="closeModal()">I Love You Too ♡</button>
-    </div>
-  </div>
-
-  <!-- Admin Panel -->
-  <div class="admin-panel" id="adminPanel">
-    <h2>Admin Settings ♡</h2>
-
-    <div class="section-title">1. Customize Background Theme</div>
-    <div class="theme-grid">
-      <button class="theme-btn active" onclick="setTheme('romantic')">🌸 Romantic Sunset</button>
-      <button class="theme-btn" onclick="setTheme('pastel')">🎨 Pastel Dream</button>
-      <button class="theme-btn" onclick="setTheme('midnight')">🌌 Midnight Star</button>
-      <button class="theme-btn" onclick="setTheme('rose')">🌹 Warm Rose</button>
-    </div>
-    <div class="form-group">
-      <label>Or Set Custom Image / GIF Background URL:</label>
-      <input type="text" id="customBgUrl" placeholder="https://example.com/wallpaper.gif">
-      <button class="btn-save" id="saveCustomBgBtn" style="margin-top:6px; background:#6c5ce7;">Apply Custom Background URL</button>
-    </div>
-    <div class="form-group" style="margin-top: 8px;">
-      <label>Or Upload Background Image Directly from Phone:</label>
-      <input type="file" id="customBgFile" accept="image/*">
     </div>
 
-    <div class="section-title">2. Custom Dating Start Date</div>
-    <div class="form-group">
-      <input type="date" id="startDateInput" value="2024-05-06">
+    <!-- ADMIN MODAL -->
+    <div class="modal" id="admin-modal">
+        <div class="modal-content">
+            <h2>Admin Settings</h2>
+            
+            <div id="login-view">
+                <div class="form-group">
+                    <label>Enter Passcode (Default: 1234)</label>
+                    <input type="password" id="passcode-input" placeholder="Enter PIN">
+                </div>
+                <button class="btn-primary" onclick="verifyAdmin()">Login</button>
+                <button class="btn-secondary" onclick="closeAdmin()">Cancel</button>
+            </div>
+
+            <div id="settings-view" style="display:none;">
+                <div class="form-group">
+                    <label>Background Image (Upload from Gallery or Paste URL)</label>
+                    <div class="file-upload-row">
+                        <input type="file" id="setting-bg-file" accept="image/*" onchange="previewBgUpload(event)">
+                    </div>
+                    <input type="text" id="setting-bg" placeholder="Or paste direct image URL (.jpg/.png)" style="margin-top:5px;">
+                </div>
+
+                <div class="form-group">
+                    <label>Station Name</label>
+                    <input type="text" id="setting-name" value="Welcome to Brenfel Fm">
+                </div>
+
+                <div class="form-group">
+                    <label>Audio File (Upload MP3 / Record / Link)</label>
+                    <div class="file-upload-row" style="margin-bottom:5px;">
+                        <input type="file" id="setting-audio-file" accept="audio/*" onchange="previewAudioUpload(event)">
+                    </div>
+                    <input type="text" id="setting-audio" placeholder="https://...file.mp3 or Data URL">
+                </div>
+
+                <div class="record-box">
+                    <label style="margin-bottom:3px;">Or Record Voice Note Directly:</label>
+                    <button class="record-btn" id="rec-toggle-btn" onclick="toggleRecording()">🎙️ Start Recording</button>
+                    <p id="rec-status" style="font-size:0.68rem; color:#666; margin-top:3px;">Ready to record</p>
+                </div>
+
+                <hr style="margin: 12px 0; border:0; border-top:1px solid #eee;">
+
+                <div class="form-group">
+                    <label>Add Memory Photo (Upload from Gallery or URL)</label>
+                    <div class="file-upload-row" style="margin-bottom:5px;">
+                        <input type="file" id="memory-img-file" accept="image/*" onchange="previewMemoryUpload(event)">
+                    </div>
+                    <input type="text" id="memory-img-url" placeholder="Or paste Image URL">
+                </div>
+                <div class="form-group">
+                    <label>Memory Caption</label>
+                    <input type="text" id="memory-caption" placeholder="Our cute moment">
+                </div>
+                <button class="btn-secondary" onclick="addMemory()">+ Add Memory Photo</button>
+
+                <button class="btn-primary" onclick="saveSettings()">Save & Update Everything</button>
+                <button class="btn-secondary" onclick="closeAdmin()">Close</button>
+            </div>
+        </div>
     </div>
 
-    <div class="section-title">3. Add Radio Station & Phone/URL Audio</div>
-    
-    <!-- LIVE MIC RECORDING OPTION WITH TIMER & VISUAL FEEDBACK -->
-    <div class="record-box">
-      <label style="font-family:'Fredoka',sans-serif; color:var(--accent); margin-bottom:4px; display:block;">🎙️ Record Audio Message from Mic</label>
-      <div id="recordStatus" style="font-size:0.82rem; color:var(--text-main); font-weight:700; margin-bottom:6px;">Ready to record 🎙️</div>
-      <div id="recordTimer" style="font-family:'Fredoka',sans-serif; font-size:1.1rem; color:var(--accent); margin-bottom:6px; display:none;">⏱️ 00:00</div>
-      <div class="record-btns">
-        <button class="btn-save" id="startRecordBtn" style="background:#00b894; padding:8px; font-size:0.85rem;">🔴 Start Record</button>
-        <button class="btn-save" id="stopRecordBtn" style="background:#ff4757; padding:8px; font-size:0.85rem;" disabled>⏹ Stop & Save</button>
-      </div>
-    </div>
+    <audio id="audio-player"></audio>
 
-    <div class="form-group"><input type="text" id="newStationName" placeholder="Station / Voice Note Name"></div>
-    <div class="form-group"><input type="text" id="newStationFreq" placeholder="Frequency e.g. 104.5 FM"></div>
-    <div class="form-group"><input type="text" id="newAudioUrl" placeholder="Or Direct Audio URL (.mp3 / stream)"></div>
-    <div class="form-group">
-      <label>Or Upload Audio File from Phone (.mp3):</label>
-      <input type="file" id="newAudioFile" accept="audio/*">
-    </div>
-    <button class="btn-save" id="addStationBtn" style="background:#6c5ce7; margin-bottom:10px;">+ Add Station & Audio</button>
-    <div class="list-box" id="adminStationList"></div>
-
-    <div class="section-title">4. Add Written Love Letter</div>
-    <div class="form-group"><input type="text" id="inputPureLetterTitle" placeholder="Letter Title"></div>
-    <div class="form-group"><textarea id="inputPureLetterBody" rows="3" placeholder="Letter contents..."></textarea></div>
-    <button class="btn-save" id="savePureLetterBtn" style="margin-bottom:12px;">Save Written Letter</button>
-
-    <div class="section-title">5. Add Scrapbook Photo (Phone or URL)</div>
-    <div class="form-group"><input type="text" id="inputPolaroidCaption" placeholder="Memory Caption"></div>
-    <div class="form-group"><input type="text" id="inputPolaroidUrl" placeholder="Or Image URL"></div>
-    <div class="form-group">
-      <label>Or Upload Image from Phone Gallery:</label>
-      <input type="file" id="inputPolaroidFile" accept="image/*">
-    </div>
-    <button class="btn-save" id="savePolaroidBtn" style="background:#00b894;">Add Memory Picture</button>
-  </div>
-
-  <script>
-    let stations = [];
-    let tracks = [];
-    let pureLetters = [];
-    let polaroids = [];
-    let datingStartDate = new Date("2024-05-06T00:00:00");
-
-    let currentTrackIndex = 0;
-    let currentLetterIndex = 0;
-    let isPlaying = false;
-    let audio = new Audio();
-
-    let ambientCtx = null;
-    let ambientNodes = {};
-
-    let speechUtterance = null;
-    let isSpeaking = false;
-    let voicesList = [];
-
-    let mediaRecorder = null;
-    let audioChunks = [];
-    let recordedAudioBlobUrl = "";
-    let recordTimerInterval = null;
-    let recordSecondsElapsed = 0;
-
-    let dvdX = 100, dvdY = 100;
-    let dvdSpeedX = 2.5, dvdSpeedY = 2.5;
-    let dvdAnimId = null;
-    const dvdColors = [
-      'linear-gradient(135deg, #ff2b56, #ff758c)',
-      'linear-gradient(135deg, #74b9ff, #0984e3)',
-      'linear-gradient(135deg, #55efc4, #00b894)',
-      'linear-gradient(135deg, #a29bfe, #6c5ce7)',
-      'linear-gradient(135deg, #fd79a8, #e84393)'
-    ];
-
-    const themes = {
-      romantic: 'linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #feada6 100%)',
-      pastel: 'linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%)',
-      midnight: 'linear-gradient(135deg, #2b5876 0%, #4e4376 100%)',
-      rose: 'linear-gradient(135deg, #ff0844 0%, #ffb199 100%)'
-    };
-
-    function init() {
-      const savedDate = localStorage.getItem('love_start_date');
-      if (savedDate) {
-        datingStartDate = new Date(savedDate);
-      } else {
-        localStorage.setItem('love_start_date', datingStartDate.toISOString());
-      }
-
-      const savedBg = localStorage.getItem('love_bg_custom');
-      if (savedBg) {
-        document.body.style.background = `url("${savedBg}") center/cover fixed no-repeat`;
-      }
-
-      const savedStations = localStorage.getItem('love_stations');
-      stations = savedStations ? JSON.parse(savedStations) : [
-        { name: "Our Memories 📸", freq: "107.9 FM", audioUrl: "" },
-        { name: "Late Night 🌙", freq: "98.5 FM", audioUrl: "" },
-        { name: "Pick-Me-Up 💕", freq: "101.3 FM", audioUrl: "" }
-      ];
-
-      const savedTracks = localStorage.getItem('love_radio_tracks');
-      tracks = savedTracks ? JSON.parse(savedTracks) : [{
-        title: "Welcome Note ♡", station: stations[0].name, freq: stations[0].freq,
-        photo: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=300", audioUrl: ""
-      }];
-
-      const savedLetters = localStorage.getItem('love_pure_letters');
-      pureLetters = savedLetters ? JSON.parse(savedLetters) : [{
-        title: "My Heart For You ♡", body: "Every moment with you since May 6, 2024 feels like a dream I never want to wake up from..."
-      }];
-
-      const savedPolaroids = localStorage.getItem('love_polaroids');
-      polaroids = savedPolaroids ? JSON.parse(savedPolaroids) : [
-        { caption: "First Date 💕", url: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400" },
-        { caption: "Sunset Walk 🌅", url: "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=400" }
-      ];
-
-      renderStations();
-      renderAdminStations();
-      renderPureLetters();
-      renderPolaroids();
-      startCounter();
-      initParticles();
-      populateVoices();
-      initRecorder();
-
-      if (tracks.length > 0) loadTrack(0);
-      if (pureLetters.length > 0) loadPureLetter(0);
-    }
-
-    function setTheme(themeName) {
-      localStorage.removeItem('love_bg_custom');
-      document.body.style.background = themes[themeName];
-      document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
-      event.target.classList.add('active');
-    }
-
-    document.getElementById('saveCustomBgBtn').onclick = () => {
-      const url = document.getElementById('customBgUrl').value.trim();
-      if (url) {
-        localStorage.setItem('love_bg_custom', url);
-        document.body.style.background = `url("${url}") center/cover fixed no-repeat`;
-        alert("Custom Background Applied! 🎨");
-      }
-    };
-
-    document.getElementById('customBgFile').addEventListener('change', (e) => {
-      const file = e.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          localStorage.setItem('love_bg_custom', reader.result);
-          document.body.style.background = `url("${reader.result}") center/cover fixed no-repeat`;
-          alert("Phone Background Applied! 📸");
+    <script>
+        // Cloud-Ready Local Storage Data Initialization
+        let appData = JSON.parse(localStorage.getItem('brenfel_love_app_data')) || {
+            bgUrl: "",
+            stations: [
+                {
+                    name: "Welcome to Brenfel Fm",
+                    freq: "107.9 FM",
+                    desc: "Our Special Voice Note",
+                    audio: "" 
+                },
+                {
+                    name: "Our Memories",
+                    freq: "98.5 FM",
+                    desc: "Sweet background melody",
+                    audio: ""
+                }
+            ],
+            memories: [
+                { url: "https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=300", caption: "Forever Together ❤️" }
+            ]
         };
-        reader.readAsDataURL(file);
-      }
-    });
 
-    function saveAll() {
-      localStorage.setItem('love_stations', JSON.stringify(stations));
-      localStorage.setItem('love_radio_tracks', JSON.stringify(tracks));
-      localStorage.setItem('love_pure_letters', JSON.stringify(pureLetters));
-      localStorage.setItem('love_polaroids', JSON.stringify(polaroids));
-      localStorage.setItem('love_start_date', datingStartDate.toISOString());
-    }
+        let currentStationIdx = 0;
+        let isPlaying = false;
+        let mediaRecorder;
+        let audioChunks = [];
 
-    function startCounter() {
-      setInterval(() => {
-        const now = new Date();
-        const diff = now - datingStartDate;
-        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-        const mins = Math.floor((diff / 1000 / 60) % 60);
-        const secs = Math.floor((diff / 1000) % 60);
+        const audioPlayer = document.getElementById('audio-player');
+        const vinyl = document.getElementById('vinyl');
+        const vinylImg = document.getElementById('vinyl-img');
+        const playBtn = document.getElementById('play-btn');
 
-        document.getElementById('counterBanner').innerHTML = 
-          `💖 Together Since May 6, 2024: <strong>${days}</strong> Days, <strong>${hours}</strong>h <strong>${mins}</strong>m <strong>${secs}</strong>s ♡`;
-      }, 1000);
-    }
+        window.onload = function() {
+            applyBackground();
+            renderStations();
+            renderMemories();
+            loadStation(0);
+            updateCounter();
+        };
 
-    function switchPage(pageId) {
-      document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
-      document.querySelectorAll('.nav-tabs .nav-btn').forEach(b => b.classList.remove('active'));
-      document.getElementById(pageId).classList.add('active');
-      event.target.classList.add('active');
-
-      if (pageId !== 'radioPage') pauseAudio();
-      if (pageId !== 'lettersPage') stopSpeech();
-
-      const dvdBtn = document.getElementById('dvdYesBtn');
-      if (pageId === 'proposalPage') {
-        dvdBtn.style.display = 'block';
-        startDvdBouncing();
-      } else {
-        dvdBtn.style.display = 'none';
-        stopDvdBouncing();
-      }
-    }
-
-    function startDvdBouncing() {
-      const btn = document.getElementById('dvdYesBtn');
-      if (!dvdAnimId) {
-        dvdX = Math.random() * (window.innerWidth - 150);
-        dvdY = Math.random() * (window.innerHeight - 80);
-      }
-
-      function update() {
-        const w = window.innerWidth;
-        const h = window.innerHeight;
-        const btnW = btn.offsetWidth || 140;
-        const btnH = btn.offsetHeight || 60;
-
-        dvdX += dvdSpeedX;
-        dvdY += dvdSpeedY;
-
-        let hit = false;
-
-        if (dvdX + btnW >= w) { dvdX = w - btnW; dvdSpeedX *= -1; hit = true; }
-        if (dvdX <= 0) { dvdX = 0; dvdSpeedX *= -1; hit = true; }
-        if (dvdY + btnH >= h) { dvdY = h - btnH; dvdSpeedY *= -1; hit = true; }
-        if (dvdY <= 0) { dvdY = 0; dvdSpeedY *= -1; hit = true; }
-
-        if (hit) {
-          const color = dvdColors[Math.floor(Math.random() * dvdColors.length)];
-          btn.style.background = color;
-        }
-
-        btn.style.left = dvdX + 'px';
-        btn.style.top = dvdY + 'px';
-
-        dvdAnimId = requestAnimationFrame(update);
-      }
-
-      cancelAnimationFrame(dvdAnimId);
-      dvdAnimId = requestAnimationFrame(update);
-    }
-
-    function stopDvdBouncing() {
-      if (dvdAnimId) {
-        cancelAnimationFrame(dvdAnimId);
-        dvdAnimId = null;
-      }
-    }
-
-    document.getElementById('dvdYesBtn').onclick = triggerSuccess;
-
-    function triggerSuccess() {
-      document.getElementById('successModal').style.display = 'flex';
-    }
-    function closeModal() {
-      document.getElementById('successModal').style.display = 'none';
-    }
-
-    // ROBUST CONTINUOUS AMBIENT GENERATOR FIX
-    function toggleAmbient(type) {
-      if (!ambientCtx) ambientCtx = new (window.AudioContext || window.webkitAudioContext)();
-      if (ambientCtx.state === 'suspended') ambientCtx.resume();
-
-      const btn = document.getElementById(type + 'Btn');
-
-      if (ambientNodes[type]) {
-        // Turn off
-        if (ambientNodes[type].source) {
-          try { ambientNodes[type].source.stop(); } catch(e){}
-        }
-        if (ambientNodes[type].timer) clearInterval(ambientNodes[type].timer);
-        delete ambientNodes[type];
-        btn.classList.remove('active');
-      } else {
-        // Turn on continuous node loop
-        let bufferSize = ambientCtx.sampleRate * 5;
-        let buffer = ambientCtx.createBuffer(1, bufferSize, ambientCtx.sampleRate);
-        let data = buffer.getChannelData(0);
-
-        let source = ambientCtx.createBufferSource();
-        let filter = ambientCtx.createBiquadFilter();
-        let gain = ambientCtx.createGain();
-
-        source.buffer = buffer;
-        source.loop = true;
-
-        let trackObj = { source };
-
-        if (type === 'rain') {
-          for (let i = 0; i < bufferSize; i++) {
-            data[i] = (Math.random() * 2 - 1);
-          }
-          filter.type = 'lowpass';
-          filter.frequency.value = 1000;
-          gain.gain.value = 0.15;
-
-          source.connect(filter);
-          filter.connect(gain);
-          gain.connect(ambientCtx.destination);
-
-          // Droplet ticks
-          trackObj.timer = setInterval(() => {
-            if (!ambientNodes['rain']) return;
-            let osc = ambientCtx.createOscillator();
-            let g = ambientCtx.createGain();
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(1200 + Math.random() * 600, ambientCtx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(300, ambientCtx.currentTime + 0.08);
-            g.gain.setValueAtTime(0.05, ambientCtx.currentTime);
-            g.gain.exponentialRampToValueAtTime(0.001, ambientCtx.currentTime + 0.08);
-            osc.connect(g);
-            g.connect(ambientCtx.destination);
-            osc.start();
-            osc.stop(ambientCtx.currentTime + 0.09);
-          }, 100);
-
-        } else if (type === 'fire') {
-          for (let i = 0; i < bufferSize; i++) {
-            data[i] = (Math.random() * 2 - 1) * 0.4;
-          }
-          filter.type = 'lowpass';
-          filter.frequency.value = 350;
-          gain.gain.value = 0.18;
-
-          source.connect(filter);
-          filter.connect(gain);
-          gain.connect(ambientCtx.destination);
-
-          trackObj.timer = setInterval(() => {
-            if (!ambientNodes['fire']) return;
-            if (Math.random() > 0.5) {
-              let pop = ambientCtx.createOscillator();
-              let g = ambientCtx.createGain();
-              pop.type = 'triangle';
-              pop.frequency.setValueAtTime(300 + Math.random() * 400, ambientCtx.currentTime);
-              g.gain.setValueAtTime(0.07, ambientCtx.currentTime);
-              g.gain.exponentialRampToValueAtTime(0.001, ambientCtx.currentTime + 0.05);
-              pop.connect(g);
-              g.connect(ambientCtx.destination);
-              pop.start();
-              pop.stop(ambientCtx.currentTime + 0.06);
+        function applyBackground() {
+            if (appData.bgUrl) {
+                document.body.style.backgroundImage = `url('${appData.bgUrl}')`;
             }
-          }, 200);
-
-        } else if (type === 'waves') {
-          for (let i = 0; i < bufferSize; i++) {
-            data[i] = Math.random() * 2 - 1;
-          }
-          filter.type = 'bandpass';
-          filter.frequency.value = 300;
-          filter.Q.value = 1.0;
-          gain.gain.value = 0.22;
-
-          source.connect(filter);
-          filter.connect(gain);
-          gain.connect(ambientCtx.destination);
-
-          let waveTime = 0;
-          trackObj.timer = setInterval(() => {
-            if (!ambientNodes['waves']) return;
-            waveTime += 0.04;
-            filter.frequency.setValueAtTime(250 + Math.sin(waveTime) * 200, ambientCtx.currentTime);
-          }, 100);
-
-        } else if (type === 'breeze') {
-          for (let i = 0; i < bufferSize; i++) {
-            data[i] = (Math.random() * 2 - 1) * 0.5;
-          }
-          filter.type = 'lowpass';
-          filter.frequency.value = 250;
-          gain.gain.value = 0.2;
-
-          source.connect(filter);
-          filter.connect(gain);
-          gain.connect(ambientCtx.destination);
-
-          let bTime = 0;
-          trackObj.timer = setInterval(() => {
-            if (!ambientNodes['breeze']) return;
-            bTime += 0.02;
-            filter.frequency.setValueAtTime(200 + Math.sin(bTime) * 120, ambientCtx.currentTime);
-          }, 150);
         }
 
-        source.start();
-        ambientNodes[type] = trackObj;
-        btn.classList.add('active');
-      }
-    }
-
-    function loadTrack(index) {
-      if (tracks.length === 0) return;
-      currentTrackIndex = index;
-      const t = tracks[index];
-      document.getElementById('trackTitle').textContent = t.title;
-      document.getElementById('trackSubtitle').textContent = "Station: " + t.station;
-      document.getElementById('freqBadge').textContent = t.freq || "107.9 FM";
-      document.getElementById('albumArt').src = t.photo || "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=300";
-
-      if (t.audioUrl) {
-        audio.src = t.audioUrl;
-      } else {
-        audio.src = "";
-      }
-    }
-
-    function playAudio() {
-      if (tracks[currentTrackIndex] && tracks[currentTrackIndex].audioUrl) {
-        audio.play().catch(e => alert("Playback error or browser restriction. Tap play again!"));
-        isPlaying = true;
-        document.getElementById('playBtn').textContent = '⏸';
-        document.getElementById('vinyl').classList.add('playing');
-      } else {
-        alert("No audio file or URL provided for this station! Add one in Admin Settings (⚙).");
-      }
-    }
-
-    function pauseAudio() {
-      audio.pause();
-      isPlaying = false;
-      document.getElementById('playBtn').textContent = '▶';
-      document.getElementById('vinyl').classList.remove('playing');
-    }
-
-    document.getElementById('playBtn').onclick = () => isPlaying ? pauseAudio() : playAudio();
-    document.getElementById('nextBtn').onclick = () => { currentTrackIndex = (currentTrackIndex + 1) % tracks.length; loadTrack(currentTrackIndex); playAudio(); };
-    document.getElementById('prevBtn').onclick = () => { currentTrackIndex = (currentTrackIndex - 1 + tracks.length) % tracks.length; loadTrack(currentTrackIndex); playAudio(); };
-
-    // CRYSTAL CLEAR RECORDER WITH VISUAL FEEDBACK & LIVE TIMER
-    function initRecorder() {
-      const startBtn = document.getElementById('startRecordBtn');
-      const stopBtn = document.getElementById('stopRecordBtn');
-      const status = document.getElementById('recordStatus');
-      const timerDisplay = document.getElementById('recordTimer');
-
-      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-        status.textContent = "Mic recording not supported in this browser.";
-        startBtn.disabled = true;
-        return;
-      }
-
-      startBtn.onclick = async () => {
-        try {
-          const stream = await navigator.mediaDevices.getUserMedia({ 
-            audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true } 
-          });
-          mediaRecorder = new MediaRecorder(stream);
-          audioChunks = [];
-
-          mediaRecorder.ondataavailable = e => {
-            if (e.data.size > 0) audioChunks.push(e.data);
-          };
-
-          mediaRecorder.onstop = () => {
-            const audioBlob = new Blob(audioChunks, { type: 'audio/mp3' });
-            const reader = new FileReader();
-            reader.onloadend = () => {
-              recordedAudioBlobUrl = reader.result;
-              status.textContent = "✅ Voice recorded successfully! Type name & tap Add Station.";
-              timerDisplay.style.display = 'none';
-            };
-            reader.readAsDataURL(audioBlob);
-          };
-
-          mediaRecorder.start();
-          startBtn.disabled = true;
-          stopBtn.disabled = false;
-          startBtn.classList.add('recording-active');
-          status.textContent = "🔴 Recording active... Speak normally!";
-          
-          recordSecondsElapsed = 0;
-          timerDisplay.style.display = 'block';
-          timerDisplay.textContent = "⏱️ 00:00";
-          
-          if (recordTimerInterval) clearInterval(recordTimerInterval);
-          recordTimerInterval = setInterval(() => {
-            recordSecondsElapsed++;
-            const mins = String(Math.floor(recordSecondsElapsed / 60)).padStart(2, '0');
-            const secs = String(recordSecondsElapsed % 60).padStart(2, '0');
-            timerDisplay.textContent = `⏱️ ${mins}:${secs}`;
-          }, 1000);
-
-        } catch (err) {
-          alert("Microphone permission denied or unavailable.");
+        function updateCounter() {
+            const startDate = new Date('2024-05-06');
+            const now = new Date();
+            const diff = now - startDate;
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            document.getElementById('counter').innerText = `Together Since May 6, 2024: ${days} Days`;
         }
-      };
 
-      stopBtn.onclick = () => {
-        if (mediaRecorder && mediaRecorder.state !== "inactive") {
-          mediaRecorder.stop();
-          mediaRecorder.stream.getTracks().forEach(track => track.stop());
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.section-content').forEach(s => s.classList.remove('active'));
+            
+            if(tab === 'radio') {
+                document.querySelectorAll('.tab-btn')[0].classList.add('active');
+                document.getElementById('radio-section').classList.add('active');
+            } else {
+                document.querySelectorAll('.tab-btn')[1].classList.add('active');
+                document.getElementById('memories-section').classList.add('active');
+            }
         }
-        startBtn.disabled = false;
-        stopBtn.disabled = true;
-        startBtn.classList.remove('recording-active');
-        if (recordTimerInterval) clearInterval(recordTimerInterval);
-      };
-    }
 
-    function populateVoices() {
-      if ('speechSynthesis' in window) {
-        const updateVoices = () => {
-          voicesList = window.speechSynthesis.getVoices();
-          const select = document.getElementById('voiceSelect');
-          select.innerHTML = "";
-          voicesList.forEach((v, i) => {
-            const opt = document.createElement('option');
-            opt.value = i;
-            opt.textContent = `${v.name} (${v.lang})`;
-            select.appendChild(opt);
-          });
-        };
-        updateVoices();
-        window.speechSynthesis.onvoiceschanged = updateVoices;
-      }
-    }
-
-    function loadPureLetter(i) {
-      currentLetterIndex = i;
-      const l = pureLetters[i];
-      document.getElementById('pureLetterTitle').textContent = l.title;
-      document.getElementById('pureLetterBody').textContent = l.body;
-      stopSpeech();
-    }
-
-    function renderPureLetters() {
-      const list = document.getElementById('pureLetterList');
-      list.innerHTML = "";
-      pureLetters.forEach((l, i) => {
-        const chip = document.createElement('div');
-        chip.className = 'station-chip' + (i === currentLetterIndex ? ' active' : '');
-        chip.textContent = l.title;
-        chip.onclick = () => {
-          document.querySelectorAll('#pureLetterList .station-chip').forEach(c => c.classList.remove('active'));
-          chip.classList.add('active');
-          loadPureLetter(i);
-        };
-        list.appendChild(chip);
-      });
-    }
-
-    document.getElementById('btnSpeechPlay').onclick = () => {
-      const l = pureLetters[currentLetterIndex];
-      if (!l) return;
-
-      if (window.speechSynthesis.paused) {
-        window.speechSynthesis.resume();
-        document.getElementById('speechEqualizer').classList.add('active');
-        return;
-      }
-
-      stopSpeech();
-      pauseAudio();
-
-      speechUtterance = new SpeechSynthesisUtterance(l.body);
-      speechUtterance.rate = parseFloat(document.getElementById('speechRate').value);
-      speechUtterance.pitch = parseFloat(document.getElementById('speechPitch').value);
-
-      const voiceIndex = document.getElementById('voiceSelect').value;
-      if (voiceIndex && voicesList[voiceIndex]) {
-        speechUtterance.voice = voicesList[voiceIndex];
-      }
-
-      speechUtterance.onstart = () => {
-        isSpeaking = true;
-        document.getElementById('speechEqualizer').classList.add('active');
-      };
-
-      speechUtterance.onend = () => { stopSpeech(); };
-      speechUtterance.onerror = () => { stopSpeech(); };
-
-      window.speechSynthesis.speak(speechUtterance);
-    };
-
-    document.getElementById('btnSpeechPause').onclick = () => {
-      if (window.speechSynthesis.speaking) {
-        window.speechSynthesis.pause();
-        document.getElementById('speechEqualizer').classList.remove('active');
-      }
-    };
-
-    document.getElementById('btnSpeechStop').onclick = stopSpeech;
-
-    function stopSpeech() {
-      window.speechSynthesis.cancel();
-      isSpeaking = false;
-      document.getElementById('speechEqualizer').classList.remove('active');
-    }
-
-    function renderPolaroids() {
-      const grid = document.getElementById('polaroidGrid');
-      grid.innerHTML = "";
-      polaroids.forEach((p) => {
-        const card = document.createElement('div');
-        card.className = 'polaroid-card';
-        card.innerHTML = `
-          <img src="${p.url}" class="polaroid-img" alt="${p.caption}">
-          <div class="polaroid-caption">${p.caption}</div>
-        `;
-        grid.appendChild(card);
-      });
-    }
-
-    function initParticles() {
-      const canvas = document.getElementById('particleCanvas');
-      const ctx = canvas.getContext('2d');
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-
-      let particles = [];
-      window.addEventListener('mousemove', (e) => {
-        for (let i = 0; i < 2; i++) {
-          particles.push({
-            x: e.clientX, y: e.clientY,
-            size: Math.random() * 8 + 3,
-            color: `hsl(${Math.random() * 40 + 340}, 100%, 70%)`,
-            speedX: Math.random() * 2 - 1,
-            speedY: Math.random() * 2 - 1,
-            life: 1
-          });
+        function renderStations() {
+            const container = document.getElementById('playlist-chips');
+            container.innerHTML = '';
+            appData.stations.forEach((st, idx) => {
+                const chip = document.createElement('button');
+                chip.className = `station-chip ${idx === currentStationIdx ? 'active' : ''}`;
+                chip.innerText = st.name;
+                chip.onclick = () => {
+                    currentStationIdx = idx;
+                    loadStation(idx);
+                    renderStations();
+                };
+                container.appendChild(chip);
+            });
         }
-      });
 
-      function animate() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        particles.forEach((p, index) => {
-          p.x += p.speedX; p.y += p.speedY; p.life -= 0.02;
-          ctx.fillStyle = p.color;
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-          ctx.fill();
-          if (p.life <= 0) particles.splice(index, 1);
-        });
-        requestAnimationFrame(animate);
-      }
-      animate();
-    }
+        function loadStation(idx) {
+            const st = appData.stations[idx];
+            document.getElementById('freq-display').innerText = st.freq;
+            document.getElementById('station-title').innerText = st.name;
+            document.getElementById('station-desc').innerText = st.desc;
+            
+            if(appData.memories.length > 0) {
+                vinylImg.style.backgroundImage = `url('${appData.memories[0].url}')`;
+            }
 
-    document.getElementById('adminBtn').onclick = () => {
-      if (prompt("Enter Passcode ♡:") === "1234") {
-        document.getElementById('adminPanel').classList.toggle('active');
-      }
-    };
+            audioPlayer.src = st.audio || '';
+        }
 
-    document.getElementById('startDateInput').addEventListener('change', (e) => {
-      if (e.target.value) {
-        datingStartDate = new Date(e.target.value + "T00:00:00");
-        saveAll();
-      }
-    });
+        function togglePlay() {
+            const currentSt = appData.stations[currentStationIdx];
+            if (!currentSt.audio) {
+                alert("No audio file or voice recording provided for this station! Add one in Admin Settings (⚙️).");
+                return;
+            }
 
-    document.getElementById('addStationBtn').onclick = () => {
-      const name = document.getElementById('newStationName').value.trim();
-      const freq = document.getElementById('newStationFreq').value.trim() || "104.5 FM";
-      let audioUrl = document.getElementById('newAudioUrl').value.trim();
-      const audioFile = document.getElementById('newAudioFile').files[0];
+            if (isPlaying) {
+                audioPlayer.pause();
+                isPlaying = false;
+                playBtn.innerText = "▶";
+                vinyl.classList.remove('spinning');
+            } else {
+                audioPlayer.play().then(() => {
+                    isPlaying = true;
+                    playBtn.innerText = "⏸";
+                    vinyl.classList.add('spinning');
+                }).catch(err => {
+                    alert("Playback failed. Please check your audio source.");
+                });
+            }
+        }
 
-      if (!name) {
-        alert("Please enter a station name!");
-        return;
-      }
-
-      if (recordedAudioBlobUrl) {
-        audioUrl = recordedAudioBlobUrl;
-        finalizeStation(name, freq, audioUrl);
-        recordedAudioBlobUrl = "";
-        document.getElementById('recordStatus').textContent = "Ready to record 🎙️";
-      } else if (audioFile) {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          audioUrl = reader.result;
-          finalizeStation(name, freq, audioUrl);
+        audioPlayer.onended = function() {
+            isPlaying = false;
+            playBtn.innerText = "▶";
+            vinyl.classList.remove('spinning');
         };
-        reader.readAsDataURL(audioFile);
-      } else {
-        finalizeStation(name, freq, audioUrl);
-      }
-    };
 
-    function finalizeStation(name, freq, audioUrl) {
-      stations.push({ name, freq, audioUrl });
-      tracks.push({ title: name, station: name, freq, photo: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=300", audioUrl });
-      saveAll(); renderStations(); renderAdminStations();
-      document.getElementById('newStationName').value = "";
-      document.getElementById('newAudioUrl').value = "";
-      document.getElementById('newAudioFile').value = "";
-      alert("Station Added Successfully! 📻");
-    }
+        function nextStation() {
+            currentStationIdx = (currentStationIdx + 1) % appData.stations.length;
+            renderStations();
+            loadStation(currentStationIdx);
+            if(isPlaying) togglePlay();
+        }
 
-    document.getElementById('savePolaroidBtn').onclick = () => {
-      const caption = document.getElementById('inputPolaroidCaption').value.trim() || "Memory";
-      let url = document.getElementById('inputPolaroidUrl').value.trim();
-      const file = document.getElementById('inputPolaroidFile').files[0];
+        function prevStation() {
+            currentStationIdx = (currentStationIdx - 1 + appData.stations.length) % appData.stations.length;
+            renderStations();
+            loadStation(currentStationIdx);
+            if(isPlaying) togglePlay();
+        }
 
-      if (file) {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          polaroids.push({ caption, url: reader.result });
-          saveAll(); renderPolaroids();
-          alert("Memory Photo Added! 📸");
-        };
-        reader.readAsDataURL(file);
-      } else if (url) {
-        polaroids.push({ caption, url });
-        saveAll(); renderPolaroids();
-        alert("Memory Photo Added! 📸");
-      } else {
-        alert("Please provide an image URL or upload a file from your phone.");
-      }
-    };
+        function renderMemories() {
+            const container = document.getElementById('memories-container');
+            container.innerHTML = '';
+            appData.memories.forEach(mem => {
+                const card = document.createElement('div');
+                card.className = 'memory-card';
+                card.innerHTML = `
+                    <img src="${mem.url}" alt="Memory">
+                    <span>${mem.caption}</span>
+                `;
+                container.appendChild(card);
+            });
+        }
 
-    document.getElementById('savePureLetterBtn').onclick = () => {
-      const title = document.getElementById('inputPureLetterTitle').value.trim();
-      const body = document.getElementById('inputPureLetterBody').value.trim();
-      if (title && body) {
-        pureLetters.push({ title, body });
-        saveAll(); renderPureLetters();
-        document.getElementById('inputPureLetterTitle').value = "";
-        document.getElementById('inputPureLetterBody').value = "";
-        alert("Letter Saved! 💌");
-      }
-    };
+        function openAdmin() {
+            document.getElementById('admin-modal').style.display = 'flex';
+        }
 
-    function renderStations() {
-      const list = document.getElementById('stationList');
-      list.innerHTML = "";
-      stations.forEach((s, idx) => {
-        const chip = document.createElement('div');
-        chip.className = 'station-chip' + (idx === currentTrackIndex ? ' active' : '');
-        chip.innerHTML = `<span>${s.name}</span><span style="font-size:0.75rem; opacity:0.8;">${s.freq}</span>`;
-        chip.onclick = () => {
-          document.querySelectorAll('#stationList .station-chip').forEach(c => c.classList.remove('active'));
-          chip.classList.add('active');
-          loadTrack(idx); playAudio();
-        };
-        list.appendChild(chip);
-      });
-    }
+        function closeAdmin() {
+            document.getElementById('admin-modal').style.display = 'none';
+            document.getElementById('login-view').style.display = 'block';
+            document.getElementById('settings-view').style.display = 'none';
+            document.getElementById('passcode-input').value = '';
+        }
 
-    function renderAdminStations() {
-      document.getElementById('adminStationList').innerHTML = stations.map((s, i) => `
-        <div class="item-card"><span>${s.name} (${s.freq})</span><button class="btn-del" onclick="stations.splice(${i},1);tracks.splice(${i},1);saveAll();renderStations();renderAdminStations();">🗑️</button></div>
-      `).join('');
-    }
+        function verifyAdmin() {
+            const pin = document.getElementById('passcode-input').value;
+            if(pin === '1234') {
+                document.getElementById('login-view').style.display = 'none';
+                document.getElementById('settings-view').style.display = 'block';
+                
+                document.getElementById('setting-bg').value = appData.bgUrl || '';
+                document.getElementById('setting-name').value = appData.stations[currentStationIdx].name;
+                document.getElementById('setting-audio').value = appData.stations[currentStationIdx].audio || '';
+            } else {
+                alert('Incorrect Passcode!');
+            }
+        }
 
-    init();
-  </script>
+        // File Uploader Handlers (Converts local files to Base64 data strings for seamless cross-device viewing)
+        function previewBgUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('setting-bg').value = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function previewAudioUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('setting-audio').value = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function previewMemoryUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('memory-img-url').value = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Live Voice Recording Handler
+        let recording = false;
+        async function toggleRecording() {
+            const recBtn = document.getElementById('rec-toggle-btn');
+            const recStatus = document.getElementById('rec-status');
+
+            if (!recording) {
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    mediaRecorder = new MediaRecorder(stream);
+                    audioChunks = [];
+
+                    mediaRecorder.ondataavailable = event => {
+                        audioChunks.push(event.data);
+                    };
+
+                    mediaRecorder.onstop = () => {
+                        const audioBlob = new Blob(audioChunks, { type: 'audio/mp3' });
+                        const reader = new FileReader();
+                        reader.readAsDataURL(audioBlob);
+                        reader.onloadend = function() {
+                            document.getElementById('setting-audio').value = reader.result;
+                            recStatus.innerText = "Voice recorded successfully! Click Save below.";
+                        };
+                    };
+
+                    mediaRecorder.start();
+                    recording = true;
+                    recBtn.innerText = "⏹️ Stop Recording";
+                    recBtn.classList.add('recording');
+                    recStatus.innerText = "Recording voice... speak now.";
+                } catch (err) {
+                    alert("Microphone permission denied or not supported on this browser.");
+                }
+            } else {
+                mediaRecorder.stop();
+                recording = false;
+                recBtn.innerText = "🎙️ Record Again";
+                recBtn.classList.remove('recording');
+            }
+        }
+
+        function addMemory() {
+            const url = document.getElementById('memory-img-url').value;
+            const caption = document.getElementById('memory-caption').value;
+            if(url) {
+                appData.memories.push({ url, caption: caption || "Our Memory ❤️" });
+                document.getElementById('memory-img-file').value = '';
+                document.getElementById('memory-img-url').value = '';
+                document.getElementById('memory-caption').value = '';
+                renderMemories();
+                alert("Memory photo added successfully!");
+            } else {
+                alert("Please select or paste an image.");
+            }
+        }
+
+        function saveSettings() {
+            appData.bgUrl = document.getElementById('setting-bg').value;
+            appData.stations[currentStationIdx].name = document.getElementById('setting-name').value;
+            appData.stations[currentStationIdx].audio = document.getElementById('setting-audio').value;
+
+            localStorage.setItem('brenfel_love_app_data', JSON.stringify(appData));
+            
+            applyBackground();
+            renderStations();
+            loadStation(currentStationIdx);
+            closeAdmin();
+            alert("Changes saved successfully! All audios and pictures are now ready to play.");
+        }
+    </script>
 </body>
 </html>
+
